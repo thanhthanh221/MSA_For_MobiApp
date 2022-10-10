@@ -5,4 +5,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Model\DiscountAggregate\**" />
+    <EmbeddedResource Remove="Model\DiscountAggregate\**" />
+    <None Remove="Model\DiscountAggregate\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Market.Domain.Core\Market.Domain.Core.csproj" />
+    <ProjectReference Include="..\Market.Infra.Bus\Market.Infra.Bus.csproj" />
+  </ItemGroup>
+
 </Project>
