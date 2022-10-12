@@ -1,0 +1,22 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/{controller}/{action}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndports": [
+        {
+          "Host": "localhost",
+          "Port": 7205
+        }
+      ],
+
+      "UpstreamPathTemplate": "/Market/{controller}/{action}",
+      "UptreamHttpMethod": ["Get","Post", "Update"],
+
+      "Key": "Market"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:7106"
+  }
+}
