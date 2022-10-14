@@ -1,4 +1,5 @@
-﻿using Market.Infra.Data.MongoDb;
+﻿using Market.Domain.Interface;
+using Market.Infra.Data.MongoDb;
 
 namespace Market.Application.Api.Installers
 {
@@ -7,6 +8,7 @@ namespace Market.Application.Api.Installers
         public void InstallService(IServiceCollection services, IConfiguration configuration)
         {
             services.AddMongoDb();
+            services.AddProductMongoRepostory("Product");
         }
     }
 }

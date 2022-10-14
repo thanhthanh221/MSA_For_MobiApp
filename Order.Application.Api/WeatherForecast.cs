@@ -1,4 +1,4 @@
-namespace Market.Api
+namespace Order.Application.Api
 {
     public class WeatherForecast
     {

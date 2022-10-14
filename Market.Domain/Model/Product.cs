@@ -4,13 +4,31 @@ namespace Market.Domain.Model
 {
     public class Product : EntityAudit
     {
-        public Product()
+
+        public Product(DateTime createAt,
+                       Guid createBy,
+                       DateTime updateAt,
+                       Guid updateBy)
+        : base(createAt, createBy, updateAt, updateBy)
         {
         }
 
-        public Product(string name, decimal price, byte[] image, int calo, string descretion, 
-            string alias, int warranty, decimal promotionPrice, int quantity, decimal originalPrice)
+        public Product(
+                       Guid Id,
+                       string name,
+                       decimal price,
+                       byte[] image,
+                       int calo,
+                       string descretion,
+                       string alias,
+                       int warranty,
+                       decimal promotionPrice,
+                       int quantity,
+                       decimal originalPrice,
+                       DateTime createAt,
+                       Guid createBy) : base(createAt, createBy)
         {
+            this.Id = Id;
             Name = name;
             Price = price;
             Image = image;

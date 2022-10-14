@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Market.Domain.Core\Market.Domain.Core.csproj" />
     <ProjectReference Include="..\Market.Infra.Bus\Market.Infra.Bus.csproj" />
   </ItemGroup>
