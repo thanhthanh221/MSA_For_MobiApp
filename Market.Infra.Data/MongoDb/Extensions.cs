@@ -32,16 +32,6 @@ namespace Market.Infra.Data.MongoDb
             });
             return Services;
         }
-        public static IServiceCollection AddMongoRepostory<TEntity>(this IServiceCollection Services, string CollectionName) where TEntity : EntityAudit
-        {
-            Services.AddSingleton<IAsyncRepository<TEntity>>(serviceProvider => 
-            {
-                IMongoDatabase database = serviceProvider.GetService<IMongoDatabase>();
-                return new MongoDbRepositoryAsync<TEntity>(database, CollectionName);
-            });
-            return Services;
-        }
-
         public static IServiceCollection AddProductMongoRepostory(this IServiceCollection Services, string CollectionName)
         {
             Services.AddSingleton<IAsyncProductRepository>(serviceProvider => 

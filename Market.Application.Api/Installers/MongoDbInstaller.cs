@@ -1,5 +1,4 @@
-﻿using Market.Domain.Interface;
-using Market.Infra.Data.MongoDb;
+﻿using Market.Infra.Data.MongoDb;
 
 namespace Market.Application.Api.Installers
 {

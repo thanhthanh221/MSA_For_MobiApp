@@ -5,19 +5,20 @@ namespace Market.Domain.Model
     public class Product : EntityAudit
     {
 
-        public Product(DateTime createAt,
+        public Product(DateTimeOffset createAt,
                        Guid createBy,
-                       DateTime updateAt,
+                       DateTimeOffset updateAt,
                        Guid updateBy)
         : base(createAt, createBy, updateAt, updateBy)
         {
         }
 
-        public Product(
-                       Guid Id,
+
+        // Update Product
+        public Product(Guid Id,
                        string name,
                        decimal price,
-                       byte[] image,
+                       string image,
                        int calo,
                        string descretion,
                        string alias,
@@ -25,7 +26,39 @@ namespace Market.Domain.Model
                        decimal promotionPrice,
                        int quantity,
                        decimal originalPrice,
-                       DateTime createAt,
+                       DateTimeOffset createAt,
+                       Guid createBy,
+                       DateTimeOffset updateAt,
+                       Guid updateBy) : base(createAt, createBy, updateAt, updateBy)
+        {
+            this.Id = Id;
+            Name = name;
+            Price = price;
+            Image = image;
+            Calo = calo;
+            Descretion = descretion;
+            Alias = alias;
+            Warranty = warranty;
+            PromotionPrice = promotionPrice;
+            Quantity = quantity;
+            OriginalPrice = originalPrice;
+        }
+
+
+        //Create Product
+        public Product(
+                       Guid Id,
+                       string name,
+                       decimal price,
+                       string image,
+                       int calo,
+                       string descretion,
+                       string alias,
+                       int warranty,
+                       decimal promotionPrice,
+                       int quantity,
+                       decimal originalPrice,
+                       DateTimeOffset createAt,
                        Guid createBy) : base(createAt, createBy)
         {
             this.Id = Id;
@@ -43,7 +76,7 @@ namespace Market.Domain.Model
 
         public string Name { get; private set; }
         public decimal Price { get; private set; }
-        public Byte[] Image { get; private set; }
+        public string Image { get; private set; }
         public int Calo { get; private set; }
         public string Descretion { get; private set; }
         public string Alias { get; private set; }

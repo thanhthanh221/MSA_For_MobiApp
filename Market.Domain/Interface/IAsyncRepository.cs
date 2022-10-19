@@ -4,12 +4,12 @@ namespace Market.Domain.Interface
 {
     public interface IAsyncRepository<TEntity> where TEntity : EntityAudit
     {
-        Task Add(TEntity obj);
         Task<TEntity> GetByIdAsync(Guid id);
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<IEnumerable<TEntity>> GetAllAsync(ISpecification<TEntity> spec);
         Task<IEnumerable<TEntity>> GetAllSoftDeletedAsync();
         Task UpdateAsync(TEntity obj);
         Task RemoveAsync(Guid id);
+        Task CreateAsync(TEntity obj);
     }
 }

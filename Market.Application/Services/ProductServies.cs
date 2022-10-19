@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Market.Application.Dtos;
+using Market.Application.Helper;
 using Market.Application.Interfaces;
+using Market.Application.Mapper;
 using Market.Domain.Commands;
 using Market.Domain.Core.Bus;
 using Market.Domain.Interface;
@@ -16,30 +14,25 @@ namespace Market.Application.Services
     public class ProductServies : IProductServices
     {
         private readonly IAsyncProductRepository productRepository;
+        private readonly IMapper mapper;
         private readonly IMediatorHandler bus;
 
-        public ProductServies(IAsyncProductRepository productRepository, IMediatorHandler bus)
+        public ProductServies(IAsyncProductRepository productRepository, IMediatorHandler bus, IMapper mapper)
         {
             this.productRepository = productRepository;
             this.bus = bus;
+            this.mapper = mapper;
         }
 
-        public async Task RegisterAsync(ProductReadDto productDto)
+        // Service Bus To Domain Command Handle
+        public async Task RegisterAsync(ProductWriteDto productDto)
         {
-            CreateNewProductCommand RegisterProduct = new CreateNewProductCommand(
-                Guid.NewGuid(),
-                productDto.Name,
-                productDto.Price,
-                productDto.Calo,
-                productDto.Descretion,
-                productDto.Alias,
-                productDto.Warranty,
-                productDto.PromotionPrice,
-                productDto.Quantity,
-                productDto.OriginalPrice,
-                DateTime.Now,
-                productDto.createBy
-            );
+
+            //Mapper WriteDto => Command
+
+            CreateNewProductCommand RegisterProduct = mapper.Map<CreateNewProductCommand>(productDto);
+
+            // Bus To Domain Layer
             await bus.SendCommand(RegisterProduct);
         }
 
@@ -47,27 +40,36 @@ namespace Market.Application.Services
         {
             IEnumerable<Product> AllProduct = await productRepository.GetAllAsync();
 
-            return null;
+            //Mapper             
+            IEnumerable<ProductReadDto> productReadDtos = mapper.Map<IEnumerable<ProductReadDto>>(AllProduct);
+
+            return productReadDtos;
         }
 
-        public Task<Product> GetById(Guid Id)
+        public async Task<ProductReadDto> GetById(Guid Id)
         {
-            throw new NotImplementedException();
+            //Create Product To Dto
+            Product product = await productRepository.GetByIdAsync(Id);
+
+            // Return Product Map To Dto
+            return mapper.Map<ProductReadDto>(product);
         }
 
-        public Task DeleteAsync(Guid Id)
+        public async Task DeleteAsync(Guid Id)
         {
-            throw new NotImplementedException();
+            await productRepository.RemoveAsync(Id);
         }
 
-        public Task UpdateAsync(ProductReadDto productDto, Guid Id)
+        // Update Product Service
+        public async Task UpdateAsync(ProductWriteDto productDto, Guid Id)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
+            Product product = await productRepository.GetByIdAsync(Id);
+            if(product != null)
+            {
+                UpdateProductCommand updateProductCommmand = mapper.Map<UpdateProductCommand>(productDto);
+                updateProductCommmand.Id = Id;
+                await bus.SendCommand(updateProductCommmand); 
+            }
         }
     }
 }

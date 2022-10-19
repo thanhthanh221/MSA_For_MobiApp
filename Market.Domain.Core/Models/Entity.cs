@@ -8,7 +8,7 @@ namespace Market.Domain.Core.Models
 {
     public abstract class Entity
     {
-        public Guid Id { get; protected set; }
+        public Guid Id { get; set; }
         public bool IsDeleted { get; protected set; }
 
         public override bool Equals(object obj)
