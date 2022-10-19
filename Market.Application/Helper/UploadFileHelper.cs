@@ -10,6 +10,17 @@ namespace Market.Application.Helper
     public static class UploadFileHelper
     {
         public static String Dir = System.IO.Directory.GetCurrentDirectory();
+        public static string IFormFileToBase64ImageOfVideo(IFormFile file)
+        {
+            // Mã hóa base64 cho sản phẩm
+                MemoryStream ms = new MemoryStream();
+                file.CopyTo(ms);
+                byte[] fileBytes = ms.ToArray();
+                string imgToBase64 = Convert.ToBase64String(fileBytes);
+
+                return imgToBase64;
+
+        }
         public static async Task<String> SaveImage(IFormFile file, String locationStorage)
         {
             if (file.Length > 0)
@@ -26,11 +37,12 @@ namespace Market.Application.Helper
                         await file.CopyToAsync(fileStream);
                         await fileStream.FlushAsync(); // giải phóng bộ đệm
 
+
+                        // Mã hóa base64 cho sản phẩm
                         MemoryStream ms = new MemoryStream();
                         file.CopyTo(ms);
                         byte[] fileBytes = ms.ToArray();
                         string imgToBase64 = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
 
                         return imgToBase64;
                     }

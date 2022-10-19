@@ -8,13 +8,13 @@ using Market.Domain.Model;
 
 namespace Market.Application.Interfaces
 {
-    public interface IProductServices : IDisposable
+    public interface IProductServices
     {
-        Task RegisterAsync(ProductReadDto productDto);
+        Task RegisterAsync(ProductWriteDto productDto);
         Task<IEnumerable<ProductReadDto>> GetAllAsync();
-        Task<Product> GetById(Guid Id);
+        Task<ProductReadDto> GetById(Guid Id);
         Task DeleteAsync(Guid Id);
-        Task UpdateAsync(ProductReadDto productDto, Guid Id);
+        Task UpdateAsync(ProductWriteDto productDto, Guid Id);
 
 
     }

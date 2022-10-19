@@ -19,17 +19,6 @@ namespace Market.Infra.Data.Repository
         {
             DbCollection = database.GetCollection<TEntity>(CollectionName);
         }
-
-        public async Task Add(TEntity entity)
-        {
-            if(entity == null) 
-            { 
-                throw new ArgumentNullException(nameof(entity));
-            }
-            await DbCollection.InsertOneAsync(entity);
-                
-        }
-
         public async Task<TEntity> GetByIdAsync(Guid id)
         {
             FilterDefinition<TEntity> filter = filterBuilder?.Eq(p => id, id);
@@ -74,6 +63,15 @@ namespace Market.Infra.Data.Repository
         public void Dispose()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task CreateAsync(TEntity entity)
+        {
+            if(entity is null)
+            {
+                throw new NullReferenceException();
+            }
+            await DbCollection.InsertOneAsync(entity);
         }
     }
 }

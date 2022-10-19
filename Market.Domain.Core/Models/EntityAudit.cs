@@ -8,9 +8,9 @@ namespace Market.Domain.Core.Models
 {
     public abstract class EntityAudit : Entity
     {
-        protected EntityAudit(DateTime createAt,
+        protected EntityAudit(DateTimeOffset createAt,
                               Guid createBy,
-                              DateTime updateAt,
+                              DateTimeOffset updateAt,
                               Guid updateBy)
         {
             CreateAt = createAt;
@@ -18,16 +18,16 @@ namespace Market.Domain.Core.Models
             UpdateAt = updateAt;
             UpdateBy = updateBy;
         }
-        protected EntityAudit(DateTime createAt,
+        protected EntityAudit(DateTimeOffset createAt,
                               Guid createBy)
         {
             this.CreateAt = createAt;
             this.CreateBy = createBy;
         }
 
-        public DateTime CreateAt { get; set; }
+        public DateTimeOffset CreateAt { get; set; }
         public Guid CreateBy { get; set; }  
-        public DateTime UpdateAt { get; set; }
+        public DateTimeOffset UpdateAt { get; set; }
         public Guid UpdateBy { get; set; }
 
     }

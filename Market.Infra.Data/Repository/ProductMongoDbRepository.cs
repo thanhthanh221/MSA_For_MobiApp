@@ -16,34 +16,22 @@ namespace Market.Infra.Data.Repository
         private readonly IMongoCollection<Product> DbCollection;
         private readonly FilterDefinitionBuilder<Product> filterBuilder = Builders<Product>.Filter;
 
+        public async Task<IEnumerable<Product>> GetAllAsync()
+        {
+            return await DbCollection.Find(new BsonDocument()).ToListAsync();
+        }
         public ProductMongoDbRepository(IMongoDatabase database, string CollectionName)
         {
             DbCollection = database.GetCollection<Product>(CollectionName);
         }
 
-        public async Task Add(Product entity)
-        {
-            if(entity == null) 
-            { 
-                throw new ArgumentNullException(nameof(entity));
-            }
-            await DbCollection.InsertOneAsync(entity);
-                
-        }
-
         public async Task<Product> GetByIdAsync(Guid id)
         {
-            FilterDefinition<Product> filter = filterBuilder?.Eq(p => id, id);
+            FilterDefinition<Product> filter = filterBuilder?.Eq(p => p.Id, id);
 
             return await DbCollection.Find(filter).FirstOrDefaultAsync();
-
+            
         }
-
-        public async Task<IEnumerable<Product>> GetAllAsync()
-        {
-            return await DbCollection.Find(new BsonDocument()).ToListAsync();
-        }
-
         public async Task<IEnumerable<Product>> GetAllAsync(ISpecification<Product> spec)
         {
             return await DbCollection.Find(spec.Criteria).ToListAsync();
@@ -75,6 +63,15 @@ namespace Market.Infra.Data.Repository
         public void Dispose()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task CreateAsync(Product entity)
+        {
+            if(entity is null)
+            {
+                throw new NullReferenceException();
+            }
+            await DbCollection.InsertOneAsync(entity);
         }
     }
 }

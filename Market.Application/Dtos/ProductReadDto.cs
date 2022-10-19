@@ -19,7 +19,8 @@ namespace Market.Application.Dtos
                               decimal promotionPrice,
                               int quantity,
                               decimal originalPrice,
-                              Guid createBy)
+                              Guid createBy,
+                              DateTimeOffset createAt)
         {
             Id = id;
             Name = name;
@@ -32,18 +33,20 @@ namespace Market.Application.Dtos
             Quantity = quantity;
             OriginalPrice = originalPrice;
             this.createBy = createBy;
+            CreateAt = createAt;
         }
 
-        public Guid Id {get; private set;}
-        public string Name { get; private set; }
-        public decimal Price { get; private set; }
-        public int Calo { get; private set; }
-        public string Descretion { get; private set; }
-        public string Alias { get; private set; }
-        public int Warranty { get; private set; } // bảo hành
-        public decimal PromotionPrice { get; private set; } // giá khuyến mãi
-        public int Quantity { get; private set; }
-        public decimal OriginalPrice { get; private set; }
-        public Guid createBy {get; private set;}
+        public Guid Id {get; set;}
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public int Calo { get; set; }
+        public string Descretion { get; set; }
+        public string Alias { get; set; }
+        public int Warranty { get; set; } // bảo hành
+        public decimal PromotionPrice { get; set; } // giá khuyến mãi
+        public int Quantity { get; set; }
+        public decimal OriginalPrice { get; set; }
+        public Guid createBy {get; set;}
+        public DateTimeOffset CreateAt {get; set;}
     }
 }
