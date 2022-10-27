@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MediatR;
 
 namespace Market.Domain.Core.Models
 {
@@ -24,7 +25,6 @@ namespace Market.Domain.Core.Models
             this.CreateAt = createAt;
             this.CreateBy = createBy;
         }
-
         public DateTimeOffset CreateAt { get; set; }
         public Guid CreateBy { get; set; }  
         public DateTimeOffset UpdateAt { get; set; }

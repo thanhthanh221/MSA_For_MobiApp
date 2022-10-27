@@ -1,4 +1,5 @@
 ﻿using Market.Application.Mapper;
+using Market.Domain.Mapper;
 
 namespace Market.Application.Api.Installers
 {
@@ -7,6 +8,7 @@ namespace Market.Application.Api.Installers
         public void InstallService(IServiceCollection services, IConfiguration configuration)
         {
             services.AddAutoMapper(ConfigMapper.RegisterMappings());
+            services.AddAutoMapper(ConfigCommandMapper.CommandMappings());
         }
     }
 }

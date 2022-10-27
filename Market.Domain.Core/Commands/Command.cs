@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentValidation.Results;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Market.Domain.Core.Events;
+using MediatR;
 
 namespace Market.Domain.Core.Commands
 {
-    public abstract class Command : Message
+    public abstract class Command :IRequest<bool>
     {
         protected Command()
         {
@@ -19,7 +16,5 @@ namespace Market.Domain.Core.Commands
         public ValidationResult ValidationResult { get; set; }
 
         public abstract bool IsValid();
-
-
     }
 }

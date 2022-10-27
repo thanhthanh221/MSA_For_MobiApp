@@ -8,6 +8,7 @@ namespace Market.Application.Api.Installers
         public void InstallService(IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IProductServices, ProductServies>();
+            services.AddScoped<ICategoryService, CategoryService>();
         }
     }
 }

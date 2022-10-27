@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-using Market.Domain.Validations;
 using MediatR;
+using Market.Domain.Validations.ProductValidation;
 
-namespace Market.Domain.Commands
+namespace Market.Domain.Commands.ProductCommand
 {
-    public class CreateNewProductCommand : ProductCommand
+    public class ProductCreateCommand : ProductCommand
     {
 
-        public CreateNewProductCommand(Guid Id,
+        public ProductCreateCommand(Guid Id,
                                        string Name,
                                        decimal Price,
                                        int Calo,
@@ -43,7 +43,7 @@ namespace Market.Domain.Commands
 
         public override bool IsValid()
         {
-            ValidationResult = new CreateNewProductCommandValidation().Validate(this);
+            ValidationResult = new ProductCreateCommandValidation().Validate(this);
             return ValidationResult.IsValid;
         }
     }

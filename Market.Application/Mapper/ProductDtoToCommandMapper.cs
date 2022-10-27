@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Market.Application.Dtos;
 using Market.Application.Helper;
-using Market.Domain.Commands;
+using Market.Domain.Commands.ProductCommand;
 
 namespace Market.Application.Mapper
 {
@@ -9,13 +9,13 @@ namespace Market.Application.Mapper
     {
         public ProductDtoToCommandMapper()
         {
-            CreateMap<ProductWriteDto,CreateNewProductCommand>()
-                .ConstructUsing(p => new CreateNewProductCommand(
+            CreateMap<ProductWriteDto,ProductCreateCommand>()
+                .ConstructUsing(p => new ProductCreateCommand(
                     Guid.NewGuid(),
                     p.Name,
                     p.Price,
                     p.Calo,
-                    UploadFileHelper.IFormFileToBase64ImageOfVideo(p.Image),
+                    null,
                     p.Descretion,
                     p.Alias,
                     p.Warranty,
@@ -23,12 +23,12 @@ namespace Market.Application.Mapper
                     p.Quantity,
                     p.OriginalPrice,
                     DateTimeOffset.Now,
-                    p.CreateBy
+                    p.UserId
                 ));
                 
-            CreateMap<ProductWriteDto, UpdateProductCommand>()
-                .ConstructUsing(p => new UpdateProductCommand(
-                    Guid.NewGuid(),
+            CreateMap<ProductWriteDto, ProductUpdateCommand>()
+                .ConstructUsing(p => new ProductUpdateCommand(
+                    Guid.Empty,
                     p.Name,
                     p.Price,
                     p.Calo,
@@ -40,7 +40,7 @@ namespace Market.Application.Mapper
                     p.Quantity,
                     p.OriginalPrice,
                     DateTimeOffset.Now,
-                    p.CreateBy
+                    p.UserId
                 ));
         }
     }

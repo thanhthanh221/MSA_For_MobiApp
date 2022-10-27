@@ -1,25 +1,43 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Market.Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Market.Application.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Market/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        // GET: api/<CategoryController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly ILogger logger;
+        private readonly ICategoryService categoryService;
+
+        public CategoryController(ILogger logger,
+                                  ICategoryService categoryService)
         {
-            return new string[] { "value1", "value2" };
+            this.logger = logger;
+            this.categoryService = categoryService;
         }
 
-        // GET api/<CategoryController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // Get All Product
+        [HttpGet(Name = "GetAllCategory")]
+        public async Task<ActionResult> GetAllAsync()
         {
-            return "value";
+            try {
+
+                return Ok();
+            }
+            catch (System.Exception) {
+
+                throw;
+            }
+        }
+
+        // Find Product By Id
+        [HttpGet("Id", Name = "GetProductById")]
+        public async Task<ActionResult> GetByIdAsync(Guid Id)
+        {
+            return Ok();
         }
 
         // POST api/<CategoryController>
@@ -35,7 +53,7 @@ namespace Market.Application.Api.Controllers
         }
 
         // DELETE api/<CategoryController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("Id")]
         public void Delete(int id)
         {
         }

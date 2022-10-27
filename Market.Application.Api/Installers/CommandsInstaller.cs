@@ -1,5 +1,5 @@
 using Market.Domain.CommandHandlers;
-using Market.Domain.Commands;
+using Market.Domain.Commands.ProductCommand;
 using MediatR;
 
 namespace Market.Application.Api.Installers
@@ -9,9 +9,11 @@ namespace Market.Application.Api.Installers
         public void InstallService(IServiceCollection services, IConfiguration configuration)
         {
             // Command For Product
-            services.AddScoped<IRequestHandler<CreateNewProductCommand, bool>, ProductCommandHandler>();
-            services.AddScoped<IRequestHandler<DeleteProductCommand, bool>, ProductCommandHandler>();
+            services.AddScoped<IRequestHandler<ProductCreateCommand, bool>, ProductCommandHandler>();
+            services.AddScoped<IRequestHandler<ProductDeleteCommand, bool>, ProductCommandHandler>();
+            services.AddScoped<IRequestHandler<ProductUpdateCommand, bool>, ProductCommandHandler>();
 
+            // Command For Category
         }
     }
 }

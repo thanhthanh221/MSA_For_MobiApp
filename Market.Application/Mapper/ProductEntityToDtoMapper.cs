@@ -16,19 +16,19 @@ namespace Market.Application.Mapper
             CreateMap<Product, ProductReadDto>()
                 .ConstructUsing(p =>
                     new ProductReadDto(
-                                    p.Id,
-                                    p.Name,
-                                    p.Price,
-                                    p.Calo,
-                                    p.Descretion,
-                                    p.Alias,
-                                    p.Warranty,
-                                    p.PromotionPrice,
-                                    p.Quantity,
-                                    p.OriginalPrice,
-                                    p.CreateBy,
-                                    p.CreateAt
-                                    ));
+                        p.Id,
+                        p.Name,
+                        p.Price,
+                        p.Calo,
+                        p.Descretion,
+                        p.Alias,
+                        p.Warranty,
+                        p.PromotionPrice,
+                        p.Quantity,
+                        p.OriginalPrice,
+                        p.CreateBy,
+                        p.CreateAt
+                    ));
         }
     }
 }

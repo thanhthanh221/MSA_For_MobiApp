@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using Market.Domain.Commands;
+using Market.Domain.Commands.ProductCommand;
 
-namespace Market.Domain.Validations
+namespace Market.Domain.Validations.ProductValidation
 {
     public class ProductValidation<T> : AbstractValidator<T> where T : ProductCommand
     {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Market.Application.Mapper
+﻿namespace Market.Application.Mapper
 {
     public class ConfigMapper
     {
@@ -14,7 +8,11 @@ namespace Market.Application.Mapper
             {
                 //Product Mapper
                 typeof(ProductEntityToDtoMapper),
-                typeof(ProductDtoToCommandMapper)
+                typeof(ProductDtoToCommandMapper),
+
+                // Category Mapper
+                typeof(CategoryEntityToDtoMapper),
+                typeof(CategoryDtoToCommandMapper)
             };
         }
     }
