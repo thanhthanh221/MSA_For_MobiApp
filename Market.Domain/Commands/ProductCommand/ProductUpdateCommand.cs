@@ -1,10 +1,11 @@
 using Market.Domain.Validations;
+using Market.Domain.Validations.ProductValidation;
 
-namespace Market.Domain.Commands
+namespace Market.Domain.Commands.ProductCommand
 {
-    public class UpdateProductCommand : ProductCommand
+    public class ProductUpdateCommand : ProductCommand
     {
-        public UpdateProductCommand(Guid Id,
+        public ProductUpdateCommand(Guid Id,
                                     string Name,
                                     decimal price,
                                     int calo,
@@ -36,7 +37,7 @@ namespace Market.Domain.Commands
 
         public override bool IsValid()
         {
-            ValidationResult = new UpdateProductCommandValidation().Validate(this);
+            ValidationResult = new ProductUpdateCommandValidation().Validate(this);
             return ValidationResult.IsValid;
         }
     }

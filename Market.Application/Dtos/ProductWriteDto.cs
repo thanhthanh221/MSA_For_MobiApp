@@ -18,7 +18,7 @@ namespace Market.Application.Dtos
         public decimal PromotionPrice { get; set; } // giá khuyến mãi
         public int Quantity { get; set; }
         public decimal OriginalPrice { get; set; } // Gía gốc
-        public Guid CreateBy { get; set; } 
+        public Guid UserId { get; set; } 
         public IFormFile Image { get; set; }
     }
 }

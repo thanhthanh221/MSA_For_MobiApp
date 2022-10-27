@@ -7,8 +7,7 @@ using Market.Application.Dtos;
 
 namespace Market.Application.Interfaces
 {
-    public interface IProductServices : IApplicationService<ProductReadDto, ProductWriteDto>
+    public interface ICategoryService : IApplicationService<CategoryReadDto, ProductWriteDto>
     {
-
     }
 }

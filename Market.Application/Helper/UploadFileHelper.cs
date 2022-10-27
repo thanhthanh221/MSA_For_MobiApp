@@ -12,13 +12,19 @@ namespace Market.Application.Helper
         public static String Dir = System.IO.Directory.GetCurrentDirectory();
         public static string IFormFileToBase64ImageOfVideo(IFormFile file)
         {
-            // Mã hóa base64 cho sản phẩm
+            using (FileStream fileStream = System.IO.File.Create(file.FileName))
+            {
+                file.CopyTo(fileStream);
+                fileStream.Flush(); // giải phóng bộ đệm
+
+                 // Mã hóa base64 cho sản phẩm
                 MemoryStream ms = new MemoryStream();
-                file.CopyTo(ms);
+                fileStream.CopyTo(ms);
                 byte[] fileBytes = ms.ToArray();
                 string imgToBase64 = Convert.ToBase64String(fileBytes);
 
                 return imgToBase64;
+            }
 
         }
         public static async Task<String> SaveImage(IFormFile file, String locationStorage)

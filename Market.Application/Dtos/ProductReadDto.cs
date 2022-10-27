@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Market.Application.Dtos
 {
-    public class ProductReadDto
+    public class ProductReadDto 
     {
         public ProductReadDto(Guid id,
                               string name,
@@ -32,7 +32,7 @@ namespace Market.Application.Dtos
             PromotionPrice = promotionPrice;
             Quantity = quantity;
             OriginalPrice = originalPrice;
-            this.createBy = createBy;
+            CreateBy = createBy;
             CreateAt = createAt;
         }
 
@@ -46,7 +46,9 @@ namespace Market.Application.Dtos
         public decimal PromotionPrice { get; set; } // giá khuyến mãi
         public int Quantity { get; set; }
         public decimal OriginalPrice { get; set; }
-        public Guid createBy {get; set;}
+        public Guid CreateBy {get; set;}
         public DateTimeOffset CreateAt {get; set;}
+        public Guid UpdateBy {get; set;}
+        public DateTimeOffset UpdateAt {get; set;}
     }
 }

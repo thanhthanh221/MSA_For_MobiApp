@@ -12,7 +12,7 @@ using MongoDB.Driver;
 
 namespace Market.Infra.Data.MongoDb
 {
-    public static class Extensions
+    public static class MongoDbExtensions
     {
         // Cài đặt kết nối Mongodb
         public static IServiceCollection AddMongoDb(this IServiceCollection Services)
@@ -32,6 +32,21 @@ namespace Market.Infra.Data.MongoDb
             });
             return Services;
         }
+
+    
+
+        // Abs DB mongodb
+         public static IServiceCollection AddMongoRepostory<T>(this IServiceCollection Services, string CollectionName) where T : EntityAudit
+        {
+            Services.AddSingleton<IAsyncRepository<T>>(serviceProvider => 
+            {
+                IMongoDatabase database = serviceProvider.GetService<IMongoDatabase>();
+                return new MongoDbRepositoryAsync<T>(database, CollectionName);
+            });
+            return Services;
+        }
+
+        // Customer Db For Product
         public static IServiceCollection AddProductMongoRepostory(this IServiceCollection Services, string CollectionName)
         {
             Services.AddSingleton<IAsyncProductRepository>(serviceProvider => 

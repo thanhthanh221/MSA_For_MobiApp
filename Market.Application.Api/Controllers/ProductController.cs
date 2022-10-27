@@ -6,71 +6,94 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Market.Application.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("Market/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
         private readonly IProductServices productServices;
+        private readonly ILogger<ProductController> logger;
 
-        public ProductController(IProductServices productServices)
+        public ProductController(IProductServices productServices, ILogger<ProductController> logger)
         {
             this.productServices = productServices;
+            this.logger = logger;
         }
 
         [HttpGet(Name = "GetAllProduct")]
         public async Task<ActionResult> GetAllAsync()
         {
-            IEnumerable<ProductReadDto> productGetDtos = await productServices.GetAllAsync();
-            if (productGetDtos is null) {
-                return NotFound(
-                    new {
-                        message = "Không có sản phẩm"
-                    }
-                );
+            try {
+                IEnumerable<ProductReadDto> productGetDtos = await productServices.GetAllAsync();
+                if (productGetDtos is null) {
+                    return NotFound(
+                        new {
+                            message = "Không có sản phẩm"
+                        }
+                    );
+                }
+                if (!ModelState.IsValid) {
+                    return NotFound();
+                }
+                logger.LogInformation("Try vấn thông tin sản phẩm tại {time}", DateTimeOffset.Now);
+                return Ok(productGetDtos);
             }
-            if(!ModelState.IsValid)
-            {
-                return NotFound();
+            catch (System.Exception) {
+                logger.LogError("500");
+                throw;
             }
-            return Ok(productGetDtos);
         }
         [HttpGet("Id", Name = "GetByIdProduct")]
         public async Task<ActionResult> GetAsyncById(Guid Id)
         {
-            ProductReadDto productDto = await productServices.GetById(Id); 
-            if(!ModelState.IsValid ||  productDto is null)
-            {
-                return NotFound();
+            try {
+                ProductReadDto productDto = await productServices.GetByIdAsync(Id);
+                if (!ModelState.IsValid || productDto is null) {
+                    return NotFound();
+                }
+                return Ok(productDto);
             }
-            return Ok(productDto);
+            catch (System.Exception) {
+                logger.LogError("500");
+                throw;
+            }
         }
-        
+
         [HttpPost(Name = "PostProduct")]
         public async Task<ActionResult> PostAsync([FromForm] ProductWriteDto productDto)
         {
-            if(!ModelState.IsValid)
-            {
-                return NotFound();
+            try {
+                if (!ModelState.IsValid) {
+                    return NotFound();
+                }
+                await productServices.CreateAsync(productDto);
+                return NoContent();
             }
-            await productServices.RegisterAsync(productDto);
-            return NoContent();
+            catch (System.Exception) {
+                logger.LogError("500");
+                throw;
+            }
         }
 
-        [HttpDelete]
+        [HttpDelete("Id")]
         public async Task<ActionResult> DeleteAsync(Guid Id)
         {
             await productServices.DeleteAsync(Id);
             return NoContent();
         }
-        [HttpPut]
-        public async Task<ActionResult> UpdateAsync([FromForm]ProductWriteDto productDto, Guid Id)
+        [HttpPut("Id",Name= "PustProduct")]
+        public async Task<ActionResult> UpdateAsync([FromForm] ProductWriteDto productDto, Guid Id)
         {
-            if(!ModelState.IsValid)
-            {
-                return NotFound();
+            try {
+                if (!ModelState.IsValid) {
+                    return NotFound();
+                }
+                await productServices.UpdateAsync(productDto, Id);
+                return NoContent();
             }
-            await productServices.UpdateAsync(productDto, Id);
-            return NoContent();
+            catch (System.Exception) {
+                logger.LogError("500");
+                throw;
+            }
         }
     }
 }

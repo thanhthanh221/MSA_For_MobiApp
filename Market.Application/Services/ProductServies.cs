@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Market.Application.Dtos;
 using Market.Application.Helper;
 using Market.Application.Interfaces;
-using Market.Application.Mapper;
-using Market.Domain.Commands;
+using Market.Domain.Commands.ProductCommand;
 using Market.Domain.Core.Bus;
 using Market.Domain.Interface;
 using Market.Domain.Model;
+using Microsoft.Extensions.Logging;
 
 namespace Market.Application.Services
 {
@@ -16,25 +15,20 @@ namespace Market.Application.Services
         private readonly IAsyncProductRepository productRepository;
         private readonly IMapper mapper;
         private readonly IMediatorHandler bus;
+        private readonly ILogger<ProductServies> logger;
 
-        public ProductServies(IAsyncProductRepository productRepository, IMediatorHandler bus, IMapper mapper)
+        public ProductServies(IAsyncProductRepository productRepository,
+                              IMediatorHandler bus,
+                              IMapper mapper,
+                              ILogger<ProductServies> logger)
         {
             this.productRepository = productRepository;
             this.bus = bus;
             this.mapper = mapper;
+            this.logger = logger;
         }
 
-        // Service Bus To Domain Command Handle
-        public async Task RegisterAsync(ProductWriteDto productDto)
-        {
-
-            //Mapper WriteDto => Command
-
-            CreateNewProductCommand RegisterProduct = mapper.Map<CreateNewProductCommand>(productDto);
-
-            // Bus To Domain Layer
-            await bus.SendCommand(RegisterProduct);
-        }
+        //Querry
 
         public async Task<IEnumerable<ProductReadDto>> GetAllAsync()
         {
@@ -46,7 +40,7 @@ namespace Market.Application.Services
             return productReadDtos;
         }
 
-        public async Task<ProductReadDto> GetById(Guid Id)
+        public async Task<ProductReadDto> GetByIdAsync(Guid Id)
         {
             //Create Product To Dto
             Product product = await productRepository.GetByIdAsync(Id);
@@ -55,9 +49,27 @@ namespace Market.Application.Services
             return mapper.Map<ProductReadDto>(product);
         }
 
+        // Command
+
+        // Service Bus To Domain Command Handle
+        public async Task CreateAsync(ProductWriteDto productDto)
+        {
+
+            //Mapper WriteDto => Command
+
+            ProductCreateCommand registerProduct = mapper.Map<ProductCreateCommand>(productDto);
+            registerProduct.Image = await UploadFileHelper.SaveImage(productDto.Image, "ImageProduct");
+
+            // Bus To Domain Layer
+            await bus.SendCommand(registerProduct);
+        }
+
         public async Task DeleteAsync(Guid Id)
         {
-            await productRepository.RemoveAsync(Id);
+            ProductDeleteCommand deleteProductCommand = new ProductDeleteCommand(Id);
+
+            // Bus to Command Handle
+            await bus.SendCommand(deleteProductCommand);
         }
 
         // Update Product Service
@@ -66,8 +78,14 @@ namespace Market.Application.Services
             Product product = await productRepository.GetByIdAsync(Id);
             if(product != null)
             {
-                UpdateProductCommand updateProductCommmand = mapper.Map<UpdateProductCommand>(productDto);
+                ProductUpdateCommand updateProductCommmand = mapper.Map<ProductUpdateCommand>(productDto);
+
+                // Upload Prop Null-IsEn
                 updateProductCommmand.Id = Id;
+                updateProductCommmand.CreateAt = product.CreateAt;
+                updateProductCommmand.Image = await UploadFileHelper.SaveImage(productDto.Image, "ImageProduct");
+
+                // Bus Send Data
                 await bus.SendCommand(updateProductCommmand); 
             }
         }

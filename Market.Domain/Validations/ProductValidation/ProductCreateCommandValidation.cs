@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Market.Domain.Commands;
+using Market.Domain.Commands.ProductCommand;
 
-namespace Market.Domain.Validations
+namespace Market.Domain.Validations.ProductValidation
 {
-    public class CreateNewProductCommandValidation : ProductValidation<CreateNewProductCommand>
+    public class ProductCreateCommandValidation : ProductValidation<ProductCreateCommand>
     {
-        public CreateNewProductCommandValidation()
+        public ProductCreateCommandValidation()
         {
             ValidateName();
             ValidateId();
