@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Order.Domain.Core.Models;
 
 namespace Order.Domain.Interface
 {
-    public interface IRepositoryAsync<T> where T : class
+    public interface IRepositoryAsync<T> where T : IAggregateRoot
     {
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetByIdAsync(Guid id);
         Task<T> CreateAsync(T entity);
-
         Task<T> UpdateAsync(T entity);
-        Task GetAllAsync();
-        Task GetById(Guid id);
         Task DeleteAsync(T entity);
     }
 }

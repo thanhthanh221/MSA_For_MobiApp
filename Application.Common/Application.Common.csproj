@@ -4,6 +4,9 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+    <packageId>BE.Application.Common</packageId>
+    <Version>1.0.0</Version>
+    <Authors>BuiQuang</Authors>
   </PropertyGroup>
   
 
@@ -11,6 +14,7 @@
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="StackExchange.Redis" Version="2.6.66" />
@@ -18,11 +22,5 @@
     <PackageReference Include="MassTransit.Autofac" Version="7.1.3" />
     <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.3" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.3" />
-  </ItemGroup>
-  
-
-  <ItemGroup>
-    <Folder Include="Interface\" />
-    <Folder Include="Redis\" />
   </ItemGroup>
 </Project>

@@ -1,13 +1,23 @@
-﻿using MediatR;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using MediatR;
 
 namespace Order.Domain.Core.Models
 {
     public abstract class EntityAudit
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id {get; protected set;}
+
+        [Required]
+        [Column("Mã người tạo",TypeName ="varchar(20)")]
         public Guid CreateBy {get; protected set;}
+        [Required]
+        [Column(name:"Thời gian tạo")]
         public DateTime CreateAt {get; protected set;}
+        [Column("Mã chỉnh sửa",TypeName ="varchar(20)")]
         public Guid UpdateBy {get; protected set;}
+        [Column(name:"Thời gian sửa")]
         public DateTime UpdateAt {get; protected set;}
 
 

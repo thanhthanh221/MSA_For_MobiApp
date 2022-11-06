@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Market.Application.Api.Controllers
 {
-    [Route("Market/[controller]")]
+    [Route("MarketService/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
