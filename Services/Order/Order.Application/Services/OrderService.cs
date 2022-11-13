@@ -1,10 +1,28 @@
-﻿using Order.Application.Dtos;
+﻿using AutoMapper;
+using Order.Application.Dtos;
 using Order.Application.Interfaces;
+using Order.Domain.Commands.OrderCommand;
+using Order.Domain.Core.Bus;
+using Order.Domain.Interface;
+using Order.Domain.Model;
 
 namespace Order.Application.Services
 {
     public class OrderService : IOrderService
     {
+        private readonly IMediatorHandler bus;
+        private readonly IOrderRepository orderRepository;
+        private readonly IMapper mapper;
+
+        public OrderService(IMediatorHandler bus,
+                            IOrderRepository orderRepository,
+                            IMapper mapper)
+        {
+            this.bus = bus;
+            this.orderRepository = orderRepository;
+            this.mapper = mapper;
+        }
+
         // Query Service
         public Task<IEnumerable<OrderReadDto>> GetAllAsync()
         {
@@ -22,9 +40,15 @@ namespace Order.Application.Services
         }
 
         // Command Service
-        public Task CreateAsync(OrderWriteDto writeDto)
+        public async Task CreateAsync(OrderWriteDto writeDto)
         {
-            throw new NotImplementedException();
+            // khởi tạo Order lúc ban đầu
+            OrderStatus orderStatus = OrderStatus.Submitted;
+            
+
+            // Gửi event đi
+            // await bus.RaiseEvent();
+            
         }
 
         public Task DeleteAsync(Guid Id)

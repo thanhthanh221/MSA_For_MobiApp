@@ -3,7 +3,7 @@ using Order.Domain.Model;
 
 namespace Order.Infra.Data.Repository
 {
-    public class OrderRepository : IOrderRepositoryAsync
+    public class OrderRepository : IOrderRepository
     {
         public Task<OrderAggregate> CreateAsync(OrderAggregate entity)
         {

@@ -1,4 +1,5 @@
-﻿using Order.Domain.Model;
+﻿using Order.Domain.Commands.OrderCommand;
+using Order.Domain.Model;
 using System.ComponentModel.DataAnnotations;
 
 namespace Order.Application.Dtos
@@ -15,12 +16,7 @@ namespace Order.Application.Dtos
         [Required]
         public Boolean isDraft {get; init;} // Đã lưu hay chưa
         [Required]
-        public List<OrderItemWriteDto> orderItemWriteDtos {get; init;}
+        public List<OrderItemWriteCommand> orderItemWriteDtos {get; init;}
     }
-    public class OrderItemWriteDto
-    {
-        public Guid productId { get; init; }
-        public decimal discount { get; init; }
-        public int count { get; set; }
-    }
+
 }

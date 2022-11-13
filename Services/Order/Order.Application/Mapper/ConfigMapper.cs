@@ -6,8 +6,8 @@
         {
             return new Type[]
             {
-                typeof(OrderEntityToDtoMapper)
-
+                typeof(OrderEntityToDtoMapper),
+                typeof(OrderDtoToCommandMappper)
             };
         }
     }

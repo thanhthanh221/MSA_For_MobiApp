@@ -18,11 +18,11 @@ namespace Market.Domain.CommandHandlers
         IRequestHandler<ProductDeleteCommand, bool>,
         IRequestHandler<ProductUpdateCommand, bool>
     {
-        private readonly IAsyncProductRepository productRepository;
+        private readonly IAsyncRepository<Product> productRepository;
         private readonly IMediatorHandler bus;
         private readonly IMapper mapper;
 
-        public ProductCommandHandler(IAsyncProductRepository productRepository,
+        public ProductCommandHandler(IAsyncRepository<Product> productRepository,
                                      IMediatorHandler bus,
                                      IMapper mapper)
         {

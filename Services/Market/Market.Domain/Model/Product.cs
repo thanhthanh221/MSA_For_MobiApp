@@ -39,9 +39,9 @@ namespace Market.Domain.Model
             Descretion = descretion;
             Alias = alias;
             Warranty = warranty;
-            PromotionPrice = promotionPrice;
-            Quantity = quantity;
-            OriginalPrice = originalPrice;
+            this.PromotionPrice = promotionPrice;
+            this.Quantity = quantity;
+            this.OriginalPrice = originalPrice;
         }
 
 
@@ -69,9 +69,9 @@ namespace Market.Domain.Model
             Descretion = descretion;
             Alias = alias;
             Warranty = warranty;
-            PromotionPrice = promotionPrice;
-            Quantity = quantity;
-            OriginalPrice = originalPrice;
+            this.PromotionPrice = promotionPrice;
+            this.Quantity = quantity;
+            this.OriginalPrice = originalPrice;
         }
 
         public string Name { get; private set; }
@@ -84,5 +84,22 @@ namespace Market.Domain.Model
         public decimal PromotionPrice { get; private set; } // giá khuyến mãi
         public int Quantity { get; private set; }
         public decimal OriginalPrice { get; private set; }
+
+        
+        // Order Product using Saga Or
+        public void OrderSagaCoutProduct(int count)
+        {
+            if(count >= this.Quantity)
+            {
+                return;
+            }
+            else if(count <= this.Quantity)
+            {
+                this.Quantity -= count;
+
+            }
+
+
+        }
     }
 }

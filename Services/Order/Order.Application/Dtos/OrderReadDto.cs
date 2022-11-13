@@ -27,6 +27,5 @@ namespace Order.Application.Dtos
         public decimal price { get; init; }
         public int count { get; set; }
         public string image { get; init; }
-
     }
 }

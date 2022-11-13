@@ -14,10 +14,17 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Plain.RabbitMQ" Version="0.0.0.4" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.1.3" />
+    <PackageReference Include="MassTransit.Autofac" Version="7.1.3" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.3" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\EventBus.Messages\EventBus.Messages.csproj" />
     <ProjectReference Include="..\Order.Application\Order.Application.csproj" />
     <ProjectReference Include="..\Order.Infra.Data\Order.Infra.Data.csproj" />
   </ItemGroup>

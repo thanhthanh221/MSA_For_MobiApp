@@ -20,13 +20,11 @@ namespace Order.Application.Api.Controllers
         [HttpGet]
         public async Task<ActionResult> GetAllAsync()
         {
-            try
-            {
+            try {
                 IEnumerable<OrderReadDto> orderDtos = await orderService.GetAllAsync();
-                return Ok(orderDtos); 
+                return Ok(orderDtos);
             }
-            catch (System.Exception)
-            {
+            catch (System.Exception) {
                 logger.LogWarning("Log 500 In Action: GetAllAsync - Controller : Order");
                 throw;
             }
@@ -35,22 +33,18 @@ namespace Order.Application.Api.Controllers
         [HttpGet("Id")]
         public async Task<ActionResult<OrderReadDto>> GetByIdAsync(Guid Id)
         {
-            try
-            {
-                if(!ModelState.IsValid)
-                {
+            try {
+                if (!ModelState.IsValid) {
                     return NotFound();
                 }
                 OrderReadDto orderReadDto = await orderService.GetByIdAsync(Id);
 
-                if(orderService is null)
-                {
+                if (orderService is null) {
                     return NotFound();
                 }
                 return Ok(Id);
             }
-            catch (System.Exception)
-            {
+            catch (System.Exception) {
                 logger.LogWarning("Log 500 In Action: GetByIdAsync - Controller : Order");
                 throw;
             }
@@ -59,28 +53,34 @@ namespace Order.Application.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> PostAsync(OrderWriteDto orderWriteDto)
         {
-            await orderService.CreateAsync(orderWriteDto);
+            try {
+                if(!ModelState.IsValid)
+                {
+                    return NotFound();
+                }
+                await orderService.CreateAsync(orderWriteDto);
 
-
-            return NoContent();
+                return NoContent();
+            }
+            catch (System.Exception) {
+                logger.LogWarning("Bug 500 In Action PostAsync - OrderController ");
+                throw;
+            }
         }
 
         // PUT api/<OrderController>/5
         [HttpPut("Id")]
         public async Task<ActionResult> PutAsync(Guid Id, OrderWriteDto orderWriteDto)
         {
-            try
-            {
-                if(!ModelState.IsValid)
-                {
+            try {
+                if (!ModelState.IsValid) {
                     return NotFound();
                 }
-                await orderService.UpdateAsync(orderWriteDto,Id);
-                return NoContent();   
+                await orderService.UpdateAsync(orderWriteDto, Id);
+                return NoContent();
             }
-            catch (System.Exception)
-            {
-                
+            catch (System.Exception) {
+
                 throw;
             }
         }

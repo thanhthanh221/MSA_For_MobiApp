@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Order.Domain.Interface;
 using Order.Infra.Data.Data;
+using Order.Infra.Data.Repository;
 using Order.Infra.Data.UnitOW;
 
 namespace Order.Application.Api.Installers
@@ -11,6 +12,9 @@ namespace Order.Application.Api.Installers
         {
             // Unit Of Work
             services.AddScoped<IUnitOfWork,UnitOfWork>();
+
+            // Repository 
+            services.AddScoped<IOrderRepository, OrderRepository>();
 
             // Add DbContext using Sql server
             services.AddDbContext<OrderServiceContext>(options =>{
