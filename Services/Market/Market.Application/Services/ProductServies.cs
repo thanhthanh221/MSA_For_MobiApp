@@ -12,12 +12,12 @@ namespace Market.Application.Services
 {
     public class ProductServies : IProductServices
     {
-        private readonly IAsyncProductRepository productRepository;
+        private readonly IAsyncRepository<Product> productRepository;
         private readonly IMapper mapper;
         private readonly IMediatorHandler bus;
         private readonly ILogger<ProductServies> logger;
 
-        public ProductServies(IAsyncProductRepository productRepository,
+        public ProductServies(IAsyncRepository<Product> productRepository,
                               IMediatorHandler bus,
                               IMapper mapper,
                               ILogger<ProductServies> logger)

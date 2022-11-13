@@ -6,7 +6,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\EventBus.Messages\EventBus.Messages.csproj" />
     <ProjectReference Include="..\Order.Domain.Core\Order.Domain.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Commands\PaymentCommand\" />
+    <Folder Include="Validations\PaymentValidation\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.1.3" />
+    <PackageReference Include="MassTransit.Autofac" Version="7.1.3" />
   </ItemGroup>
 
 

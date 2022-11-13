@@ -11,7 +11,7 @@ namespace Market.Application.Api.Installers
             services.AddMongoDb();
 
             // Create Db
-            services.AddProductMongoRepostory("Product");
+            services.AddMongoRepostory<Product>("Product");
             services.AddMongoRepostory<Category>("Categories");
         }
     }

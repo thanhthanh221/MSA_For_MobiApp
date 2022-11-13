@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Order.Domain.Core.Commands;
+using Order.Domain.Core.Events;
 
 namespace Order.Domain.Core.Bus
 {
@@ -11,6 +12,12 @@ namespace Order.Domain.Core.Bus
         {
             this.mediator = mediator;
         }
+
+        public Task RaiseEvent<T>(T @event) where T : Event
+        {
+            return mediator.Publish(@event);
+        }
+
         public Task SendCommand<T>(T command) where T : Command
         {
             return mediator.Send(command);
