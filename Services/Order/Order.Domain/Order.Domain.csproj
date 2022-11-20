@@ -6,13 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Validations\**" />
+    <EmbeddedResource Remove="Validations\**" />
+    <None Remove="Validations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\EventBus.Messages\EventBus.Messages.csproj" />
     <ProjectReference Include="..\Order.Domain.Core\Order.Domain.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Commands\PaymentCommand\" />
-    <Folder Include="Validations\PaymentValidation\" />
   </ItemGroup>
 
   <ItemGroup>

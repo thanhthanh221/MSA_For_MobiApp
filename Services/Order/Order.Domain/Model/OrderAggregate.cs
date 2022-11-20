@@ -5,71 +5,99 @@ namespace Order.Domain.Model
     // Root Aggregate Order
     public class OrderAggregate : EntityAudit, IAggregateRoot
     {
+        public String orderName { get; private set; }
+        public DateTime createAt { get; private set; }
+        public decimal price { get; private set; }
+
+        // user Infomation
         public Guid userId { get; private set; }
-        public String userName {get; private set;}
-        public String description { get; private set; }
-        public Boolean isDraft { get; private set; } 
-        // Enum
-        public OrderStatus orderStatus { get; private set; }
-        public int orderStatusId { get; private set; }
-        // Value Object
-        public Address address { get; private set; }
+        public String userName { get; private set; }
 
         // 1 - N
-        public List<OrderItem> orderItems { get; private set; }
+        public virtual List<OrderItem> orderItems { get; private set; }
+
+        // OrderStatus N - 1
+        public int? orderStatusId { get; private set; }
+        public virtual OrderStatus orderStatus { get; private set; }
+
+        // Value Obj
+        public virtual Address address { get; private set; }
+
 
         public OrderAggregate()
         {
         }
 
         public OrderAggregate(Guid userId,
-                              String userName,
-                              String description,
-                              bool isDraft,
-                              OrderStatus orderStatus,
-                              int orderStatusId,
-                              Address address)
+                              string userName)
         {
+            this.orderName = Guid.NewGuid().ToString().Substring(1, 5);
             this.userId = userId;
             this.userName = userName;
-            this.description = description;
-            this.isDraft = isDraft;
-            this.orderStatus = orderStatus;
-            this.orderStatusId = orderStatusId;
-            this.address = address;
-            this.orderItems = orderItems;
-        }
-        // tạo bản order nháp
-        public static OrderAggregate NewDraft()
-        {
-            OrderAggregate order = new OrderAggregate();
-            order.isDraft = true;
-            return order;
+            this.orderStatusId = 2;
+            this.createAt = DateTime.Now;
         }
 
         // Nghiệp vụ thêm đơn hàng
-        public void AddOrderItem(Guid productId, String productName, String image, decimal price, decimal discount, int count)
+        public void AddOrderItem(Guid productId, String productName, String image, decimal price, int count)
         {
-            OrderItem orderItem = orderItems
-                                .Where(orItem => orItem.productId == productId)
-                                .SingleOrDefault();
-
-            if(orderItem != null)
+            if(this.orderItems is null) 
             {
-                orderItem.count += count;
-            }
-            else 
-            {
-                OrderItem newOrderItem = new OrderItem(productId,
-                                                productName,
-                                                image,
-                                                price,
-                                                discount,
-                                                count,
-                                                this.Id
-                                                );
+                this.orderItems = new List<OrderItem>();
+                OrderItem newOrderItem = new OrderItem(this, productId, productName, image, price, count);
                 // Add 
-                orderItems.Add(newOrderItem);
+                this.orderItems.Add(newOrderItem);
+            }
+            OrderItem orderItem = this.orderItems
+                                .Where(or => or.productId == productId)
+                                .SingleOrDefault();
+                
+            // Nếu đơn hàng chưa có sản phẩm 
+            if (orderItem is null) {
+
+                OrderItem newOrderItem = new OrderItem(this, productId, productName, image, price, count);
+                // Add 
+                this.orderItems.Add(newOrderItem);
+
+                return;
+            }
+            orderItem.count += count;
+        }
+
+        // Tính tiền đơn hàng
+        public void OrderBilling()
+        {
+            this.price = this.orderItems.Sum(orItem => orItem.price);
+        }
+
+        // Thay đổi địa chỉ đơn hàng
+        public void UpdateAddress(string city, string district, string commune, string street, string detail)
+        {
+            Address newAddress = new Address(city, district, commune, street, detail, this);
+            if(this.address is null)
+            {
+                this.address = address;
+            }
+
+            if(!newAddress.Equals(address))
+            {
+                this.address = newAddress;
+            }
+        }
+
+        public void SetShippedStatus()
+        {
+            if (this.orderStatusId != OrderStatus.Shipped.Id) {
+                this.orderStatus = OrderStatus.Shipped;
+
+                // Sinh ra Event 
+            }
+        }
+
+        public void SetCancellOrder()
+        {
+            if (this.orderStatusId <= 3) {
+                this.orderStatus = OrderStatus.Cancelled;
             }
         }
     }

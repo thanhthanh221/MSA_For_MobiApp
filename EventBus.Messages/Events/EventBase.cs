@@ -1,19 +1,13 @@
-﻿namespace EventBus.Messages.Events
+﻿using MediatR;
+
+namespace EventBus.Messages.Events
 {
-    public abstract class EventBase
+    public abstract class EventBase : INotification
     {
         public EventBase()
         {
             this.Id = Guid.NewGuid();
-            this.dateTime = DateTime.UtcNow;
         }
-
-        public EventBase(Guid id, DateTime dateTime)
-        {
-            Id = id;
-            this.dateTime = dateTime;
-        }
-
         private Guid Id {get; set;}
         private DateTime dateTime {get; set;}
     }
