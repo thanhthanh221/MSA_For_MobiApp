@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Order.Domain.Model;
 using Order.Infra.EntityConfigurations;
+using Order.Infra.Extensions;
 
 namespace Order.Infra.ServiceContext
 {
@@ -29,6 +30,8 @@ namespace Order.Infra.ServiceContext
             modelBuilder.ApplyConfiguration(new OrderItemConfigutation());
             modelBuilder.ApplyConfiguration(new OrderStatusConfiguration());
             modelBuilder.ApplyConfiguration(new AddressConfiguration());
+
+            modelBuilder.Seed();
 
             base.OnModelCreating(modelBuilder);
         }

@@ -28,7 +28,7 @@ namespace Order.Domain.Core.Models
 
         public override bool Equals(object obj)
         {
-            if(obj == null || !(obj is EntityAudit))
+            if(!(obj is EntityAudit))
             {
                 return false;
             }
@@ -46,12 +46,7 @@ namespace Order.Domain.Core.Models
 
             EntityAudit entity = (EntityAudit)obj;
 
-            return entity.Id == this.Id;
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
+            return entity.Id == Id;
         }
     }
 }

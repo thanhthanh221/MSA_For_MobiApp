@@ -1,105 +1,99 @@
-using Market.Domain.Core.Models;
+using Market.Domain.Models;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Market.Domain.Model
 {
-    public class Product : EntityAudit
+    public class Product : IAggregate
     {
-
-        public Product(DateTimeOffset createAt,
-                       Guid createBy,
-                       DateTimeOffset updateAt,
-                       Guid updateBy)
-        : base(createAt, createBy, updateAt, updateBy)
+        public Product()
         {
         }
 
-
-        // Update Product
-        public Product(Guid Id,
-                       string name,
-                       decimal price,
-                       string image,
-                       int calo,
-                       string descretion,
-                       string alias,
-                       int warranty,
-                       decimal promotionPrice,
-                       int quantity,
-                       decimal originalPrice,
-                       DateTimeOffset createAt,
-                       Guid createBy,
-                       DateTimeOffset updateAt,
-                       Guid updateBy) : base(createAt, createBy, updateAt, updateBy)
-        {
-            this.Id = Id;
-            Name = name;
-            Price = price;
-            Image = image;
-            Calo = calo;
-            Descretion = descretion;
-            Alias = alias;
-            Warranty = warranty;
-            this.PromotionPrice = promotionPrice;
-            this.Quantity = quantity;
-            this.OriginalPrice = originalPrice;
-        }
-
-
-        //Create Product
         public Product(
-                       Guid Id,
-                       string name,
-                       decimal price,
-                       string image,
-                       int calo,
-                       string descretion,
-                       string alias,
-                       int warranty,
-                       decimal promotionPrice,
-                       int quantity,
-                       decimal originalPrice,
-                       DateTimeOffset createAt,
-                       Guid createBy) : base(createAt, createBy)
+            string name,
+            decimal price,
+            int calo,
+            string descretion,
+            int quantity,
+            Guid userId,
+            string userName,
+            string image,
+            HashSet<Category> categories)
         {
-            this.Id = Id;
+            Id = Guid.NewGuid();
+            CreateAt = DateTime.Now;
+            Categories = categories;
+            UserLikeProduct = new HashSet<Guid>();
+            CountView = 0;
             Name = name;
             Price = price;
-            Image = image;
             Calo = calo;
             Descretion = descretion;
-            Alias = alias;
-            Warranty = warranty;
-            this.PromotionPrice = promotionPrice;
-            this.Quantity = quantity;
-            this.OriginalPrice = originalPrice;
+            Quantity = quantity;
+            UserId = userId;
+            UserName = userName;
+            Image = image;
+        }
+        [BsonId]
+        public Guid Id { get; private set; }
+
+        [BsonElement("Tên sản phẩm")]
+        public string Name { get; private set; }
+
+        [BsonElement("Giá")]
+        public decimal Price { get; private set; }
+
+        [BsonElement("Calo")]
+        public int Calo { get; private set; }
+        [BsonElement("Mô tả")]
+        public string Descretion { get; private set; }
+        [BsonElement("Số lượng")]
+        public int Quantity { get; private set; }
+        [BsonElement("Lượt xem")]
+
+        public int CountView { get; private set; }
+        [BsonElement("Người Thích")]
+        public HashSet<Guid> UserLikeProduct { get; private set; }
+
+        [BsonElement("Ngày thêm")]
+        public DateTime CreateAt { get; private set; }
+
+        [BsonElement("Mã người tạo")]
+        public Guid UserId { get; private set; }
+
+        [BsonElement("Tên người tạo")]
+        public string UserName { get; private set; }
+
+        [BsonElement("Ảnh")]
+        public string Image { get; private set; }
+
+        [BsonElement("Danh mục sản phẩm")]
+        public HashSet<Category> Categories { get; private set; }
+
+        // Order Product using Saga Or
+        public void UpdateQuantityProduct(int newQuantity)
+        {
+            if (newQuantity > 0) {
+                Quantity = newQuantity;
+            }
         }
 
-        public string Name { get; private set; }
-        public decimal Price { get; private set; }
-        public string Image { get; private set; }
-        public int Calo { get; private set; }
-        public string Descretion { get; private set; }
-        public string Alias { get; private set; }
-        public int Warranty { get; private set; } // bảo hành
-        public decimal PromotionPrice { get; private set; } // giá khuyến mãi
-        public int Quantity { get; private set; }
-        public decimal OriginalPrice { get; private set; }
-
-        
-        // Order Product using Saga Or
-        public void OrderSagaCoutProduct(int count)
+        public void UpdateNumberLike(Guid userId)
         {
-            if(count >= this.Quantity)
-            {
+            if (UserLikeProduct.Contains(userId)) {
+                UserLikeProduct.Remove(userId);
                 return;
             }
-            else if(count <= this.Quantity)
+            UserLikeProduct.Add(userId);
+        }
+        public bool UpdatePriceProduct(decimal newPrice)
+        {
+            if(newPrice == Price || newPrice <= 0)
             {
-                this.Quantity -= count;
-
+                return false;
             }
-
-
+            Price = newPrice;
+            return true;
         }
     }
 }

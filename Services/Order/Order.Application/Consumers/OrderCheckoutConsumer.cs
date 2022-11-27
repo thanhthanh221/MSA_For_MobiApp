@@ -9,31 +9,32 @@ namespace Order.Application.Consumers
     public class OrderCheckoutConsumer : IConsumer<OrderCheckoutEvent>
     {
         private readonly MediatR.IMediator mediator;
-        private readonly IUnitOfWork unitOfWork;
 
 
-        public OrderCheckoutConsumer(MediatR.IMediator mediator,
-                                     IUnitOfWork unitOfWork)
+        public OrderCheckoutConsumer(MediatR.IMediator mediator)
         {
             this.mediator = mediator;
-            this.unitOfWork = unitOfWork;
         }
 
         public async Task Consume(ConsumeContext<OrderCheckoutEvent> context)
         {
             if (!context.Message.checkOrchestration) {
 
-                if (context.Message.CountCheckSaga == 1) {
+                if(context.Message.CountCheckSaga == 1) {
                     Console.WriteLine("Loi tai Market : " + context.Message.MessageError);
+                    return;
+                }
+                else if(context.Message.CountCheckSaga == 2)
+                {
                     return;
                 }
             }
 
             // Tất cả đều không bug
-            List<CreateOrderItemCommand> createOrderItems = new List<CreateOrderItemCommand>();
+            List<CreateOrderItemCommand> createOrderItems = new ();
 
             foreach (var orItem in context.Message.products) {
-                CreateOrderItemCommand createOrderItem = new CreateOrderItemCommand(
+                CreateOrderItemCommand createOrderItem = new (
                     orItem.productId,
                     orItem.productName,
                     orItem.price,
@@ -44,28 +45,14 @@ namespace Order.Application.Consumers
                 createOrderItems.Add(createOrderItem);
             }
 
-            // Address address = new Address(
-            //     context.Message.city,
-            //     context.Message.district,
-            //     context.Message.commune,
-            //     context.Message.street,
-            //     context.Message.infomation
-            // );
-            // CreateOrderCommand createOrderCommand = new CreateOrderCommand(
-            //     context.Message.userId,
-            //     context.Message.userName,
-            //     address,
-            //     createOrderItems
-            // );
-
-            CreateOrderCommand createOrderCommand = new CreateOrderCommand(
+            CreateOrderCommand createOrderCommand = new (
                 Guid.NewGuid(),
                 Guid.NewGuid().ToString().Substring(2,5),
-                "context.Message.city",
-                "context.Message.district",
-                "context.Message.commune",
-                "context.Message.street",
-                "context.Message.infomation",
+                context.Message.city,
+                context.Message.district,
+                context.Message.commune,
+                context.Message.street,
+                context.Message.infomation,
                 createOrderItems
             );
             

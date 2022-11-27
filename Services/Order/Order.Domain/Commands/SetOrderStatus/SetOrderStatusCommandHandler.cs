@@ -28,7 +28,7 @@ namespace Order.Domain.Commands.SetOrderStatus
             {
                 return false;
             }
-            return await unitOfWork.SaveDbAsync() > 0;
+            return await unitOfWork.SaveDbAsync();
         }
     }
 }

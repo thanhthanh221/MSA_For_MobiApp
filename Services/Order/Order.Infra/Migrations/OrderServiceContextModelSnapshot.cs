@@ -159,6 +159,44 @@ namespace Order.Infra.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Trạng thái đơn hàng", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            name = "Xác nhận đặt hàng",
+                            sub_title = "Đơn đặt hàng của bạn đã được nhận"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            name = "Đơn hàng đang chuẩn bị",
+                            sub_title = "Đơn đặt hàng của bạn đã được chuẩn bị"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            name = "Đang giao hàng",
+                            sub_title = "Đơn hàng của bạn đang được chuyển đến"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            name = "Đã giao hàng",
+                            sub_title = "Chúc bạn ăn ngon miệng"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            name = "Đánh giá chúng tôi",
+                            sub_title = "Giúp chúng tôi cải thiện dịch vụ của mình"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            name = "Hủy Đơn hàng",
+                            sub_title = "Hẹn gặp lại bạn đơn hàng khác"
+                        });
                 });
 
             modelBuilder.Entity("Order.Domain.Model.Address", b =>

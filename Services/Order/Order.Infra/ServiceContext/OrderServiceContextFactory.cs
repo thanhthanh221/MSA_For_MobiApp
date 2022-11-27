@@ -8,14 +8,14 @@ namespace Order.Infra.ServiceContext
     {
         public OrderServiceContext CreateDbContext(string[] args)
         {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
+            var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            String connectionString = configuration.GetConnectionString("Context");
-            DbContextOptionsBuilder<OrderServiceContext> optionsBuilder = new DbContextOptionsBuilder<OrderServiceContext>();
-        
+            string connectionString = configuration.GetConnectionString("Context");
+            DbContextOptionsBuilder<OrderServiceContext> optionsBuilder = new();
+
             optionsBuilder.UseSqlServer(connectionString);
 
             return new OrderServiceContext(optionsBuilder.Options);
