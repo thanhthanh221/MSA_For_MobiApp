@@ -1,12 +1,11 @@
-﻿using Market.Domain.Core.Models;
+﻿using Market.Domain.Models;
 
 namespace Market.Domain.Interface
 {
-    public interface IAsyncRepository<TEntity> where TEntity : EntityAudit
+    public interface IAsyncRepository<TEntity> where TEntity : IAggregate
     {
         Task<TEntity> GetByIdAsync(Guid id);
         Task<IEnumerable<TEntity>> GetAllAsync();
-        Task<IEnumerable<TEntity>> GetAllAsync(ISpecification<TEntity> spec);
         Task UpdateAsync(TEntity obj);
         Task RemoveAsync(Guid id);
         Task CreateAsync(TEntity obj);

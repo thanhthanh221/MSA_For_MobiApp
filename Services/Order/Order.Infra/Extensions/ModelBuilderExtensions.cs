@@ -9,7 +9,7 @@ namespace Order.Infra.Extensions
         {
             modelBuilder.Entity<OrderStatus>().HasData(
                 OrderStatus.Submitted,
-                OrderStatus.Prepared,
+                OrderStatus.Prepared,   
                 OrderStatus.StockConfirmed,
                 OrderStatus.Shipped,
                 OrderStatus.Evaluate,

@@ -4,7 +4,7 @@ namespace Order.Domain.Core.Models
 {
     public abstract class Enumeration : IComparable
     {
-        public Enumeration(int Id, String name, String sub_title)
+        public Enumeration(int Id, string name, string sub_title)
         {
             this.Id = Id;
             this.name = name;
@@ -13,13 +13,16 @@ namespace Order.Domain.Core.Models
 
         // Prop
         public int Id {get; private set;}
-        public String name {get; private set;}
-        public String sub_title {get; private set;}
+        public string name {get; private set;}
+        public string sub_title {get; private set;}
 
         // Overrding
         public override string ToString() => this.name;
 
-        public override int GetHashCode() => this.Id.GetHashCode();
+        public override int GetHashCode() 
+        {
+            return Id.GetHashCode();
+        }
         
         // So sánh
         public int CompareTo(object obj)

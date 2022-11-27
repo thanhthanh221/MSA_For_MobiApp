@@ -34,7 +34,7 @@ namespace Order.Domain.Model
             this.orderName = Guid.NewGuid().ToString().Substring(1, 5);
             this.userId = userId;
             this.userName = userName;
-            this.orderStatusId = 2;
+            this.orderStatusId = OrderStatus.Submitted.Id;
             this.createAt = DateTime.Now;
         }
 

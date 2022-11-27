@@ -12,9 +12,9 @@ namespace Order.Infra.UnitOW
             this.context = context;
         }
 
-        public async Task<int> SaveDbAsync()
+        public async Task<bool> SaveDbAsync()
         {
-            return await context.SaveChangesAsync();   
+            return await context.SaveChangesAsync() > 0;   
         }
     }
 }

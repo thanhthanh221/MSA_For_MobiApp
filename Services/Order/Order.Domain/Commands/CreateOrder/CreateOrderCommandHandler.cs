@@ -31,12 +31,12 @@ namespace Order.Domain.Commands.CreateOrder
 
             // Create Order
 
-            OrderAggregate order = new OrderAggregate(Guid.NewGuid(), "Quang");
+            OrderAggregate order = new OrderAggregate(command.userId, command.userName);
             order.UpdateAddress(command.city,command.district,command.commune,command.street, command.detail);
 
             foreach (CreateOrderItemCommand orderIt in command.orderItemCommands) {
                 order.AddOrderItem(
-                    orderIt.productId, "Bim Bim", "15663", 14000, 1
+                    orderIt.productId, orderIt.productName, orderIt.image, orderIt.price, orderIt.count
                 );
             }
             
@@ -46,7 +46,7 @@ namespace Order.Domain.Commands.CreateOrder
 
             await orderRepository.CreateAsync(order);
             
-            return await unitOfWork.SaveDbAsync() > 0;
+            return await unitOfWork.SaveDbAsync();
         }
     }
 }

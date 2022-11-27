@@ -25,7 +25,7 @@ namespace Order.Domain.Commands.CancelOrder
             }
 
             order.SetCancellOrder();
-            return await unitOfWork.SaveDbAsync() > 0;
+            return await unitOfWork.SaveDbAsync();
         }
     }
 }

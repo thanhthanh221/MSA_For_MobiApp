@@ -1,59 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Market.Domain.Core.Models;
-
+﻿using Market.Domain.Models;
 namespace Market.Domain.Model
 {
-    public class Category : EntityAudit
+    public class Category : IAggregate
     {
-        public Category(DateTimeOffset createAt,
-                        Guid createBy,
-                        DateTimeOffset updateAt,
-                        Guid updateBy) : base(createAt, createBy, updateAt, updateBy)
+        public Category(string name,
+                        string image)
         {
+            Id = Guid.NewGuid();
+            ParentCategory = new List<Category>();
+            Name = name;
+            Image = image;
         }
 
-        // Full Atrubute For Update
-        public Category(Guid Id,
-                        string name,
-                        string alias,
-                        string description,
-                        string image,
-                        DateTimeOffset createAt,
-                        Guid createBy,
-                        DateTimeOffset updateAt,
-                        Guid updateBy)  : base(createAt, createBy, updateAt, updateBy)
+        public Guid Id {get; private set;}
+        public string Name { get; private set; }
+        public string Image { get; private set; }
+        public List<Category> ParentCategory { set; private get; }
+
+        public bool UpdateParentCategory(List<Category> categories)
         {
-            this.Id = Id;
-            this.name = name;
-            this.alias = alias;
-            this.description = description;
-            this.image = image;
+            if(categories.Count == 0)
+            {
+                return false;
+            }
+            ParentCategory = categories; 
+            return true;         
         }
-
-        // Create Category From Command
-        public Category(Guid Id,
-                        string name,
-                        string alias,
-                        string description,
-                        string image,
-                        DateTimeOffset createAt,
-                        Guid createBy) : base(createAt, createBy)
-        {
-            this.Id = Id;
-            this.name = name;
-            this.alias = alias;
-            this.description = description;
-            this.image = image;
-        }
-
-        public String name { get; private set; }
-        public String alias { get; private set; }
-        public String description { get; private set; }
-        public String image { get; private set; }
-
     }
 }
