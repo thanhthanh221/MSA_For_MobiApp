@@ -19,6 +19,10 @@ namespace Market.Infra.MongoDb
             BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String)); // Chỉnh Giud thành String
             BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String)); // Ngày tháng thành String
             BsonSerializer.RegisterSerializer(new DateTimeSerializer(BsonType.String));
+            
+            // TimeSpan to String
+            BsonSerializer.RegisterSerializer(new TimeSpanSerializer(BsonType.String)); 
+
 
             Services.AddSingleton(ServiceProvider =>
             {

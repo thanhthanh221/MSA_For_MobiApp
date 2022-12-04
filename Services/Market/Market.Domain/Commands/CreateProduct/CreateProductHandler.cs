@@ -4,6 +4,7 @@ using Market.Domain.Interface;
 using Market.Domain.Model;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Market.Domain.Commands.CreateProduct
 {
@@ -32,33 +33,47 @@ namespace Market.Domain.Commands.CreateProduct
             if (!validationResult.IsValid) {
                 return null;
             }
+
+            var allProduct = await productRepository.GetAllAsync();
+            var checkProduct = allProduct.Any(p => p.Name.ToLower().Equals(command.Name.Trim().ToLower()));
+
+            if (checkProduct) {
+                logger.LogWarning($"product already exists : {command.Name} ");
+                return null;
+            }
             string imageToString = UploadFileHelper.IFormFileToBase64ImageOfVideo(command.Image);
 
-            HashSet<Category> categories = new();
-            foreach (var cateId in command.CategoriesId)
-            {
-                // var category = await categoryRepository.GetByIdAsync(cateId);
-                // if(category is null)
-                // {
-                //     logger.LogInformation(message: $@"Category Id: {cateId} does not exist
-                //                                     Time : {DateTime.Now}");
-                //     return null;
-                // }
-                // categories.Add(category);    
+            List<Category> categories = new();
+            foreach (var cateId in command.CategoriesId) {
+                var category = await categoryRepository.GetByIdAsync(cateId);
+                if (category is null) {
+                    logger.LogInformation(message: $@"Category Id: {cateId} does not exist
+                                                    Time : {DateTime.Now}");
+                    return null;
+                }
+                categories.Add(category);
+            }
+
+            HashSet<TypeProduct> typeProducts = new();
+
+            foreach (var p in command.TypeProducts) {
+                var typeProduct = JsonConvert.DeserializeObject<TypeProduct>(p);
+                typeProducts.Add(typeProduct);
             }
 
             Product product = new(
-                command.Name,
-                command.Price,
+                command.Name.Trim(),
                 command.Calo,
-                command.Descretion,
-                command.Quantity,
+                command.Descretion.Trim(),
+                command.TypeName.Trim(),
+                typeProducts,
                 command.UserId,
-                command.UserName,
+                command.UserName.Trim(),
                 imageToString,
-                categories
+                categories,
+                new TimeSpan(command.TimeOrder.Day, command.TimeOrder.Hours, command.TimeOrder.Minute, 0)
             );
-            
+
             await productRepository.CreateAsync(product);
 
             // Create Event
@@ -66,7 +81,7 @@ namespace Market.Domain.Commands.CreateProduct
             CreateProductEvent createProductEvent = new(product);
 
             await mediator.Publish(createProductEvent, cancellationToken);
-            
+
             logger.LogInformation(message: $"Create Product {product.Id}");
 
             return product;
