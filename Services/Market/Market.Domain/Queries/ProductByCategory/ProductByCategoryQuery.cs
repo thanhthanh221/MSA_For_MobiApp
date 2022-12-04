@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Market.Domain.Queries.ProductByCategory
 {
-    public class ProductByCategoryQuery : IRequest<Product>
+    public class ProductByCategoryQuery : IRequest<List<Product>>
     {
         public ProductByCategoryQuery(Guid categoryId,
                                       int page,

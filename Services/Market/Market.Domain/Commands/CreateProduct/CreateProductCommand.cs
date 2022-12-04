@@ -10,14 +10,17 @@ namespace Market.Domain.Commands.CreateProduct
         [Required]
         public string Name { get; set; }
         [Required]
-        public decimal Price { get; set; }
-        [Required]
         public int Calo { get; set; }
         public string Descretion { get; set; }
         [Required]
-        public int Quantity { get; set; }
+        public string TypeName {get; set;}
         [Required]
-        public HashSet<Guid> CategoriesId {get; set;}
+    
+        public List<string> TypeProducts {get; set;}
+        [Required]
+        public TimeOrderProduct TimeOrder { get; set; }
+        [Required]
+        public HashSet<Guid> CategoriesId { get; set; }
 
         // user
         public Guid UserId { get; set; }
@@ -25,4 +28,20 @@ namespace Market.Domain.Commands.CreateProduct
         [Required]
         public IFormFile Image { get; set; }
     }
+
+    public class TimeOrderProduct
+    {    
+        [Required]
+        [Range(0, 31)]
+        public int Day { get; set; }
+
+        [Required]
+        [Range(0, 60)]
+        public int Hours { get; set; }
+
+        [Required]
+        [Range(0, 60)]
+        public int Minute { get; set; }
+    }
+
 }

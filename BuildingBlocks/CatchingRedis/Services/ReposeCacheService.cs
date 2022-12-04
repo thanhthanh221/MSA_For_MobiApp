@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -27,38 +28,21 @@ namespace CatchingRedis.Services
             string cacheRespone = await distributedCache.GetStringAsync(cacheKey);
             return string.IsNullOrEmpty(cacheRespone) ? null : cacheRespone;
         }
-
-        public async Task<List<string>> GetPageCacheReponseAsync(string partern,int pageSize, int page)
-        {
-            List<string> readByCatcheRedis = new ();
-            if (string.IsNullOrWhiteSpace(partern) || partern.Equals("_")) {
-                throw new AggregateException("Dữ liệu không thể null hoặc khoảng trắng");
-            }
-            // Lấy ra cái Catche có Key = cacheKey
-
-            foreach (var key in this.GetKeyAsync(partern + "*")) {
-                string cacheRespone = await distributedCache.GetStringAsync(key);
-                if(!string.IsNullOrEmpty(cacheRespone))
-                {
-                    readByCatcheRedis.Add(cacheRespone);
-                }          
-            }
-            return readByCatcheRedis.Skip(page* pageSize).Take(pageSize).ToList();
-        }
         public async Task<List<string>> GetAllCacheReponseAsync(string partern)
         {
-            List<string> readByCatcheRedis = new ();
+            List<string> readByCatcheRedis = new();
             if (string.IsNullOrWhiteSpace(partern) || partern.Equals("_")) {
                 throw new AggregateException("Dữ liệu không thể null hoặc khoảng trắng");
             }
             // Lấy ra cái Catche có Key = cacheKey
 
             foreach (var key in this.GetKeyAsync(partern + "*")) {
-                string cacheRespone = await distributedCache.GetStringAsync(key);
-                if(!string.IsNullOrEmpty(cacheRespone))
-                {
+                var cacheResponeByte = await distributedCache.GetAsync(key);
+
+                string cacheRespone = Encoding.UTF8.GetString(cacheResponeByte);
+                if (!string.IsNullOrEmpty(cacheRespone)) {
                     readByCatcheRedis.Add(cacheRespone);
-                }          
+                }
             }
             return readByCatcheRedis;
         }
@@ -94,13 +78,10 @@ namespace CatchingRedis.Services
             if (response == null) {
                 return;
             }
-            string serializerRespone = JsonConvert.SerializeObject(response,
-                new JsonSerializerSettings() {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                }
-            );
+            var converReponseToString = JsonConvert.SerializeObject(response);
+            var redisUTF8 = Encoding.UTF8.GetBytes(converReponseToString);
 
-            await distributedCache.SetStringAsync(cacheKey, serializerRespone,
+            await distributedCache.SetAsync(cacheKey, redisUTF8,
                 new DistributedCacheEntryOptions {
                     AbsoluteExpirationRelativeToNow = timeOut
                 }

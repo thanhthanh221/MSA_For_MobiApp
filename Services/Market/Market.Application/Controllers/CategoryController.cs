@@ -1,5 +1,8 @@
 ﻿using Market.Domain.Commands.CreateCategory;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
+using Market.Domain.Model;
+
 namespace Market.Application.Controllers
 {
     [Route("MarketService/[controller]")]
@@ -7,18 +10,22 @@ namespace Market.Application.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ILogger<CategoryController> logger;
+        private readonly IMediator mediator;
 
-        public CategoryController(ILogger<CategoryController> logger)
+        public CategoryController(
+            ILogger<CategoryController> logger, IMediator mediator)
         {
             this.logger = logger;
+            this.mediator = mediator;
         }
+
 
         // Get All Product
         [HttpGet(Name = "GetAllCategory")]
         public async Task<ActionResult> GetAllAsync()
         {
             try {
-                
+
 
                 return Ok();
             }
@@ -33,7 +40,7 @@ namespace Market.Application.Controllers
         public async Task<ActionResult> GetByIdAsync(Guid Id)
         {
             try {
-                
+
 
                 // if (categoryDto is null) {
                 //     return NotFound();
@@ -47,18 +54,22 @@ namespace Market.Application.Controllers
             }
         }
 
-        // POST api/<CategoryController>
-        [HttpPost(Name ="CreateCategory")]
-        public async Task<ActionResult> PostAsync([FromForm] CreateCategoryCommand command)
+        [Route("CreateCategory")]
+        [HttpPost]
+        public async Task<ActionResult> CreateCategoryAsync([FromForm] CreateCategoryCommand command)
         {
             try {
                 if (!ModelState.IsValid) {
-                    return NotFound();
+                    return this.BadRequest();
                 }
 
-                
-                
-                return NoContent();
+                var category = await mediator.Send(command);
+
+                if (category is null) {
+                    return this.BadRequest();
+                }
+
+                return this.CreatedAtAction("CreateCategoryAsync", category);
             }
             catch (System.Exception) {
                 logger.LogInformation("500");

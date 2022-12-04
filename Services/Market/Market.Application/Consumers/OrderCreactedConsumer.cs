@@ -25,10 +25,7 @@ namespace Market.Application.Consumers
             if (!context.Message.checkOrchestration) {
                 // services # bị lỗi => rerun lại dữ liệu cũ
                 foreach (var pro in context.Message.products) {
-                    Product product = await productRepository.GetByIdAsync(pro.productId);
-
-                    // Update lại số lượng sản phẩm
-                    product.UpdateQuantityProduct(pro.count + product.Quantity);
+                    var product = await productRepository.GetByIdAsync(pro.productId);
                     await productRepository.UpdateAsync(product);
 
                     // gửi tin nhắn ngược lại về Order
@@ -47,24 +44,6 @@ namespace Market.Application.Consumers
                     await publishEndpoint.Publish<OrderCheckoutEvent>(context.Message);
                     Console.WriteLine(context.Message.MessageError);
                     return;
-                }
-
-                // check Count Product
-
-                if (product.Quantity < pro.count) {
-                    context.Message.checkOrchestration = false;
-                    context.Message.MessageError = $"Kho khong du san pham Id: {pro.productId}";
-
-                    await publishEndpoint.Publish<OrderCheckoutEvent>(context.Message);
-                    Console.WriteLine(context.Message.MessageError);
-                    return;
-                }
-                else if (product.Quantity >= pro.count) {
-                    product.UpdateQuantityProduct(pro.count);
-                    await productRepository.UpdateAsync(product);
-                    context.Message.price += pro.count * product.Price;
-
-                    // Update Product
                 }
             }
             Console.WriteLine($"Update Price for Product Check true");

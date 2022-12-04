@@ -1,4 +1,7 @@
 ﻿using Market.Domain.Models;
+using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
+
 namespace Market.Domain.Model
 {
     public class Category : IAggregate
@@ -11,20 +14,25 @@ namespace Market.Domain.Model
             Name = name;
             Image = image;
         }
-
+        [BsonId]
+        [JsonProperty(PropertyName = "CateId")]
         public Guid Id {get; private set;}
+        [BsonElement("Tên danh mục")]
         public string Name { get; private set; }
-        public string Image { get; private set; }
+        [BsonElement("Danh mục cha")]
+        [JsonProperty]
         public List<Category> ParentCategory { set; private get; }
+        [BsonElement("Ảnh")]
+        public string Image { get; private set; }
 
-        public bool UpdateParentCategory(List<Category> categories)
+        public void SetParentCategory(HashSet<Category> categories)
         {
-            if(categories.Count == 0)
+
+            if(categories != null)
             {
-                return false;
+                ParentCategory = categories.ToList();
             }
-            ParentCategory = categories; 
-            return true;         
+
         }
     }
 }

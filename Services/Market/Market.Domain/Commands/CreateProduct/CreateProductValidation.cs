@@ -16,11 +16,5 @@ namespace Market.Domain.Commands.CreateProduct
                 .NotEmpty().WithMessage("Không được Null giá trị")
                 .GreaterThan(0).WithMessage("Calo không được âm");
         }
-        public void ValidationPrice()
-        {
-            this.RuleFor(x => x.Price)
-                .NotEmpty().WithMessage("Phải có giá tiền sản phẩm")
-                .GreaterThan(0).WithMessage("Phải có giá tiền");
-        }
     }
 }
