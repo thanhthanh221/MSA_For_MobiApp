@@ -1,0 +1,22 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/MarketService/{controller}/{action}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndports": [
+        {
+          "Host": "localhost",
+          "Port": 7165
+        }
+      ],
+
+      "UpstreamPathTemplate": "/MarketService/{controller}/{action}",
+      "UptreamHttpMethod": ["Get","Post", "Update"],
+
+      "Key": "Market"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5027"
+  }
+}
