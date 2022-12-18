@@ -1,11 +1,11 @@
 ﻿using Market.Application.Dtos;
-using Market.Domain.Model;
+using Market.Domain.ProductService.Model;
 
 namespace Market.Application.Extensions
 {
     public static class ProductDtoExtension
     {
-        public static ProductsDto ConvertToDto(this Product product, Guid userId)
+        public static ProductsDto ConvertToDto(this ProductAggregate product, Guid userId)
         {
             ProductsDto productsDto = new() {
                 ProductId = product.Id,
@@ -13,14 +13,14 @@ namespace Market.Application.Extensions
                 Calo = product.Calo,
                 Price = product.Price,
                 CheckFavourite = product.UserLikeProduct.Any(us => us.Equals(userId)),
-                Categories = product.Categories.Select(c => c.Id).ToList(),
+                Categories = product.Categories.Select(c => c.CategoryId).ToList(),
                 Star = product.Star,
                 Image = product.Image
             };
             return productsDto;
         }
 
-        public static ProductDto ConvertOneToDto(this Product product, Guid userId)
+        public static ProductDto ConvertOneToDto(this ProductAggregate product, Guid userId)
         {
 
             ProductDto productDto = new() {
@@ -32,8 +32,8 @@ namespace Market.Application.Extensions
                 CheckFavourite = product.UserLikeProduct
                                 .Any(us => us.Equals(userId)),
                 TypeName = product.TypeName,
-                TypeProductDtos = product.TypeProducts
-                                .Select(ty => new TypeProductDto(ty.TypeValue, ty.PriceType, ty.QuantityType))
+                TypeProductDtos = product.ProductTypes
+                                .Select(ty => new TypeProductDto(ty.ValueType, ty.PriceType, ty.QuantityType))
                                 .ToList(),
                 Image = product.Image
             };

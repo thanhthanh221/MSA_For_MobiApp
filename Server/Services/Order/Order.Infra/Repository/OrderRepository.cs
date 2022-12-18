@@ -21,7 +21,7 @@ namespace Order.Infra.Repository
 
         public async Task DeleteAsync(Guid id)
         {
-            OrderAggregate order = await GetByIdAsync(id);
+            var order = await GetByIdAsync(id);
             if (order is null) {
                 return;
             }

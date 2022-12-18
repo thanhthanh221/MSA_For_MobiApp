@@ -9,6 +9,10 @@ const logo_01 = require("../assets/images/logo_01.png")
 const logo_02 = require("../assets/images/logo_02.png")
 const success = require("../assets/images/success.png");
 const card = require("../assets/images/card.png");
+const couponBackground = require("../assets/images/couponBackground.png");
+const noen = require("../assets/images/noen.png");
+
+
 
 export default {
     profile,
@@ -22,4 +26,6 @@ export default {
     logo_02,
     success,
     card,
+    couponBackground,
+    noen
 }

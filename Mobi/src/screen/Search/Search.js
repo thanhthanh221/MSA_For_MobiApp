@@ -271,10 +271,16 @@ const Search = ({ navigation }) => {
     <View
       style={{
         flex: 1,
-        marginTop: 5,
-        paddingHorizontal: SIZES.radius
+        paddingHorizontal: SIZES.radius,
       }}
     >
+      <Image
+        source={images.noen}
+        style={{
+          position: 'absolute',
+          width: SIZES.width,
+        }}
+      />
       {renderSearch()}
 
       {/* Filter */}

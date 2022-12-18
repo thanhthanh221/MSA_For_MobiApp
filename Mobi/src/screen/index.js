@@ -13,6 +13,7 @@ import Settings from './Settings/Settings';
 import ChangePassword from './Authentication/ChangePassword';
 import MyAccount from './Account/MyAccount';
 import Coupon from './Coupons/Coupon';
+import ViewCoupon from './Coupons/ViewCoupon';
 
 export {
   Home, 
@@ -29,5 +30,6 @@ export {
   Settings,
   ChangePassword,
   MyAccount,
-  Coupon
+  Coupon,
+  ViewCoupon
 }

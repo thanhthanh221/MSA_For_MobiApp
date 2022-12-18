@@ -1,7 +1,7 @@
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Header, IconButton, TextButton, TextIconButton } from '../../components'
-import { COLORS, icons, SIZES, theme } from '../../constants'
+import { COLORS, icons, images, SIZES, theme } from '../../constants'
 
 const Coupon = ({ navigation }) => {
 
@@ -70,16 +70,6 @@ const Coupon = ({ navigation }) => {
                     containerStyle={{
                         marginTop: 10
                     }}
-                    leftComponent={
-                        <IconButton
-                            icon={icons.back}
-                            iconStyle={{
-                                tintColor: COLORS.black,
-                                marginLeft: 10
-                            }}
-                            onPress={() => navigation.goBack()}
-                        />
-                    }
                     title={"MÃ GIẢM GIÁ"}
                 />
 
@@ -185,8 +175,8 @@ const Coupon = ({ navigation }) => {
                                     backgroundColor: COLORS.white,
                                     borderTopRightRadius: SIZES.padding,
                                     borderBottomRightRadius: SIZES.padding,
-                                    justifyContent: 'center',
-                                    alignItems:'center'
+                                    justifyContent: 'flex-start',
+                                    alignItems: 'center'
                                 }}
                                 icon={icons.couponsUser}
                                 iconStyle={{
@@ -247,6 +237,7 @@ const Coupon = ({ navigation }) => {
                                         </Text>
                                     </View>
                                 }
+                                onPress={() => navigation.navigate("DetailCoupon", { CouponId: item.Id })}
                             />
 
                             <View
@@ -299,6 +290,14 @@ const Coupon = ({ navigation }) => {
                 paddingBottom: 120
             }}
         >
+            <Image
+                source={images.noen}
+                style={{
+                    width:SIZES.width,
+                    position:'absolute',
+                    marginTop:50
+                }}
+            />
             {renderHeader()}
 
             <View

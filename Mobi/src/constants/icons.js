@@ -67,6 +67,7 @@ const fishingTackle = require("../assets/icons/fishingTackle.png");
 const bbq = require("../assets/icons/bbq.png");
 const couponsUser = require("../assets/icons/couponsUser.png");
 const backRight = require("../assets/icons/backRight.png");
+const couponBackground = require("../assets/icons/couponBackground.png");
 
 
 export default {
@@ -138,5 +139,6 @@ export default {
     fishingTackle,
     bbq,
     couponsUser,
-    backRight
+    backRight,
+    couponBackground
 }

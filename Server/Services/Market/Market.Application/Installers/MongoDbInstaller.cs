@@ -1,4 +1,5 @@
-﻿using Market.Domain.Model;
+﻿using Market.Domain.CouponService.Model;
+using Market.Domain.ProductService.Model;
 using Market.Infra.MongoDb;
 
 namespace Market.Application.Installers
@@ -11,8 +12,8 @@ namespace Market.Application.Installers
             services.AddMongoDb();
 
             // Create Db
-            services.AddMongoRepostory<Product>("Product");
-            services.AddMongoRepostory<Category>("Categories");
+            services.AddMongoRepostory<ProductAggregate>("Product");
+            services.AddMongoRepostory<CouponAggregate>("Coupon");
         }
     }
 }

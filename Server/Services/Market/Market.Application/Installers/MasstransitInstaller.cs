@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using EventBus.Messages.Events;
 using Market.Application.Consumers;
+using Market.Infra.Masstransit;
 using Market.Infra.Settings;
 using MassTransit;
 using RabbitMQ.Client;
@@ -19,9 +20,9 @@ namespace Market.Application.Installers
                 // cài đặt khi sử dung rbmq
                 configure.UsingRabbitMq((context, configuration) => {
 
-                    IConfiguration Configuration = context.GetService<IConfiguration>();
+                    var Configuration = context.GetService<IConfiguration>();
 
-                    RabbitMQSettings rabbitMQSettings = Configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
+                    var rabbitMQSettings = Configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
 
                     // Config RabbitMq By Masstransit
                     configuration.Host(rabbitMQSettings.Host, "/", h => {
@@ -29,31 +30,12 @@ namespace Market.Application.Installers
                         h.Password(rabbitMQSettings.Password);
                     });
 
-                    configuration.Send<OrderCheckoutEvent>(x => {
-                        x.UseRoutingKeyFormatter(context => "15122001");
-                    });
-                    configuration.Message<OrderCheckoutEvent>(x => {
-                        x.SetEntityName("Market.Checkout");
-                    });
-                    configuration.Publish<OrderCheckoutEvent>(x => {
-                        x.ExchangeType = ExchangeType.Direct;
-                    });
+                    MasstransitPublish masstransitPublish = new();
+                    masstransitPublish.ConfigRabbitMq(context, configuration);
 
-
-                    configuration.ReceiveEndpoint("Order-Services", e => {
-                        e.ConfigureConsumer<OrderCreactedConsumer>(context);
-
-                        e.Bind("Order.Orchestration", x => {
-                            x.AutoDelete = false;
-                            x.Durable = true;
-                            x.ExchangeType = ExchangeType.Direct;
-                            x.RoutingKey = "16042002";
-                        });
-                    });
-
-
-
-                    // Exchange for Consume 
+                    MasstransitConsumer masstransitConsumer = new();
+                    masstransitConsumer.ConfigRabbitMq(context, configuration);
+                     
                 });
             });
             services.AddMassTransitHostedService();

@@ -1,18 +1,17 @@
 ﻿using MassTransit;
-using Market.Domain.Events;
 using EventBus.Messages.Events;
-using Market.Domain.Model;
-using Market.Domain.Interface;
+using Application.Common.Repository;
+using Market.Domain.ProductService.Model;
 
 namespace Market.Application.Consumers
 {
     public class OrderCreactedConsumer : IConsumer<OrderCheckoutEvent>
     {
-        private readonly IAsyncRepository<Product> productRepository;
+        private readonly IRepository<ProductAggregate> productRepository;
         private readonly IPublishEndpoint publishEndpoint;
 
-        public OrderCreactedConsumer(IAsyncRepository<Product> productRepository,
-                                     IPublishEndpoint publishEndpoint)
+        public OrderCreactedConsumer(
+            IRepository<ProductAggregate> productRepository, IPublishEndpoint publishEndpoint)
         {
             this.productRepository = productRepository;
             this.publishEndpoint = publishEndpoint;
@@ -29,12 +28,12 @@ namespace Market.Application.Consumers
                     await productRepository.UpdateAsync(product);
 
                     // gửi tin nhắn ngược lại về Order
-                    
+
                 }
                 return;
             }
             foreach (var pro in context.Message.products) {
-                Product product = await productRepository.GetByIdAsync(pro.productId);
+                var product = await productRepository.GetByIdAsync(pro.productId);
 
                 // không tìm thấy sản phẩm
                 if (product is null) {

@@ -14,7 +14,7 @@ import SignUp from './src/screen/Authentication/SignUp';
 import Otp from './src/screen/Authentication/Otp';
 import ForgotPassword from './src/screen/Authentication/ForgotPassword';
 import FoodDetail from './src/screen/Food/FoodDetail';
-import { AddCard, ChangePassword, Checkout, Coupon, DeliveryStatus, Home, Map, MyAccount, MyCard, MyCart, Settings, Success } from './src/screen';
+import { AddCard, ChangePassword, Checkout, Coupon, DeliveryStatus, Home, Map, MyAccount, MyCard, MyCart, Settings, Success, ViewCoupon } from './src/screen';
 import CustomDrawer from './src/navigation/CustomDrawer';
 import MainLayout from './src/screen/MainLayout';
 import CustomTabBottom from './src/navigation/CustomTabBottom';
@@ -106,6 +106,10 @@ const App = () => {
           <Stack.Screen
             name='CouponLayout'
             component={Coupon}
+          />
+          <Stack.Screen
+            name='DetailCoupon'
+            component={ViewCoupon}
           />
         </Stack.Navigator>
       </NavigationContainer>
