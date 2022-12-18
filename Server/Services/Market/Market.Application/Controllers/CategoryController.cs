@@ -1,7 +1,6 @@
 ﻿using Market.Domain.Commands.CreateCategory;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using Market.Domain.Model;
 
 namespace Market.Application.Controllers
 {
@@ -63,13 +62,7 @@ namespace Market.Application.Controllers
                     return this.BadRequest();
                 }
 
-                var category = await mediator.Send(command);
-
-                if (category is null) {
-                    return this.BadRequest();
-                }
-
-                return this.CreatedAtAction("CreateCategoryAsync", category);
+                return this.Ok();
             }
             catch (System.Exception) {
                 logger.LogInformation("500");

@@ -2,9 +2,6 @@
 using Market.Domain.Commands.CreateProduct;
 using Market.Domain.Commands.DeleteProduct;
 using Market.Domain.Commands.UpdatePriceProduct;
-using Market.Domain.Queries.FilterProduct;
-using Market.Domain.Queries.ProductByCategory;
-using Market.Domain.Queries.ProductById;
 using Market.Infra.Redis;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -29,21 +26,9 @@ namespace Market.Application.Controllers
         public async Task<ActionResult> GetByCategoryIdAsync(int Page, Guid CategoryId)
         {
             try {
-                if (!ModelState.IsValid) {
-                    return this.BadRequest();
-                }
-                ProductByCategoryQuery productQuery = new(CategoryId, Page,
-                    PatternCatcheRedis.ProductPattern
-                );
-
-                var products = await mediator.Send(productQuery);
-
-                if (products is null) {
-                    return this.BadRequest();
-                }
 
                 logger.LogInformation("Try vấn thông tin sản phẩm tại {time}", DateTimeOffset.Now);
-                return this.Ok(products);
+                return this.Ok();
             }
             catch (System.Exception) {
                 logger.LogError("500");
@@ -52,16 +37,11 @@ namespace Market.Application.Controllers
         }
         [Route("FilerProduct")]
         [HttpGet]
-        public async Task<ActionResult> GetProductAsync([FromQuery] FilterProductQuery query)
+        public async Task<ActionResult> GetProductAsync()
         {
             try {
-                var products = await mediator.Send(query);
 
-                if (products is null) {
-                    return this.BadRequest();
-                }
-
-                return this.Ok(products);
+                return this.Ok();
             }
             catch (System.Exception) {
                 logger.LogError("500");
@@ -74,13 +54,8 @@ namespace Market.Application.Controllers
         public async Task<ActionResult> GetProductByIdAsync(Guid ProductId)
         {
             try {
-                ProductByIdQuery productByIdQuery = new(ProductId);
-                var product = await mediator.Send(productByIdQuery);
 
-                if (product is null) {
-                    return this.BadRequest();
-                }
-                return this.Ok(product.ConvertOneToDto(product.UserId));
+                return this.Ok();
             }
             catch (System.Exception) {
                 logger.LogError("500");
@@ -97,13 +72,8 @@ namespace Market.Application.Controllers
                 if (!ModelState.IsValid) {
                     return this.NotFound();
                 }
-                var product = await mediator.Send(createProduct);
 
-                if (product is null) {
-                    return this.BadRequest();
-                }
-
-                return this.CreatedAtAction("CreateProductAsync", product);
+                return this.Ok();
             }
             catch (System.Exception) {
                 logger.LogError("500");

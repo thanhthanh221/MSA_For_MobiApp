@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using MediatR;
-using Microsoft.OpenApi.Models;
 
 namespace Market.Application.Installers
 {
@@ -8,6 +7,7 @@ namespace Market.Application.Installers
     {
         public void InstallService(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddCors();
             services.AddMediatR(typeof(Program).GetTypeInfo().Assembly);
             services.AddControllers(option => {
                 option.SuppressAsyncSuffixInActionNames = false; //Phương thức xóa bỏ hậu tố bất đồng bộ (Async)

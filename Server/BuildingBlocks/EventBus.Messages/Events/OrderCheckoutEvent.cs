@@ -1,6 +1,6 @@
 ﻿namespace EventBus.Messages.Events
 {
-    public class OrderCheckoutEvent : EventBase
+    public class OrderCheckoutEvent
     {
         public Guid userId { get; set; }
         public String userName { get; set; }

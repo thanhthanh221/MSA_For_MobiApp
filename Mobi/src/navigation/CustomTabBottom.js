@@ -227,7 +227,8 @@ const CustomTabBottom = ({ navigation }) => {
             <View
                 style={{
                     justifyContent: 'flex-end',
-                    height: 85
+                    height: 85,
+                    
                 }}>
 
                 <View
@@ -238,7 +239,7 @@ const CustomTabBottom = ({ navigation }) => {
                         paddingHorizontal: 5,
                         borderTopRightRadius: 20,
                         borderTopLeftRadius: 20,
-                        backgroundColor: COLORS.white
+                        backgroundColor: COLORS.white2
                     }}>
                     <TabButton
                         lable={constants.screens.home}

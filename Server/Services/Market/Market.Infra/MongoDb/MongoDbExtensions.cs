@@ -1,5 +1,5 @@
-﻿using Market.Domain.Models;
-using Market.Domain.Interface;
+﻿using Application.Common.Model;
+using Application.Common.Repository;
 using Market.Infra.Repository;
 using Market.Infra.Settings;
 using Microsoft.Extensions.Configuration;
@@ -38,12 +38,12 @@ namespace Market.Infra.MongoDb
         }
 
         // Abs DB mongodb
-        public static IServiceCollection AddMongoRepostory<T>(this IServiceCollection Services, string CollectionName) where T : IAggregate
+        public static IServiceCollection AddMongoRepostory<T>(this IServiceCollection Services, string CollectionName) where T : IAggregateRoot
         {
-            Services.AddSingleton<IAsyncRepository<T>>(serviceProvider => 
+            Services.AddSingleton<IRepository<T>>(serviceProvider => 
             {
                 var database = serviceProvider.GetService<IMongoDatabase>();
-                return new MongoDbAsyncRepository<T>(database, CollectionName);
+                return new MongoDbRepository<T>(database, CollectionName);
             });
             return Services;
         }

@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Market.Application.Api/Market.Application.Api.csproj",
+                "${workspaceFolder}/Services/Order/Order.Application/Order.Application.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Market.Application.Api/Market.Application.Api.csproj",
+                "${workspaceFolder}/Services/Order/Order.Application/Order.Application.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/Market.Application.Api/Market.Application.Api.csproj"
+                "${workspaceFolder}/Services/Order/Order.Application/Order.Application.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
