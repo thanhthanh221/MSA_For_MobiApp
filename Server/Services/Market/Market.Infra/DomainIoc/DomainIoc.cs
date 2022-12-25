@@ -3,12 +3,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Market.Infra.DomainIoc
 {
-    public class DomainIoc
+    public static class DomainIoc
     {
-        public void AddDomainIoc(IServiceCollection services, IConfiguration configuration)
+        public static void AddDomainIoc(IServiceCollection services, IConfiguration configuration)
         {
             AddDomainCommandIoc(services, configuration);
             AddDomainEventIoc(services, configuration);
+            AddQueriesIoc(services, configuration);
+            AddServices(services, configuration);
 
         }
         private static void AddDomainCommandIoc(IServiceCollection services, IConfiguration configuration)
@@ -16,6 +18,14 @@ namespace Market.Infra.DomainIoc
 
         }
         private static void AddDomainEventIoc(IServiceCollection services, IConfiguration configuration)
+        {
+
+        }
+        private static void AddQueriesIoc(IServiceCollection services, IConfiguration configuration)
+        {
+
+        }
+        private static void AddServices(IServiceCollection services, IConfiguration configuration)
         {
 
         }

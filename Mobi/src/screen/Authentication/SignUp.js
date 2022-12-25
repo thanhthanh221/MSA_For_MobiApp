@@ -5,10 +5,11 @@ import React from 'react'
 import AuthLayout from './AuthLayout'
 import { COLORS, FONTS, icons, images, SIZES } from '../../constants'
 import FormInput from '../../components/FormInput'
-import { utils } from '../../utils/index'
+import { RequestAxios, utils } from '../../utils/index'
 import CustomSwitch from '../../components/CustomSwitch'
 import TextButton from '../../components/TextButton'
 import TextIconButton from '../../components/TextIconButton'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const SignUp = ({ navigation }) => {
     const [email, setEmail] = React.useState("");
@@ -25,6 +26,25 @@ const SignUp = ({ navigation }) => {
         return email != '' && password != ''
             && emailError == '' && passWordError == ''
             && userName != '' && userNameError == ''
+    }
+
+    const SignUpAsync = async () => {
+        try {
+            const response = await RequestAxios.post('/IdentityService/Account/Register',
+                {
+                    email: email,
+                    userName: userName,
+                    password: password
+                });
+            if (response.status == 200) {
+                await AsyncStorage.setItem('Token', response.data.token);
+                await AsyncStorage.setItem('userId', response.data.id);
+                await AsyncStorage.setItem('userName', response.data.userName);
+                navigation.navigate('Home');
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
@@ -148,7 +168,7 @@ const SignUp = ({ navigation }) => {
                         color: COLORS.white,
                         ...FONTS.h3
                     }}
-                    onPress={() => navigation.navigate('Otp')}
+                    onPress={() => SignUpAsync()}
                 />
 
                 {/* Sign Up */}
@@ -182,12 +202,12 @@ const SignUp = ({ navigation }) => {
                         onPress={() => navigation.navigate('SignIn')}
                     />
                 </View>
-
                 {/* Footer */}
                 <View
                     style={{
-                        marginTop: 60
-
+                        flexDirection: 'column',
+                        justifyContent: 'flex-end',
+                        marginTop: 20
                     }}
                 >
                     {/* FaceBook */}
@@ -237,11 +257,7 @@ const SignUp = ({ navigation }) => {
                         onPress={() => { console.log('Đăng nhập với Google') }}
                     />
                 </View>
-
-
             </View>
-
-
         </AuthLayout>
     )
 }

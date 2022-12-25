@@ -12,16 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\Application.Common\Application.Common.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\CatchingRedis\CatchingRedis.csproj" />
-    <ProjectReference Include="..\Order.Domain.Core\Order.Domain.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Commands\PaymentCommand\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.0" />
     <PackageReference Include="MassTransit.AspNetCore" Version="7.1.3" />
     <PackageReference Include="MassTransit.Autofac" Version="7.1.3" />

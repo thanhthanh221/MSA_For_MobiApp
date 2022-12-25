@@ -21,7 +21,7 @@ const Header = (
                 }}>
                 <Text
                     style={{
-                        ...FONTS.h3,
+                        ...FONTS.h3 ,
                         fontWeight: "700",
                         color: COLORS.black
                     }}

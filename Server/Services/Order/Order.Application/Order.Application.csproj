@@ -19,12 +19,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\CatchingRedis\CatchingRedis.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus.Messages\EventBus.Messages.csproj" />
-    <ProjectReference Include="..\Order.Domain.Core\Order.Domain.Core.csproj" />
-    <ProjectReference Include="..\Order.Domain\Order.Domain.csproj" />
-    <ProjectReference Include="..\Order.Infra\Order.Infra.csproj" />
+  <ItemGroup>>
   </ItemGroup>
 
 </Project>

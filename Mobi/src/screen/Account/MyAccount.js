@@ -1,18 +1,41 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
 import React from 'react'
 
-import { COLORS, icons, SIZES } from '../../constants'
-import { Header, IconButton, LineDivider, TextButton } from '../../components'
+import { COLORS, FONTS, icons, images, SIZES } from '../../constants'
+import { Header, IconButton, LineDivider, MyAccountInfomation, TextButton, TextIconButton } from '../../components'
 import dummyData from '../../constants/dummyData'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const MyAccount = () => {
+
+const MyAccount = ({ navigation }) => {
+    const [userInfomation, setUserInfomation] = React.useState({});
+    const [userId, setUserId] = React.useState('');
+
+    React.useEffect(() => {
+        async function GetItem() {
+            const Id = await AsyncStorage.getItem('userId');
+            setUserId(Id);
+            console.log(Id);
+            setUserInfomation(dummyData?.myProfile);
+        }
+        GetItem();
+    }, [])
+
+    const LogOut = async () => {
+        await AsyncStorage.removeItem('Token');
+        await AsyncStorage.removeItem('userId');
+        await AsyncStorage.removeItem('userName');
+
+        navigation.navigate('SignIn');
+
+    }
+
     const renderHeader = () => {
         return (
             <Header
-                title={"Thông tin cá nhân"}
+                title={"Thông tin tài khoản"}
                 containerStyle={{
                     height: 50,
-                    marginHorizontal: SIZES.padding,
                     marginTop: 15,
                 }}
                 leftComponent={
@@ -35,217 +58,174 @@ const MyAccount = () => {
                         onPress={() => navigation.goBack()}
                     />
                 }
-                RightComponent={
-                    <IconButton
-                        icon={icons.userInfomation}
-                        containerStyle={{
-                            width: 40,
-                            height: 40,
-                            color: COLORS.black,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderWidth: 1,
-                            borderRadius: SIZES.radius,
-                            borderColor: COLORS.gray2
-
-                        }}
-                        iconStyle={{
-                            tintColor: COLORS.darkGray2,
-                        }}
-                        onPress={() => navigation.goBack()}
-                    />
-
-                }
             />
         )
     }
-    // User Infomation 
 
-    const userInfomation = ({lable, userInfo}) => {
+    const renderUserInfomation = () => {
         return (
             <View
                 style={{
-                    paddingHorizontal: SIZES.padding,
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    flex: 1
+                    alignItems: 'center'
                 }}
             >
-                <Text
+                <Image
+                    source={userInfomation.image}
                     style={{
-                        fontWeight: '400',
-                        fontSize: 17,
-                        color: COLORS.black
+                        marginTop: SIZES.radius,
+                        marginBottom: SIZES.radius,
+                        width: 120,
+                        height: 120,
+                        borderRadius: 60,
+                        borderWidth: 2,
+                        borderColor: COLORS.transparentPrimray
                     }}
-                >
-                    {lable}
-                </Text>
-
-                <Text
-                    style={{
-                        fontWeight: '400',
-                        fontSize: 17,
-                        color: COLORS.black,
-                        marginLeft: 45,
-
-
-                    }}
-                >
-                    {userInfo}
-                </Text>
-            </View>
-        )
-    }
-
-    // Render Body
-
-    const renderUserBody = () => {
-        return (
-            <View
-                style={{
-                    paddingHorizontal: SIZES.padding,
-                    borderRadius: SIZES.radius,
-                    marginTop: SIZES.radius,
-                }}
-            >
+                />
                 <View
                     style={{
-                        backgroundColor: COLORS.lightGray1,
-                        height: 200,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderWidth: 2,
+                        borderColor: COLORS.primary,
+                        backgroundColor: COLORS.transparentPrimray,
+                        width: SIZES.width - 2 * SIZES.base,
+                        height: 60,
+                        marginBottom: 15,
                         borderRadius: SIZES.radius
                     }}
                 >
-                    {/* User Name */}
-
-                    {/* Line For Check */}
-                    <LineDivider
-                        lineStyle={{
-                            backgroundColor: COLORS.lightGray2,
-                            paddingHorizontal: 10
-
-                        }}
-                    />
-
-                    <View
+                    <Text
                         style={{
-                            paddingHorizontal: SIZES.padding,
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            flexDirection: 'row',
-                            flex: 1
+                            fontWeight: '700',
+                            fontSize: 17,
+                            color: COLORS.white
                         }}
                     >
-                        <Text
-                            style={{
-                                fontWeight: '400',
-                                fontSize: 17,
-                                color: COLORS.black
-                            }}
-                        >
-                            Số điện thoại
-                        </Text>
-
-                        <Text
-                            style={{
-                                fontWeight: '400',
-                                fontSize: 17,
-                                color: COLORS.black,
-                                marginLeft: 45,
-
-
-                            }}
-                        >
-                            {dummyData.myProfile.phone}
-                        </Text>
-                    </View>
-
-                    {/* Line For Check */}
-                    <LineDivider
-                        lineStyle={{
-                            backgroundColor: COLORS.lightGray2,
-                            paddingHorizontal: 10
-
-                        }}
-                    />
-
-                    <View
-                        style={{
-                            paddingHorizontal: SIZES.padding,
-                            justifyContent: 'flex-start',
-                            alignItems: 'center',
-                            flexDirection: 'row',
-                            flex: 1
-                        }}
-                    >
-                        <Text
-                            style={{
-                                fontWeight: '400',
-                                fontSize: 17,
-                                color: COLORS.black
-                            }}
-                        >
-                            Email
-                        </Text>
-
-                        <Text
-                            style={{
-                                fontWeight: '400',
-                                fontSize: 17,
-                                color: COLORS.black,
-                                marginLeft: 45,
-                            }}
-                        >
-                            {dummyData.myProfile.email}
-                        </Text>
-                    </View>
+                        Mã Id: {userId}
+                    </Text>
                 </View>
-            </View>
-        )
-    }
+                <MyAccountInfomation
+                    label="Tên"
+                    text={userInfomation.name}
+                    textType="Text"
+                    check={true}
+                    onPress={() => navigation.navigate('ChangeEmail')}
+                />
+                <MyAccountInfomation
+                    label="Số điện thoại"
+                    text={userInfomation.phone}
+                    textType="Text"
+                    check={true}
+                />
+                <MyAccountInfomation
+                    label="Địa chỉ Email"
+                    text={userInfomation.email}
+                    textType="Text"
+                    check={true}
+                    onPress={() => navigation.navigate('ChangeEmail')}
+                />
+                <MyAccountInfomation
+                    label="Giới tính"
+                    textType="Text"
+                />
+                <MyAccountInfomation
+                    label="Ngày sinh"
+                    textType="DD/MM/YYYY"
+                />
+                <MyAccountInfomation
+                    label="Nghề nghiệp"
+                    textType="DD/MM/YYYY"
+                />
 
-    const renderInfoUserBody = () => {
-        return (
-            <View
-                style={{
-                    paddingHorizontal: SIZES.padding,
-                    borderRadius: SIZES.radius,
-                    marginTop: SIZES.radius,
-                }}
-            >
-                <View
+
+                <Text
                     style={{
-                        backgroundColor: COLORS.lightGray1,
-                        height: 450,
-                        borderRadius: SIZES.radius
+                        width: '100%',
+                        marginLeft: SIZES.radius,
+                        color: COLORS.red,
+                        fontWeight: '600',
+                        ...FONTS.h3
                     }}
-                ></View>
-
+                >
+                    * Không chia sẻ những thông tin này cho ai ngoài bạn
+                </Text>
             </View>
         )
     }
+
     return (
         <View
             style={{
                 flex: 1,
-                backgroundColor: COLORS.white
+                backgroundColor: COLORS.white,
+                paddingHorizontal: SIZES.base,
+                marginBottom: SIZES.base
             }}
         >
+            <Image
+                source={images.noen}
+                style={{
+                    position: 'absolute',
+                    width: SIZES.width,
+                    marginTop: 55
+                }}
+            />
             {/* header */}
             {renderHeader()}
 
-            {/* Body */}
-            {renderUserBody()}
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+            >
+                {renderUserInfomation()}
 
-            {renderInfoUserBody()}
+                <TextIconButton
+                    icon={icons.changePassword}
+                    iconStyle={{
+                        width: 25,
+                        height: 25,
+                        marginLeft: SIZES.base,
+                        tintColor: COLORS.white
+                    }}
+                    label="Đổi mật khẩu..."
+                    lableStyle={{
+                        color: COLORS.white,
+                        ...FONTS.h2
+                    }}
+                    containerStyle={{
+                        backgroundColor: COLORS.primary,
+                        height: 50,
+                        borderRadius: SIZES.radius,
+                        marginVertical: SIZES.radius
+                    }}
+                    onPress={() => navigation.navigate('ChangePassword')}
+                />
+
+                <TextIconButton
+                    icon={icons.logout}
+                    iconStyle={{
+                        width: 25,
+                        height: 25,
+                        marginLeft: SIZES.radius
+                    }}
+                    label="Đăng xuất..."
+                    lableStyle={{
+                        color: COLORS.white,
+                        ...FONTS.h2
+                    }}
+                    containerStyle={{
+                        backgroundColor: COLORS.primary,
+                        height: 50,
+                        borderRadius: SIZES.radius,
+                        marginBottom: SIZES.radius
+                    }}
+                    onPress={() => LogOut()}
+
+                />
+            </ScrollView>
         </View>
     )
 }
 
 export default MyAccount
 
-const styles = StyleSheet.create({
-    x: {
-
-    }
-})
+const styles = StyleSheet.create({})

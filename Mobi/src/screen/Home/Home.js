@@ -14,6 +14,7 @@ import * as dummyData from '../../constants/dummyData'
 import HorizontalFoodCard from '../../components/HorizontalFoodCard';
 import VerticalFoodCard from '../../components/VerticalFoodCard';
 import FilterModal from './FilterModal';
+import { Header } from '../../components';
 
 const Section = ({ title, onPress, children }) => {
   return (
@@ -104,55 +105,63 @@ const Home = () => {
 
   }
 
+  const renderHeader = () => {
+    return (
+      <Header
+        title={"Home"}
+      />
+    )
+  }
+
   const renderSearch = () => {
     return (
-        <View
+      <View
+        style={{
+          flexDirection: 'row',
+          height: 40,
+          backgroundColor: COLORS.lightGray2,
+          marginVertical: SIZES.base,
+          marginHorizontal: SIZES.padding,
+          paddingHorizontal: SIZES.radius,
+          borderRadius: SIZES.radius,
+          alignItems: 'center'
+        }}
+      >
+        {/* Icons */}
+
+        <Image
+          source={icons.search}
           style={{
-            flexDirection: 'row',
-            height: 40,
-            backgroundColor: COLORS.lightGray2,
-            marginVertical: SIZES.base,
-            marginHorizontal: SIZES.padding,
-            paddingHorizontal: SIZES.radius,
-            borderRadius: SIZES.radius,
-            alignItems: 'center'
+            height: 20,
+            width: 20,
+            tintColor: COLORS.black
           }}
+        />
+
+        {/* Text button */}
+
+        <TextInput
+          style={{
+            marginLeft: SIZES.radius,
+            flex: 1,
+            ...FONTS.h3
+          }}
+          placeholder='Search food' />
+
+        {/* Filter Button */}
+
+        <TouchableOpacity
+          onPress={() => setShowFilterModal(true)}
         >
-          {/* Icons */}
-
           <Image
-            source={icons.search}
+            source={icons.filter}
             style={{
-              height: 20,
               width: 20,
+              height: 20,
               tintColor: COLORS.black
-            }}
-          />
-
-          {/* Text button */}
-
-          <TextInput
-            style={{
-              marginLeft: SIZES.radius,
-              flex: 1,
-              ...FONTS.h3
-            }}
-            placeholder='Search food' />
-
-          {/* Filter Button */}
-
-          <TouchableOpacity
-            onPress={() => setShowFilterModal(true)}
-          >
-            <Image
-              source={icons.filter}
-              style={{
-                width: 20,
-                height: 20,
-                tintColor: COLORS.black
-              }} />
-          </TouchableOpacity>
-        </View>
+            }} />
+        </TouchableOpacity>
+      </View>
     )
   }
 
@@ -377,6 +386,7 @@ const Home = () => {
       style={{
         flex: 1
       }}>
+      {renderHeader()}
       {/* Search */}
       {renderSearch()}
 

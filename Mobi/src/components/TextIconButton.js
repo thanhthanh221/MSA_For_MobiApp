@@ -4,7 +4,7 @@ import React from 'react'
 import { COLORS, FONTS, SIZES, icons } from '../constants'
 
 const TextIconButton = (
-    { containerStyle, label, lableStyle, icon, iconStyle, onPress, childLabel, iconPosition = 'RIGHT' }) => {
+    { containerStyle, label, lableStyle, icon, iconStyle, onPress, childLabel, disabled = false, iconPosition = 'RIGHT' }) => {
     return (
         <TouchableOpacity
             style={{
@@ -15,6 +15,7 @@ const TextIconButton = (
                 ...containerStyle,
             }}
             onPress={onPress}
+            disabled={disabled}
         >
             <View
                 style={{
@@ -49,8 +50,7 @@ const TextIconButton = (
                     <Text
                         style={{
                             ...lableStyle,
-                            ...FONTS.body3,
-                            flexWrap: 'wrap'
+                            flexWrap: 'nowrap'
                         }}
                     >
                         {label}

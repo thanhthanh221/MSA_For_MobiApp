@@ -14,7 +14,23 @@
       "UptreamHttpMethod": ["Get","Post", "Update"],
 
       "Key": "Market"
+    },
+    {
+      "DownstreamPathTemplate": "/IdentityService/{controller}/{action}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndports": [
+        {
+          "Host": "localhost",
+          "Port": 7025
+        }
+      ],
+
+      "UpstreamPathTemplate": "/IdentityService/{controller}/{action}",
+      "UptreamHttpMethod": ["Get","Post", "Update"],
+
+      "Key": "Identity"
     }
+
   ],
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:5027"

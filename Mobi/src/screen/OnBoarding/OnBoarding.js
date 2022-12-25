@@ -16,6 +16,7 @@ import {
     FONTS
 } from '../../constants'
 import TextButton from '../../components/TextButton'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 const OnBoarding = ({ navigation }) => {
@@ -27,6 +28,11 @@ const OnBoarding = ({ navigation }) => {
     const onViewChangeRef = React.useRef(({ viewableItems, changed }) => {
         setCurrentIndex(viewableItems[0].index)
     })
+
+    const checkLoginProject = async () => {
+        const token = await AsyncStorage.getItem("JsonWebToken");
+        token ? navigation.replace('Home') : navigation.replace('SignIn')
+    }
 
     const Dots = () => {
         const dotPosition = Animated.divide(scrollX, SIZES.width);
@@ -159,7 +165,7 @@ const OnBoarding = ({ navigation }) => {
                         <TextButton
                             lable='Bắt đầu với chúng tôi'
                             buttonContainerStyle={styles.buttonLength}
-                            onPress={() => navigation.replace('SignIn')}
+                            onPress={() => checkLoginProject()}
                             lableStyle={{ ...styles.buttonLable, ...FONTS.h3 }}
                         />
                     </View>

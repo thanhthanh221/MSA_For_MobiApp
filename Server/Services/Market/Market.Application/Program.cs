@@ -13,15 +13,14 @@ if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseCors(buider => {
-    buider
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader();
-});
+        buider
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
 }
 
-
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

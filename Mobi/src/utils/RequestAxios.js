@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export const RequestAxios = axios.create({
-    baseURL: ' https://e2f5-2402-9d80-26d-1954-25cb-3061-ba59-60ec.ap.ngrok.io'
-});
+const RequestAxios = axios.create({
+    baseURL: 'http://10.0.2.2:5027'
+})
 
 export default RequestAxios
 

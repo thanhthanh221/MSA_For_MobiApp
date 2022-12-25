@@ -23,11 +23,11 @@ namespace Order.Domain.Model
             this.order = order;
         }
 
-        public String city { get; private set; }        // thành phố/tỉnh
-        public String district { get; private set; }    // huyện/quận
-        public String commune {get; private set;}     // xã/phường
-        public String street { get; private set; }    // đường
-        public String detail {get; private set;}       // Mô tả vị trí
+        public string city { get; private set; }        // thành phố/tỉnh
+        public string district { get; private set; }    // huyện/quận
+        public string commune {get; private set;}     // xã/phường
+        public string street { get; private set; }    // đường
+        public string detail {get; private set;}       // Mô tả vị trí
 
         // 1- 1
         public virtual OrderAggregate order {get; private set;}
