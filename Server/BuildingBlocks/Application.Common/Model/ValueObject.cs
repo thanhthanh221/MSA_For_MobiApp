@@ -1,15 +1,13 @@
 namespace Application.Common.Model
 {
-    public abstract class ValueObject<T>
+    public abstract class ValueObject
     {
-        public override bool Equals(object obj)
+        protected static bool EqualOperator(ValueObject left, ValueObject right)
         {
-            return obj is ValueObject<T>;
+            if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null)) {
+                return false;
+            }
+            return ReferenceEquals(left, null) || left.Equals(right);
         }
-        public override int GetHashCode()
-        {
-            return this.GetType().GetHashCode();
-        }
-
     }
 }

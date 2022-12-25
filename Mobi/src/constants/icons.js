@@ -68,6 +68,13 @@ const bbq = require("../assets/icons/bbq.png");
 const couponsUser = require("../assets/icons/couponsUser.png");
 const backRight = require("../assets/icons/backRight.png");
 const couponBackground = require("../assets/icons/couponBackground.png");
+const message = require("../assets/icons/message.png");
+const pen = require("../assets/icons/pen.png");
+const changePassword = require("../assets/icons/changePassword.png");
+const check_update = require("../assets/icons/check_update.png");
+const save = require("../assets/icons/save.png");
+
+
 
 
 export default {
@@ -140,5 +147,10 @@ export default {
     bbq,
     couponsUser,
     backRight,
-    couponBackground
+    couponBackground,
+    message,
+    pen,
+    changePassword,
+    check_update,
+    save
 }

@@ -15,9 +15,12 @@ function validateEmail(value, setEmailError) {
     }
 }
 
-function validatePassword(value, setPasswordError) {
-    if (value.length < 9 && value.trim().length != 0 ) {
+function validatePassword(value, setPasswordError, comparativeValue) {
+    if (value.trim().length < 6) {
         setPasswordError("Mật khẩu quá ngắn")
+    }
+    else if (comparativeValue && value !== comparativeValue) {
+        setPasswordError("Mật khẩu không trùng khớp")
     }
     else {
         setPasswordError("")

@@ -239,7 +239,7 @@ const CustomTabBottom = ({ navigation }) => {
                         paddingHorizontal: 5,
                         borderTopRightRadius: 20,
                         borderTopLeftRadius: 20,
-                        backgroundColor: COLORS.white2
+                        backgroundColor: COLORS.white
                     }}>
                     <TabButton
                         lable={constants.screens.home}

@@ -30,19 +30,66 @@ const Search = ({ navigation }) => {
 
   const [showFilterModal, setShowFilterModal] = React.useState(false);
 
+
   const renderSearch = () => {
     return (
       <View>
-        <Text
+        <View
           style={{
-            fontSize: 20,
-            fontWeight: 'bold',
-            color: COLORS.black,
-            marginVertical: 10
+            marginVertical: 10,
+            flexDirection: 'row',
+            justifyContent: 'space-between'
           }}
         >
-          Tìm Kiếm
-        </Text>
+          <TextIconButton
+            icon={icons.location_pin}
+            iconStyle={{
+              width: 30,
+              height: 30
+            }}
+            iconPosition='LEFT'
+            label={dummyData?.myProfile?.address}
+            lableStyle={{
+              fontSize: 18,
+              fontWeight: '700',
+              color: COLORS.black,
+              marginLeft: 5,
+              width: SIZES.width * 0.7
+            }}
+          />
+          <View
+            style={{
+              flexDirection: 'row'
+            }}
+          >
+            <IconButton
+              icon={icons.message}
+              containerStyle={{
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+              iconStyle={{
+                tintColor: COLORS.darkBlue,
+                width: 23,
+                height: 23,
+                marginRight: 15
+              }}
+            />
+            <IconButton
+              icon={icons.menu}
+              containerStyle={{
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+              iconStyle={{
+                tintColor: COLORS.darkBlue,
+                width: 23,
+                height: 23,
+                marginRight: 5,
+              }}
+            />
+          </View>
+        </View>
         <View
           style={{
             flexDirection: 'row',
@@ -53,8 +100,8 @@ const Search = ({ navigation }) => {
             paddingHorizontal: SIZES.radius,
             borderRadius: SIZES.radius,
             alignItems: 'center',
-            borderColor: COLORS.black,
-            borderWidth: 1
+            borderColor: COLORS.primary,
+            borderWidth: 2
           }}
         >
           {/* Icons */}
@@ -104,7 +151,7 @@ const Search = ({ navigation }) => {
             width: 180,
             height: 50,
             borderWidth: 2,
-            borderColor: COLORS.darkGray,
+            borderColor: COLORS.transparentPrimray,
             borderRadius: SIZES.padding,
             alignItems: 'center',
             justifyContent: 'flex-start',
@@ -221,7 +268,7 @@ const Search = ({ navigation }) => {
         style={{
           height: 46,
           width: theme.SIZES.width - 2 * SIZES.radius,
-          borderColor: COLORS.black,
+          borderColor: COLORS.transparentPrimray,
           borderWidth: 2,
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -272,6 +319,7 @@ const Search = ({ navigation }) => {
       style={{
         flex: 1,
         paddingHorizontal: SIZES.radius,
+        paddingTop: SIZES.base
       }}
     >
       <Image

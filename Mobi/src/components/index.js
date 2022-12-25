@@ -12,6 +12,7 @@ import FormInputCheck from "./FormInputCheck";
 import CartQuatityButton from "./CartQuatityButton";
 import RadioButton from "./RadioButton";
 import TextIconButton from "./TextIconButton";
+import MyAccountInfomation from "./MyAccountInfomation";
 
 export {
     Header,
@@ -27,5 +28,6 @@ export {
     FormInputCheck,
     CartQuatityButton,
     RadioButton,
-    TextIconButton
+    TextIconButton,
+    MyAccountInfomation
 }

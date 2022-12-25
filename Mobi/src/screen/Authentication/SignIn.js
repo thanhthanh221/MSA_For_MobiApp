@@ -1,14 +1,16 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native'
 import React from 'react'
 
 
 import AuthLayout from './AuthLayout'
 import { COLORS, FONTS, icons, images, SIZES } from '../../constants'
 import FormInput from '../../components/FormInput'
-import { utils } from '../../utils/index'
+import { RequestAxios, utils } from '../../utils/index'
 import CustomSwitch from '../../components/CustomSwitch'
 import TextButton from '../../components/TextButton'
 import TextIconButton from '../../components/TextIconButton'
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 
@@ -29,6 +31,26 @@ const SignIn = ({ navigation }) => {
 
     const isEnableSignIn = () => {
         return email != '' && password != '' && emailError == '' && passWordError == ''
+    }
+
+    const LoginAsync = async () => {
+        try {
+            const response = await RequestAxios.post('/IdentityService/Account/Login',
+                {
+                    email: email,
+                    password: password
+                })
+            
+            if (response.status == 200) {
+                await AsyncStorage.setItem('Token', response.data.token);
+                await AsyncStorage.setItem('userId', response.data.id);
+                await AsyncStorage.setItem('userName', response.data.userName);
+                navigation.navigate('MyAccount')
+            }
+        } catch (error) {
+            console.log(error);
+            Alert.alert("Tên tài khoản hoặc mật khẩu không chính xác!");
+        }
     }
 
     return (
@@ -144,6 +166,7 @@ const SignIn = ({ navigation }) => {
                 {/* Đăng nhập */}
                 <TextButton
                     lable='Đăng nhập ...'
+                    disabled={!isEnableSignIn()}
                     buttonContainerStyle={{
                         height: 55,
                         alignItems: 'center',
@@ -155,7 +178,7 @@ const SignIn = ({ navigation }) => {
                         color: COLORS.white,
                         ...FONTS.h3
                     }}
-                    onPress={() => navigation.navigate('Home')}
+                    onPress={() => LoginAsync()}
                 />
 
                 {/* Sign Up */}
@@ -195,8 +218,7 @@ const SignIn = ({ navigation }) => {
                 {/* Footer */}
                 <View
                     style={{
-                        marginTop: 75
-
+                        marginTop: 30
                     }}
                 >
                     {/* FaceBook */}
@@ -245,8 +267,6 @@ const SignIn = ({ navigation }) => {
                         }}
                         onPress={() => { console.log('Đăng nhập với Google') }}
                     />
-
-
                 </View>
             </View>
         </AuthLayout>

@@ -63,7 +63,8 @@ const ForgotPassword = ({navigation}) => {
                 {/* Footer */}
                 <View
                     style={{
-                        marginTop: 400
+                        marginTop: 20,
+                        flex:1
                     }}
                 >
                     <TextButton
@@ -73,6 +74,7 @@ const ForgotPassword = ({navigation}) => {
                             alignItem: 'center',
                             backgroundColor: COLORS.primary,
                             borderRadius: SIZES.radius
+                            
                         }}
                         lableStyle={{
                             color: COLORS.white,

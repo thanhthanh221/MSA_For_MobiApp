@@ -16,13 +16,14 @@ import {
     constants,
     FONTS
 } from '../../constants'
+import { TextButton } from '../../components'
 
 const AuthLayout = ({ title, subtitle, titleContainerStyle, children }) => {
     return (
         <View
             style={{
                 flex: 1,
-                paddingVertical: SIZES.padding,
+                paddingVertical: SIZES.radius,
                 backgroundColor: COLORS.white
             }}
         >
@@ -81,10 +82,8 @@ const AuthLayout = ({ title, subtitle, titleContainerStyle, children }) => {
                         {subtitle}
                     </Text>
                 </View>
-
                 {/* Children */}
                 {children}
-
             </KeyboardAwareScrollView>
 
         </View>

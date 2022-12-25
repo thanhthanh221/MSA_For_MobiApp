@@ -21,7 +21,7 @@ namespace Order.Infra.Repository
 
         public async Task DeleteAsync(Guid id)
         {
-            var order = await GetByIdAsync(id);
+            var order = await this.GetByIdAsync(id);
             if (order is null) {
                 return;
             }
@@ -30,7 +30,7 @@ namespace Order.Infra.Repository
 
         public async Task<IList<OrderAggregate>> GetAllAsync()
         {
-            List<OrderAggregate> orders = await (from o in context.orders
+            var orders = await (from o in context.orders
                                             select o).ToListAsync();
             
             return orders;

@@ -1,11 +1,9 @@
 ﻿using System.Reflection;
 using EventBus.Messages.Events;
-using Market.Application.Consumers;
 using Market.Infra.Masstransit;
 using Market.Infra.Settings;
 using MassTransit;
 using RabbitMQ.Client;
-
 namespace Market.Application.Installers
 {
     public class MasstransitInstaller : IInstaller
