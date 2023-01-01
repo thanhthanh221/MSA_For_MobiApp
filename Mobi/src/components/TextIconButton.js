@@ -28,7 +28,7 @@ const TextIconButton = (
                     <Text
                         style={{
                             ...lableStyle,
-                            ...FONTS.body3
+                            ...FONTS.body3,
                         }}
                     >
                         {label}
@@ -41,8 +41,7 @@ const TextIconButton = (
             <Image
                 source={icon}
                 style={{
-                    ...iconStyle,
-                    marginLeft: 5,
+                    ...iconStyle
                 }}
             />
             <View>
@@ -50,7 +49,7 @@ const TextIconButton = (
                     <Text
                         style={{
                             ...lableStyle,
-                            flexWrap: 'nowrap'
+                            flexWrap: 'nowrap',
                         }}
                     >
                         {label}

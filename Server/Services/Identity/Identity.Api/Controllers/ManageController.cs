@@ -15,25 +15,23 @@ namespace Identity.Api.Controllers
         {
             this.manageService = manageService;
         }
-
         [HttpGet]
-        [Route("GetEmailUser")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> GetEmailAsync(Guid userId)
+        [Route("GetInfomation")]
+        public async Task<IActionResult> GetUserInfomation(Guid userId)
         {
             try {
-
-                if (!ModelState.IsValid) { return this.BadRequest(); }
+                if (!ModelState.IsValid) { return this.NotFound(); }
                 var appUser = await manageService.GetUserInfomation(userId);
-                if (appUser is null) { return this.BadRequest(); }
-                ManageEmailDto manageEmailRespose = new(appUser.Email, appUser.EmailConfirmed);
-                return this.Ok(manageEmailRespose);
+                if (appUser is null) { return this.Accepted(); }
+                ManageInfomationDto userInfomation = ManageInfomationDto.ConvertAppUserToDto(appUser);
+                return this.Ok(userInfomation);
             }
             catch (System.Exception) {
                 return this.Unauthorized();
+                throw;
             }
         }
-        [HttpPut]
+        [HttpPatch]
         [Route("ChangeEmailUser")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult> ChangeEmailAsync(ChangeEmailViewModel changeEmail)
@@ -50,5 +48,22 @@ namespace Identity.Api.Controllers
                 throw;
             }
         }
+        [HttpPut]
+        [Route("EditExtraProfileUser")]
+        public async Task<ActionResult> EditProfileAsync([FromForm]EditExtraProfileViewModel editExtraProfile)
+        {
+            try {
+                if (!ModelState.IsValid) { return this.BadRequest(); }
+                var checkResponse = await manageService.EditProfileAsync(editExtraProfile);
+                if (checkResponse.Status == 202) { return this.Accepted(checkResponse.Message); }
+                if (checkResponse.Status == 404) { return this.NotFound(checkResponse.Message); }
+                return this.Ok(checkResponse.Message);
+            }
+            catch (System.Exception) {
+                return this.Unauthorized();
+                throw;
+            }
+        }
     }
+
 }

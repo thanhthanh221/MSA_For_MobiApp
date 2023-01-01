@@ -1,18 +1,5 @@
 import { icons, images } from "./";
 
-const myProfile = {
-    Id: "c72837fc-81cf-4ed0-ae67-7f120b3ab573",
-    name: "Bùi Quang",
-    profile_image: images.profile,
-    address: "Đồng Minh, Vĩnh Bảo, Hải Phòng",
-    phone: "0325826395",
-    userId: "00412122-de2c-4b97-9410-3c28c7f776fa",
-    email: "zzzquangzzzthuzzz@gmail.com",
-    dateOfBirth: "15/12/2001",
-    registrationDate: "27/10/2022",
-    image: images.userfake
-}
-
 
 const categories = [
     {
@@ -271,7 +258,6 @@ const sizes = [
 
 
 export default {
-    myProfile,
     categories,
     menu,
     vegBiryani,

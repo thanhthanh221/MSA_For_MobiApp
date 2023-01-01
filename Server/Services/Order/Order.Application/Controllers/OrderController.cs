@@ -16,14 +16,19 @@ namespace Order.Application.Api.Controllers
     public class OrderController : ControllerBase
     {
         private readonly ILogger<OrderController> logger;
+
         private readonly IPublishEndpoint publishEndpoint;
+
         private readonly IMediator mediator;
+
         private readonly IOrderRepository orderRepository;
 
-        public OrderController(ILogger<OrderController> logger,
-                               IPublishEndpoint publishEndpoint,
-                               IMediator mediator,
-                               IOrderRepository orderRepository)
+        public OrderController(
+            ILogger<OrderController> logger,
+            IPublishEndpoint publishEndpoint,
+            IMediator mediator,
+            IOrderRepository orderRepository
+        )
         {
             this.logger = logger;
             this.publishEndpoint = publishEndpoint;
@@ -45,58 +50,66 @@ namespace Order.Application.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateOrderAsync(OrderCreateDto createOrderDto)
+        public async Task<ActionResult>
+        CreateOrderAsync(OrderCreateDto createOrderDto)
         {
-            try {
-                List<OrderItemCheckoutEvent> orderItemCheckoutEvents = new List<OrderItemCheckoutEvent>();
+            try
+            {
+                List<OrderItemCheckoutEvent> orderItemCheckoutEvents =
+                    new List<OrderItemCheckoutEvent>();
 
-                foreach (var orProduct in createOrderDto.orderItemCommands) 
+                foreach (var orProduct in createOrderDto.orderItemCommands)
                 {
-                    orderItemCheckoutEvents.Add(
-                        new OrderItemCheckoutEvent() 
+                    orderItemCheckoutEvents
+                        .Add(new OrderItemCheckoutEvent()
                         {
                             productId = orProduct.productId,
-                            count = orProduct.count,
-                        }
-                    );
+                            count = orProduct.count
+                        });
                 }
-                OrderCheckoutEvent orderCheckout = new OrderCheckoutEvent()
-                {
-                    userId = createOrderDto.userId,
-                    products = orderItemCheckoutEvents,
-                    checkOrchestration = true,
-                    CountCheckSaga = 0
-                };
+                OrderCheckoutEvent orderCheckout =
+                    new OrderCheckoutEvent()
+                    {
+                        userId = createOrderDto.userId,
+                        products = orderItemCheckoutEvents,
+                        checkOrchestration = true,
+                        CountCheckSaga = 0
+                    };
 
+                logger
+                    .LogInformation($"Publish Message To Queue {DateTime.Now}");
 
-                logger.LogInformation($"Publish Message To Queue {DateTime.Now}");
-
-                await publishEndpoint.Publish<OrderCheckoutEvent>(orderCheckout);
+                await publishEndpoint
+                    .Publish<OrderCheckoutEvent>(orderCheckout);
 
                 return Accepted();
             }
-            catch (System.Exception) {
-
+            catch (System.Exception)
+            {
                 throw;
             }
-
-
         }
 
         [HttpPatch("orderId")]
-        public async Task<ActionResult> SetOrderStatusAsync(Guid orderId, int statusId)
+        public async Task<ActionResult>
+        SetOrderStatusAsync(Guid orderId, int statusId)
         {
-            try {
-                SetOrderStatusCommand setOrderStatusCommand = new SetOrderStatusCommand(orderId, statusId);
-                Boolean checkSetOrderStatus = await mediator.Send(setOrderStatusCommand);
+            try
+            {
+                SetOrderStatusCommand setOrderStatusCommand =
+                    new SetOrderStatusCommand(orderId, statusId);
+                Boolean checkSetOrderStatus =
+                    await mediator.Send(setOrderStatusCommand);
 
-                if (!checkSetOrderStatus) {
+                if (!checkSetOrderStatus)
+                {
                     return NotFound();
                 }
 
                 return NoContent();
             }
-            catch (System.Exception) {
+            catch (System.Exception)
+            {
                 logger.LogWarning($"Bug 500 In Controller : Order - Action : SetOrderStatus - Time: {DateTime.UtcNow}");
                 throw;
             }
@@ -105,17 +118,24 @@ namespace Order.Application.Api.Controllers
         [HttpDelete("orderId")]
         public async Task<ActionResult> CancelOrderAsync(Guid orderId)
         {
-            try {
-                CancelOrderCommand cancelOrderCommand = new CancelOrderCommand(orderId);
-                Boolean checkCancleOrder = await mediator.Send(cancelOrderCommand);
+            try
+            {
+                CancelOrderCommand cancelOrderCommand =
+                    new CancelOrderCommand(orderId);
+                Boolean checkCancleOrder =
+                    await mediator.Send(cancelOrderCommand);
 
-                if (!checkCancleOrder) {
+                if (!checkCancleOrder)
+                {
                     return NotFound();
                 }
                 return NoContent();
             }
-            catch (System.Exception) {
-                logger.LogWarning($"Bug 500 In Controller : Order - Action : CancelOrderAsync - Time: {DateTime.UtcNow}");
+            catch (System.Exception)
+            {
+                logger
+                    .LogWarning($"Bug 500 In Controller : Order - Action : CancelOrderAsync - Time: {
+                        DateTime.UtcNow}");
                 throw;
             }
         }

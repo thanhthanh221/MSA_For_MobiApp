@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Market.Domain.ProductService.Queries;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Market.Infra.DomainIoc
@@ -23,6 +24,7 @@ namespace Market.Infra.DomainIoc
         }
         private static void AddQueriesIoc(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<IQueryProduct, QueryProduct>();
 
         }
         private static void AddServices(IServiceCollection services, IConfiguration configuration)

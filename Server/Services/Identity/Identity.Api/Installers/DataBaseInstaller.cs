@@ -1,4 +1,5 @@
 using Application.Common.Extensions;
+using Identity.Domain.IdentityConfig;
 using Identity.Domain.Interfaces;
 using Identity.Domain.Model;
 using Identity.Infra.ServiceContext;
@@ -15,6 +16,7 @@ namespace Identity.Api.Installers
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             // Đăng ký các dịch vụ của Identity
             services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddUserManager<UserManager>()
                 .AddEntityFrameworkStores<IdentityServiceContext>()
                 .AddDefaultTokenProviders();
             services.AddDbContext<IdentityServiceContext>(options => {

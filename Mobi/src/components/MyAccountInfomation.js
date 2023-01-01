@@ -4,7 +4,7 @@ import { COLORS, SIZES, icons } from '../constants'
 import IconButton from './IconButton'
 
 const MyAccountInfomation =
-    ({label, text, textType = 'Text', check = false, onPress}) => {
+    ({ label, textNull, text, check = false, onPress }) => {
         return (
             <View
                 style={{
@@ -39,11 +39,10 @@ const MyAccountInfomation =
                         style={{
                             fontWeight: '500',
                             fontSize: 18,
-                            color: text ? COLORS.darkGray : COLORS.lightGray1
+                            color: text != null ? COLORS.darkGray : COLORS.lightGray1
                         }}
                     >
-                        {text && text}
-                        {!text && (textType == 'Text' ? '-Chọn-' : 'DD/MM/YYY')}
+                        {text != null ? text : textNull}
                     </Text>
                 </View>
 

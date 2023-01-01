@@ -4,7 +4,7 @@ import { COLORS, FONTS, SIZES, icons } from '../../constants'
 import { Header, IconButton, TextIconButton } from '../../components'
 
 const AccountLayout = (
-    { title, buttonTitle, titleContainerStyle, children, onPress, navigation, disabled }) => {
+    { title, buttonTitle, titleContainerStyle, children, onPress, navigation, disabled}) => {
     return (
         <View
             style={{
@@ -23,13 +23,23 @@ const AccountLayout = (
                         iconStyle={{
                             tintColor: COLORS.black
                         }}
-                        onPress={() => navigation.goBack()}
+                        onPress={() => navigation.navigate("MyAccount")}
                     />
                 }
             />
+            {/* Line */}
             <View
                 style={{
-                    flex: 1
+                    width: '100%',
+                    height: 1,
+                    backgroundColor: COLORS.darkGray,
+                    marginTop: SIZES.radius,
+                }}
+            />
+            <View
+                style={{
+                    flex: 1,
+                    backgroundColor: COLORS.white
                 }}
             >
                 {children}
@@ -55,7 +65,6 @@ const AccountLayout = (
                     marginBottom: SIZES.radius
                 }}
                 onPress={onPress}
-
             />
         </View>
     )

@@ -15,7 +15,6 @@ namespace Market.Infra.Masstransit
         {
             configuration.ReceiveEndpoint("Order-Services", e => {
                 e.ConfigureConsumer<OrderCheckoutConsumer>(context);
-
                 e.Bind("Order.Orchestration", x => {
                     x.AutoDelete = false;
                     x.Durable = true;

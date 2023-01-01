@@ -8,6 +8,7 @@ namespace Market.Domain.CouponService.Service
 {
     public class CouponService : ICouponService
     {
+        
         private readonly IRepository<CouponAggregate> couponRepository;
         private readonly IReposeCacheService reposeCacheService;
 

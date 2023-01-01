@@ -28,8 +28,8 @@ function validatePassword(value, setPasswordError, comparativeValue) {
 }
 
 function validateInput(value, minLength, setError) {
-    if (value.length < minLength) {
-        setError("Không đúng.")
+    if (value.trim().length < minLength && value.trim().length > 0) {
+        setError("Dữ liệu nhập vào không hợp lệ.")
     } else {
         setError("")
     }

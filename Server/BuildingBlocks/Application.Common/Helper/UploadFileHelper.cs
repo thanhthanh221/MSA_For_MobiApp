@@ -4,18 +4,15 @@ namespace Application.Common.Helper
 {
     public static class UploadFileHelper
     {
-        private static string Dir = System.IO.Directory.GetCurrentDirectory();
+        public static string Dir { get; set; } = Directory.GetCurrentDirectory();
         public static string IFormFileToBase64ImageOfVideo(IFormFile file)
         {
             if (file.Length > 0) {
                 try {
-
                     MemoryStream ms = new();
                     file.CopyTo(ms);
-                    
                     byte[] fileBytes = ms.ToArray();
                     string imgToBase64 = Convert.ToBase64String(fileBytes);
-
                     return imgToBase64;
                 }
                 catch (Exception ex) {
@@ -28,25 +25,13 @@ namespace Application.Common.Helper
         {
             if (file.Length > 0) {
                 try {
-                    if (!Directory.Exists(Dir + "\\Images\\" + $"\\{locationStorage}\\"))
-                    // Kiểm tra xem đã tồn tại thư mục chưa
-                    {
+                    if (!Directory.Exists(Dir + "\\Images\\" + $"\\{locationStorage}\\")) {
                         Directory.CreateDirectory(Dir + "\\Images\\" + $"\\{locationStorage}\\");
                     }
-                    var fileStream = System.IO.File.Create(Dir + "\\Images\\" + $"\\{locationStorage}\\" + file.FileName);
-
+                    using var fileStream = File.Create(Dir + "\\Images\\" + $"\\{locationStorage}\\" + file.FileName);
                     await file.CopyToAsync(fileStream);
                     await fileStream.FlushAsync(); // giải phóng bộ đệm
-
-
-                    // Mã hóa base64 cho sản phẩm
-                    MemoryStream ms = new();
-                    file.CopyTo(ms);
-                    byte[] fileBytes = ms.ToArray();
-                    string imgToBase64 = Convert.ToBase64String(fileBytes);
-
-                    return imgToBase64;
-
+                    return file.FileName;
                 }
                 catch (Exception ex) {
                     return ex.ToString();
@@ -59,8 +44,8 @@ namespace Application.Common.Helper
         public static void DeleteImage(string imageName, string locationStorage)
         {
             var imagePath = Path.Combine(Dir + "\\Images\\" + $"\\{locationStorage}\\" + imageName);
-            if (System.IO.File.Exists(imagePath)) {
-                System.IO.File.Delete(imagePath);
+            if (File.Exists(imagePath)) {
+                File.Delete(imagePath);
             }
 
         }

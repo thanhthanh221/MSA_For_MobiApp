@@ -9,8 +9,6 @@ namespace Order.Application.Consumers
     public class OrderCheckoutConsumer : IConsumer<OrderCheckoutEvent>
     {
         private readonly MediatR.IMediator mediator;
-
-
         public OrderCheckoutConsumer(MediatR.IMediator mediator)
         {
             this.mediator = mediator;

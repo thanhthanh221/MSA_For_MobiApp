@@ -15,6 +15,12 @@ import Coupon from './Coupons/Coupon';
 import ViewCoupon from './Coupons/ViewCoupon';
 import ChangePassword from './Account/ChangePassword';
 import ChangeEmail from './Account/ChangeEmail';
+import ChangeDateOfBirth from './Account/ChangeDateOfBirth';
+import ChangeJob from './Account/ChangeJob';
+import ChangeName from './Account/ChangeName';
+import ChangeSex from './Account/ChangeSex';
+import AccountLayout from './Account/AccountLayout';
+import ChangePhone from './Account/ChangePhone';
 
 export {
   Home, 
@@ -33,5 +39,11 @@ export {
   Coupon,
   ViewCoupon,
   ChangePassword,
-  ChangeEmail
+  ChangeEmail,
+  ChangeDateOfBirth,
+  ChangeName,
+  ChangeJob,
+  ChangeSex,
+  AccountLayout,
+  ChangePhone
 }

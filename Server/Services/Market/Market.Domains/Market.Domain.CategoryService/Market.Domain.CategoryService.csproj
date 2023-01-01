@@ -17,11 +17,10 @@
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\BuildingBlocks\Application.Common\Application.Common.csproj" />
-    <ProjectReference Include="..\..\..\..\BuildingBlocks\CatchingRedis\CatchingRedis.csproj" />
-    <ProjectReference Include="..\..\..\..\BuildingBlocks\EventBus.Messages\EventBus.Messages.csproj" />
-  </ItemGroup>
-
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\BuildingBlocks\Application.Common\Application.Common.csproj" />
+	  <ProjectReference Include="..\..\..\..\BuildingBlocks\CatchingRedis\CatchingRedis.csproj" />
+	  <ProjectReference Include="..\..\..\..\BuildingBlocks\EventBus.Messages\EventBus.Messages.csproj" />
+	</ItemGroup>
 </Project>
