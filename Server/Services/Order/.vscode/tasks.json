@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Order.Application/Order.Application.csproj",
+                "${workspaceFolder}/Order.Domain/Order.Domain.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Order.Application/Order.Application.csproj",
+                "${workspaceFolder}/Order.Domain/Order.Domain.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/Order.Application/Order.Application.csproj"
+                "${workspaceFolder}/Order.Domain/Order.Domain.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

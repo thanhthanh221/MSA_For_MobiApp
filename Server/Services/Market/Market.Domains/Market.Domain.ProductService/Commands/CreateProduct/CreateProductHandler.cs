@@ -29,16 +29,10 @@ namespace Market.Domain.ProductService.Commands.CreateProduct
 
         public async Task<ProductAggregate> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
-            var validationResult = new CreateProductValidation().Validate(command);
-
-            if (!validationResult.IsValid) { return null; }
             var product = await productService.AddProduct(command);
             await productRepository.CreateAsync(product);
-
             CreateProductEvent createProductEvent = new(command.UserId, command.CategoriesId);
             await publishEndpoint.Publish(createProductEvent, cancellationToken);
-
-            logger.LogInformation(message: $"Create Product {product.Id}");
             return product;
         }
     }

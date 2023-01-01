@@ -9,11 +9,12 @@ import React from 'react'
 
 import { COLORS } from '../constants'
 
-const IconButton = ({ containerStyle, icon, iconStyle, onPress }) => {
+const IconButton = ({ containerStyle, icon, iconStyle, onPress, disabled }) => {
     return (
         <TouchableOpacity
             style={containerStyle}
             onPress={onPress}
+            disabled={disabled}
         >
             <Image
                 style={{

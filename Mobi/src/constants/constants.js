@@ -1,3 +1,5 @@
+import icons from "./icons"
+
 const screens = {
     main_layout: "MainLayout",
     home: "Trang chủ",
@@ -100,6 +102,39 @@ const onboarding_screens = [
     }
 ]
 
+const job_User = [
+    {
+        id: 1,
+        job: "Nhân viên văn phòng",
+        icon: icons.company
+    },
+    {
+        id: 2,
+        job: "Nội trợ",
+        icon: icons.housewife
+    },
+    {
+        id: 3,
+        job: "Làm tự do",
+        icon: icons.freelancing
+    },
+    {
+        id: 4,
+        job: "Học sinh, sinh viên",
+        icon: icons.student
+    },
+    {
+        id: 5,
+        job: "Công nhân",
+        icon: icons.worker
+    },
+    {
+        id: 6,
+        job: "Khác",
+        icon: icons.other
+    }
+]
+
 const tags = [
     {
         id: 1,
@@ -179,7 +214,8 @@ const Settings = [
         icon: require("../assets/icons/notification.png"),
         onPress: "ChangePassword"
     },
-    {   label: "Thông tin người dùng",
+    {
+        label: "Thông tin người dùng",
         icon: require("../assets/icons/userInfomation.png"),
         onPress: "ChangePassword"
     },
@@ -218,6 +254,7 @@ export default {
     delivery_time,
     ratings,
     tags,
+    job_User,
     onboarding_screens,
     track_order_status,
     Settings,

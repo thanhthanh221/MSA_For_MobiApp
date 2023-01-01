@@ -1,25 +1,28 @@
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { COLORS, FONTS, icons, images, SIZES } from '../../constants'
-import { Header, IconButton, LineDivider, MyAccountInfomation, TextButton, TextIconButton } from '../../components'
-import dummyData from '../../constants/dummyData'
+import { Header, IconButton, MyAccountInfomation, TextButton, TextIconButton } from '../../components'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import IdentityApi from '../../services/IdentityApi'
 
 
 const MyAccount = ({ navigation }) => {
     const [userInfomation, setUserInfomation] = React.useState({});
-    const [userId, setUserId] = React.useState('');
 
-    React.useEffect(() => {
-        async function GetItem() {
-            const Id = await AsyncStorage.getItem('userId');
-            setUserId(Id);
-            console.log(Id);
-            setUserInfomation(dummyData?.myProfile);
-        }
-        GetItem();
-    }, [])
+    useFocusEffect(
+        React.useCallback(() => {
+            async function GetItem() {
+                const response = await IdentityApi.UserInfomation();
+                if (response.status == 200) {
+                    setUserInfomation(response.data);
+                }
+            }
+            GetItem();
+        }, [])
+    );
+
 
     const LogOut = async () => {
         await AsyncStorage.removeItem('Token');
@@ -27,7 +30,6 @@ const MyAccount = ({ navigation }) => {
         await AsyncStorage.removeItem('userName');
 
         navigation.navigate('SignIn');
-
     }
 
     const renderHeader = () => {
@@ -70,15 +72,15 @@ const MyAccount = ({ navigation }) => {
                 }}
             >
                 <Image
-                    source={userInfomation.image}
+                    source={images.userfake}
                     style={{
                         marginTop: SIZES.radius,
-                        marginBottom: SIZES.radius,
+                        marginBottom: SIZES.padding,
                         width: 120,
                         height: 120,
                         borderRadius: 60,
                         borderWidth: 2,
-                        borderColor: COLORS.transparentPrimray
+                        borderColor: COLORS.transparentPrimray,
                     }}
                 />
                 <View
@@ -101,43 +103,60 @@ const MyAccount = ({ navigation }) => {
                             color: COLORS.white
                         }}
                     >
-                        Mã Id: {userId}
+                        Mã Id: {userInfomation?.id}
                     </Text>
                 </View>
                 <MyAccountInfomation
-                    label="Tên"
-                    text={userInfomation.name}
-                    textType="Text"
-                    check={true}
-                    onPress={() => navigation.navigate('ChangeEmail')}
+                    label="Tên Tài khoản"
+                    text={userInfomation?.userName}
+                    textNull="-Chọn-"
+                    onPress={() => navigation.navigate('ChangeName', {
+                        userName: userInfomation?.userName
+                    })}
                 />
                 <MyAccountInfomation
                     label="Số điện thoại"
-                    text={userInfomation.phone}
-                    textType="Text"
-                    check={true}
+                    text={userInfomation.phoneInfomation?.phone}
+                    textNull="-Chọn-"
+                    check={userInfomation.phoneInfomation?.phoneConfirmed}
+                    onPress={() => navigation.navigate('ChangePhone')}
                 />
                 <MyAccountInfomation
                     label="Địa chỉ Email"
-                    text={userInfomation.email}
-                    textType="Text"
-                    check={true}
-                    onPress={() => navigation.navigate('ChangeEmail')}
+                    text={userInfomation.emailInfomation?.email}
+                    textNull="-Chọn-"
+                    check={userInfomation.emailInfomation?.emailConfirmed}
+                    onPress={() => navigation.navigate('ChangeEmail', {
+                        email: userInfomation.emailInfomation?.email,
+                        emailConfirmed: userInfomation.emailInfomation?.emailConfirmed,
+                    })}
                 />
                 <MyAccountInfomation
+                    text={userInfomation?.sex == null ? null : (userInfomation?.sex ? "Nữ" : "Nam")}
                     label="Giới tính"
-                    textType="Text"
+                    textNull={"-Chọn-"}
+                    onPress={() => navigation.navigate('ChangeSex', {
+                        sex: userInfomation?.sex
+                    })}
                 />
                 <MyAccountInfomation
+                    text={userInfomation?.dateOfBirth ? userInfomation?.dateOfBirth?.slice(8, 10)
+                        + "/ " + userInfomation?.dateOfBirth?.slice(5, 7)
+                        + "/ " + userInfomation?.dateOfBirth?.slice(0, 4) : null}
                     label="Ngày sinh"
-                    textType="DD/MM/YYYY"
+                    textNull="DD/MM/YYYY"
+                    onPress={() => navigation.navigate("ChangeDateOfBirth", {
+                        dateOfBirth: userInfomation?.dateOfBirth
+                    })}
                 />
                 <MyAccountInfomation
                     label="Nghề nghiệp"
-                    textType="DD/MM/YYYY"
+                    textNull="-Chọn-"
+                    text={userInfomation?.job}
+                    onPress={() => navigation.navigate("ChangeJob", {
+                        job: userInfomation?.job
+                    })}
                 />
-
-
                 <Text
                     style={{
                         width: '100%',

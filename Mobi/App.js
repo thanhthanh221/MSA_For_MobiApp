@@ -14,7 +14,7 @@ import SignUp from './src/screen/Authentication/SignUp';
 import Otp from './src/screen/Authentication/Otp';
 import ForgotPassword from './src/screen/Authentication/ForgotPassword';
 import FoodDetail from './src/screen/Food/FoodDetail';
-import { AddCard, ChangeEmail, ChangePassword, Checkout, Coupon, DeliveryStatus, Home, Map, MyAccount, MyCard, MyCart, Settings, Success, ViewCoupon } from './src/screen';
+import { AddCard, ChangeDateOfBirth, ChangeEmail, ChangeJob, ChangeName, ChangePassword, ChangePhone, ChangeSex, Checkout, Coupon, DeliveryStatus, Home, Map, MyAccount, MyCard, MyCart, Settings, Success, ViewCoupon } from './src/screen';
 import CustomTabBottom from './src/navigation/CustomTabBottom';
 
 const store = createStore(RootReducer, applyMiddleware(thunk));
@@ -112,6 +112,26 @@ const App = () => {
           <Stack.Screen
             name='ChangeEmail'
             component={ChangeEmail}
+          />
+          <Stack.Screen
+            name='ChangeSex'
+            component={ChangeSex}
+          />
+          <Stack.Screen
+            name='ChangeDateOfBirth'
+            component={ChangeDateOfBirth}
+          />
+          <Stack.Screen
+            name='ChangeJob'
+            component={ChangeJob}
+          />
+          <Stack.Screen
+            name='ChangeName'
+            component={ChangeName}
+          />
+          <Stack.Screen
+            name='ChangePhone'
+            component={ChangePhone}
           />
         </Stack.Navigator>
       </NavigationContainer>

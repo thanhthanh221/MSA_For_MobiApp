@@ -73,6 +73,13 @@ const pen = require("../assets/icons/pen.png");
 const changePassword = require("../assets/icons/changePassword.png");
 const check_update = require("../assets/icons/check_update.png");
 const save = require("../assets/icons/save.png");
+const worker = require("../assets/icons/worker.png");
+const freelancing = require("../assets/icons/freelancing.png");
+const company = require("../assets/icons/company.png");
+const housewife = require("../assets/icons/housewife.png");
+const student = require("../assets/icons/student.png");
+const other = require("../assets/icons/other.png");
+const vietnam = require("../assets/icons/vietnam.png");
 
 
 
@@ -152,5 +159,12 @@ export default {
     pen,
     changePassword,
     check_update,
-    save
+    save,
+    worker,
+    freelancing,
+    company,
+    housewife,
+    student,
+    other,
+    vietnam
 }

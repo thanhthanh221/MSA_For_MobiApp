@@ -9,7 +9,6 @@ import { RequestAxios, utils } from '../../utils/index'
 import CustomSwitch from '../../components/CustomSwitch'
 import TextButton from '../../components/TextButton'
 import TextIconButton from '../../components/TextIconButton'
-import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 

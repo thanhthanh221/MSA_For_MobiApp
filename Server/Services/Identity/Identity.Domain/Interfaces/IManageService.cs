@@ -8,6 +8,7 @@ namespace Identity.Domain.Interfaces
     {
         Task<ApplicationUser> GetUserInfomation(Guid userId);
         Task<ResponseClient> ChangeEmailAsync(ChangeEmailViewModel changeEmail);
-        
+        Task<ResponseClient> EditProfileAsync(EditExtraProfileViewModel editExtraProfile);
+        Task<ResponseClient> AddPhoneNumberService(AddPhoneNumberViewModel phoneNumberViewModel);
     }
 }

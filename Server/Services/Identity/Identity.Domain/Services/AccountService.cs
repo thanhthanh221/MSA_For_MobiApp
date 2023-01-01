@@ -1,5 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Application.Common.Helper;
 using Identity.Domain.Interfaces;
 using Identity.Domain.Model;

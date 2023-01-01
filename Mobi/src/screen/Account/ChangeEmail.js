@@ -2,25 +2,19 @@ import { Alert, Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import AccountLayout from './AccountLayout'
 import { COLORS, SIZES, icons } from '../../constants'
-import { FormInput } from '../../components'
+import { FormInput, IconButton } from '../../components'
 import { utils } from '../../utils'
 import { IdentityApi } from '../../services'
 
-const ChangeEmail = ({ navigation }) => {
+const ChangeEmail = ({ navigation, route }) => {
     const [email, setEmail] = React.useState('');
     const [emailConfirmed, setEmailConfirmed] = React.useState(true);
     const [newEmail, setNewEmail] = React.useState('');
 
     const [newEmailError, setNewEmailError] = React.useState('');
     React.useEffect(() => {
-        const CallApi = async () => {
-            await IdentityApi.GetEmailUser();
-            const response = await IdentityApi.GetEmailUser();
-            if (response == null) { return; }
-            setEmail(response.data.email);
-            setEmailConfirmed(response.data.emailConfirmed);
-        }
-        CallApi();
+        setEmail(route.params.email);
+        setEmailConfirmed(route.params.emailConfirmed);
     }, []);
 
     const checkedDisabled = () => {
@@ -28,7 +22,13 @@ const ChangeEmail = ({ navigation }) => {
     }
     const CallApiChangeEmail = async () => {
         const response = await IdentityApi.ChangeEmailUser(newEmail);
-        Alert.alert(response.status.message);
+        if (response != null) {
+            setEmail(newEmail);
+            Alert.alert(response.data);
+        }
+        else {
+            Alert.alert("Không đổi được email");
+        }
     }
     return (
         <AccountLayout
@@ -89,24 +89,22 @@ const ChangeEmail = ({ navigation }) => {
                         >
                             {email}
                         </Text>
-                        <View
-                            style={{
+                        <IconButton
+                            icon={emailConfirmed ? icons.correct : icons.cross}
+                            iconStyle={{
+                                height: 20,
+                                width: 20,
+                                tintColor: emailConfirmed ? COLORS.green : COLORS.red
+                            }}
+                            disabled={emailConfirmed}
+                            containerStyle={{
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 paddingHorizontal: SIZES.radius,
                                 borderLeftWidth: 1,
                             }}
-                        >
-                            <Image
-                                source={emailConfirmed ? icons.correct : icons.cross}
-                                style={{
-                                    height: 20,
-                                    width: 20,
-                                    tintColor: emailConfirmed ? COLORS.green : COLORS.red
 
-                                }}
-                            />
-                        </View>
+                        />
                     </View>
                 </View>
 
@@ -116,9 +114,8 @@ const ChangeEmail = ({ navigation }) => {
                     keyboardType='email-address'
                     autoCompleteType='email'
                     onChange={(value) => {
-                        utils.validateEmail(value, setNewEmailError)
                         setNewEmail(value);
-                        console.log(checkedDisabled());
+                        utils.validateEmail(value, setNewEmailError)
                     }}
                     errorMsg={newEmailError}
                     containerStyle={{
