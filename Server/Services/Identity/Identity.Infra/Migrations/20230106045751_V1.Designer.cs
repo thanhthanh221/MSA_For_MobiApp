@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Identity.Infra.Migrations
 {
     [DbContext(typeof(IdentityServiceContext))]
-    [Migration("20221226054844_V1")]
+    [Migration("20230106045751_V1")]
     partial class V1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,7 +46,7 @@ namespace Identity.Infra.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Address");
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("Identity.Domain.Model.ApplicationRole", b =>
@@ -156,6 +156,28 @@ namespace Identity.Infra.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Identity.Domain.Model.OtpUser", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CountSubmit")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTimeCreate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OtpHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SecondsExpire")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("OtpUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -272,6 +294,17 @@ namespace Identity.Infra.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Identity.Domain.Model.OtpUser", b =>
+                {
+                    b.HasOne("Identity.Domain.Model.ApplicationUser", "User")
+                        .WithOne("Otp")
+                        .HasForeignKey("Identity.Domain.Model.OtpUser", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Identity.Domain.Model.ApplicationRole", null)
@@ -326,6 +359,8 @@ namespace Identity.Infra.Migrations
             modelBuilder.Entity("Identity.Domain.Model.ApplicationUser", b =>
                 {
                     b.Navigation("Address");
+
+                    b.Navigation("Otp");
                 });
 #pragma warning restore 612, 618
         }

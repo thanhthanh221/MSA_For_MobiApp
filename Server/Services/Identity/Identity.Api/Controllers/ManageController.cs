@@ -48,9 +48,39 @@ namespace Identity.Api.Controllers
                 throw;
             }
         }
+        [HttpPatch]
+        [Route("AddPhoneNumber")]
+        public async Task<ActionResult> AddPhoneNumberAsync(AddPhoneNumberViewModel addPhoneNumber)
+        {
+            try {
+                if (!ModelState.IsValid) { return this.BadRequest(); }
+                var checkResponse = await manageService.AddPhoneNumberService(addPhoneNumber);
+                return this.Ok(checkResponse.Message);
+            }
+            catch (System.Exception) {
+                return this.Unauthorized();
+                throw;
+            }
+
+        }
+        [HttpPost]
+        [Route("VerifyPhoneNumber")]
+        public async Task<ActionResult> VerifyPhoneNumberAsync(VerifyPhoneNumberViewModel verifyPhoneNumber)
+        {
+            try {
+                if (!ModelState.IsValid) { return this.BadRequest(); }
+                var response = await manageService.VerifyPhoneNumberService(verifyPhoneNumber);
+                if (response.Status == 404) { return this.NotFound(); }
+                return this.Ok(new { response.Message, response.Verify });
+            }
+            catch (System.Exception) {
+                return this.StatusCode(500);
+                throw;
+            }
+        }
         [HttpPut]
         [Route("EditExtraProfileUser")]
-        public async Task<ActionResult> EditProfileAsync([FromForm]EditExtraProfileViewModel editExtraProfile)
+        public async Task<ActionResult> EditProfileAsync([FromForm] EditExtraProfileViewModel editExtraProfile)
         {
             try {
                 if (!ModelState.IsValid) { return this.BadRequest(); }

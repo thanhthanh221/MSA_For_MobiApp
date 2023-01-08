@@ -2,24 +2,31 @@ import { Image, StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 import AccountLayout from './AccountLayout'
 import { COLORS, SIZES, icons } from '../../constants'
+import { IdentityApi } from '../../services'
 
 const ChangePhone = ({ navigation }) => {
     const [phone, setPhone] = React.useState('');
+    const [phoneError, setPhoneError] = React.useState('');
 
-    const SendOtpToPhone = () => {
-        navigation.navigate("Otp");
+    const SendOtpToPhone = async () => {
+        const response = await IdentityApi.AddPhoneNumber(phone);
+        if (response.status == 200) {
+            navigation.navigate("Otp", {
+                "PhoneNumber": phone
+            });
+        }
     }
     const disabled = () => {
-        return phone.length == 9
+        return phone.length == 11
     }
     return (
         <AccountLayout
             buttonTitle={"Tiếp theo"}
             title="Số điện thoại"
             navigation={navigation}
-            disabled = {!disabled()}
+            disabled={!disabled()}
             onPress={() => SendOtpToPhone()}
-            
+
         >
             <Text
                 style={{
@@ -53,7 +60,8 @@ const ChangePhone = ({ navigation }) => {
                         borderRadius: 7,
                         borderColor: COLORS.primary,
                         borderWidth: 2,
-                        flexDirection: 'row'
+                        flexDirection: 'row',
+                        marginVertical: SIZES.radius
                     }}
                 >
                     <View
@@ -93,9 +101,25 @@ const ChangePhone = ({ navigation }) => {
                             backgroundColor: COLORS.white2
                         }}
                         keyboardType='phone-pad'
-                        onChangeText={(numberPhone) => setPhone('84' + numberPhone)}
+                        onChangeText={(numberPhone) => {
+                            setPhone('84' + numberPhone);
+                            numberPhone.length != 9 && numberPhone.length != 0
+                                ? setPhoneError("Không phải số điện thoại") : setPhoneError('');
+                        }}
                     />
                 </View>
+                {/* Error */}
+                <Text
+                    style={{
+                        width: '90%',
+                        color: COLORS.red,
+                        fontSize: 16,
+                        fontWeight: '400',
+                        height: phoneError ? 30 : 0
+                    }}
+                >
+                    {phoneError}
+                </Text>
             </View>
 
         </AccountLayout>

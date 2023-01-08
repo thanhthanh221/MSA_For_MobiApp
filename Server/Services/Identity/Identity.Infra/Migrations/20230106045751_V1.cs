@@ -75,7 +75,7 @@ namespace Identity.Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Address",
+                name: "Addresses",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -87,9 +87,30 @@ namespace Identity.Infra.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Address", x => x.UserId);
+                    table.PrimaryKey("PK_Addresses", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_Address_Users_UserId",
+                        name: "FK_Addresses_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OtpUsers",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OtpHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateTimeCreate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SecondsExpire = table.Column<int>(type: "int", nullable: false),
+                    CountSubmit = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OtpUsers", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_OtpUsers_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -224,7 +245,10 @@ namespace Identity.Infra.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Address");
+                name: "Addresses");
+
+            migrationBuilder.DropTable(
+                name: "OtpUsers");
 
             migrationBuilder.DropTable(
                 name: "RoleClaims");
