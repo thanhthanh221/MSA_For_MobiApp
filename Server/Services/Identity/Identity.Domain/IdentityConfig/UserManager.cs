@@ -21,7 +21,6 @@ namespace Identity.Domain.IdentityConfig
         }
         public async Task<ApplicationUser> FindByPhoneAsync(string Phone)
         {
-            if (Phone.Length != 10) { return null; }
             var appUser = await Users.FirstOrDefaultAsync(u => u.PhoneNumber.Equals(Phone));
             return appUser;
         }

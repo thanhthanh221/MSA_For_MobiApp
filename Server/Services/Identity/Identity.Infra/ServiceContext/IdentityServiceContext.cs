@@ -6,6 +6,8 @@ namespace Identity.Infra.ServiceContext
 {
     public class IdentityServiceContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<OtpUser> OtpUsers { get; set; }
         public IdentityServiceContext(DbContextOptions options) : base(options)
         {
         }
@@ -21,6 +23,12 @@ namespace Identity.Infra.ServiceContext
                 entity.HasOne(appuser => appuser.User)
                     .WithMany(appuser => appuser.Address)
                     .HasForeignKey(add => add.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+            builder.Entity<ApplicationUser>(entity => {
+                entity.HasOne(u => u.Otp)
+                    .WithOne(o => o.User)
+                    .HasForeignKey<OtpUser>("UserId")
                     .OnDelete(DeleteBehavior.Cascade);
             });
             foreach (var entityType in builder.Model.GetEntityTypes()) {

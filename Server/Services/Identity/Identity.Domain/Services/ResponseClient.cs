@@ -12,7 +12,13 @@
             Status = status;
         }
 
+        public ResponseClient(string message, int status, bool verify) : this(message, status)
+        {
+            Verify = verify;
+        }
+
         public string Message { get; set; }
         public int Status { get; set; }
+        public bool Verify {get; set;} 
     }
 }

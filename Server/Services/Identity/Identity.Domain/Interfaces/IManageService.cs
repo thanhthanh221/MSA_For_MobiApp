@@ -10,5 +10,6 @@ namespace Identity.Domain.Interfaces
         Task<ResponseClient> ChangeEmailAsync(ChangeEmailViewModel changeEmail);
         Task<ResponseClient> EditProfileAsync(EditExtraProfileViewModel editExtraProfile);
         Task<ResponseClient> AddPhoneNumberService(AddPhoneNumberViewModel phoneNumberViewModel);
+        Task<ResponseClient> VerifyPhoneNumberService(VerifyPhoneNumberViewModel verifyPhoneNumber);    
     }
 }

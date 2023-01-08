@@ -2,25 +2,45 @@ import {
     StyleSheet,
     Text,
     View,
-    Image,
-    TouchableOpacity
+    Alert
 } from 'react-native'
 import React from 'react'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 
-
 import AuthLayout from './AuthLayout'
 import { COLORS, FONTS, icons, images, SIZES } from '../../constants'
-import FormInput from '../../components/FormInput'
-import { utils } from '../../utils/index'
-import CustomSwitch from '../../components/CustomSwitch'
 import TextButton from '../../components/TextButton'
-import TextIconButton from '../../components/TextIconButton'
+import { IdentityApi } from '../../services'
 
-const Otp = ({ navigation }) => {
+const Otp = ({ navigation, route }) => {
     const [time, setTime] = React.useState(60);
+    const [phone, setPhone] = React.useState('');
+    const [codeOtp, setCodeOtp] = React.useState('');
+
+    const VerifyOtp = async () => {
+        var responseApi = await IdentityApi.VerifyPhoneNumber(codeOtp, phone);
+        if (responseApi.status === 200) {
+            console.log(responseApi.data.message);
+            if(!responseApi.data.verify) {
+                Alert.alert(responseApi.data.message);
+                return;
+            }
+            else {
+                navigation.navigate("MyAccount");
+                return;
+            }
+        }
+    }
+    // Gửi lại
+    const SendOtp = async () => {
+        await IdentityApi.AddPhoneNumber(phone);
+    }
+    const checkCode = () => {
+        return codeOtp.length == 4;
+    }
 
     React.useEffect(() => {
+        setPhone(route.params.PhoneNumber)
         let interval = setInterval(() => {
             setTime(prev => {
                 if (prev > 0) {
@@ -37,105 +57,90 @@ const Otp = ({ navigation }) => {
     return (
         <AuthLayout
             title='Mã xác thực'
-            subtitle={'Nhập mã vừa gửi về Email - Số điện thoại của bạn'}
+            subtitle={'Nhập mã vừa gửi về số điện thoại của bạn'}
             titleContainerStyle={{
                 marginTop: 30
             }}
         >
-            <OTPInputView
-                pinCount={4}
-                style={{
-                    width: '100%',
-                    height: 50,
-                    marginTop: 60
-                }}
-                onCodeFilled={(code) => {
-                    console.log(code)
-                }}
-                codeInputFieldStyle={{
-                    width: 65,
-                    height: 65,
-                    borderRadius: SIZES.radius,
-                    backgroundColor: COLORS.lightGray2,
-                    ...FONTS.h3,
-                    color: COLORS.black
-
-                }}
-            />
-
-            {/* Đếm ngược thời gian */}
             <View
                 style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    marginTop: SIZES.padding
+                    flex: 1
                 }}
             >
-                <Text
+                <OTPInputView
+                    pinCount={4}
                     style={{
-                        color: COLORS.darkGray,
-                        ...FONTS.body3,
-                        marginTop: 14,
-                        fontSize: 20
+                        width: '100%',
+                        height: 50,
+                        marginTop: 60
+                    }}
+                    onCodeChanged={(code) => {
+                        setCodeOtp(code)
+                    }}
+                    codeInputFieldStyle={{
+                        width: 65,
+                        height: 65,
+                        borderRadius: SIZES.radius,
+                        backgroundColor: COLORS.lightGray2,
+                        ...FONTS.h3,
+                        color: COLORS.black
+
+                    }}
+                />
+
+                {/* Đếm ngược thời gian */}
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        marginTop: SIZES.padding
                     }}
                 >
-                    Không nhận được mã ?
-                </Text>
-                <TextButton
-                    buttonContainerStyle={{
-                        marginLeft: 10
-                    }}
-                    lableStyle={{
-                        fontSize: 20,
-                        color: COLORS.primary
-                    }}
-                    lable={`Gửi lại (${time}s)`}
-                    onPress={() => setTime(60)}
-                />
+                    <Text
+                        style={{
+                            color: COLORS.darkGray,
+                            ...FONTS.body3,
+                            marginTop: 14,
+                            fontSize: 20
+                        }}
+                    >
+                        Không nhận được mã ?
+                    </Text>
+                    <TextButton
+                        buttonContainerStyle={{
+                            marginLeft: 10,
+                            marginTop: 10
+                        }}
+                        lableStyle={{
+                            fontSize: 20,
+                            color: COLORS.primary
+                        }}
+                        lable={`Gửi lại (${time}s)`}
+                        onPress={() => {
+                            setTime(60);
+                            SendOtp();
+                        }}
+                    />
+                </View>
             </View>
 
             {/* Footer */}
-            <View
-                style={{
-                    marginTop: 250
+            <TextButton
+                lable={'Xác nhận'}
+                buttonContainerStyle={{
+                    height: 50,
+                    alignItem: 'center',
+                    backgroundColor: checkCode() ? COLORS.primary : COLORS.transparentPrimray,
+                    borderRadius: SIZES.radius,
+                    marginBottom: 10
                 }}
-            >
-                <TextButton
-                    lable={'Xác thực ....'}
-                    buttonContainerStyle={{
-                        height: 50,
-                        alignItem: 'center',
-                        backgroundColor: COLORS.primary,
-                        borderRadius: SIZES.radius
-                    }}
-                    lableStyle={{
-                        color: COLORS.white,
-                        ...FONTS.h3
-                    }}
-                    onPress={() => navigation.navigate('Home')}
-                />
-
-                <View
-                    style={{
-                        marginTop: SIZES.padding / 2,
-                        alignItems: 'center'
-                    }}
-                >
-                    <TextButton
-                        lable={'Xem về chúng tôi'}
-                        buttonContainerStyle={{
-                            backgroundColor: null
-                        }}
-                        lableStyle={{
-                            color: COLORS.primary,
-                            ...FONTS.body3
-                        }}
-                        onPress={() => console.log("Bùi Quang - Tạ Yến")}
-
-                    />
-
-                </View>
-            </View>
+                disabled={!checkCode()}
+                lableStyle={{
+                    color: COLORS.white,
+                    ...FONTS.h3
+                }}
+                onPress={() => VerifyOtp()}
+            />
         </AuthLayout>
     )
 }

@@ -23,6 +23,7 @@ namespace Identity.Api.Installers
                 string sqlConfig = configuration.GetConnectionString("Context");
                 options.UseSqlServer(sqlConfig);
             });
+            services.AddScoped<IOtpManager, OtpManager>();
         }
     }
 }
