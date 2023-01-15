@@ -6,6 +6,8 @@ import { COLORS, FONTS, icons, images, SIZES } from '../../constants'
 import { Header, IconButton, MyAccountInfomation, TextButton, TextIconButton } from '../../components'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import IdentityApi from '../../services/IdentityApi'
+import { LoginManager } from 'react-native-fbsdk-next';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 
 const MyAccount = ({ navigation }) => {
@@ -28,7 +30,9 @@ const MyAccount = ({ navigation }) => {
         await AsyncStorage.removeItem('Token');
         await AsyncStorage.removeItem('userId');
         await AsyncStorage.removeItem('userName');
-
+        LoginManager.logOut();
+        GoogleSignin.configure();
+        await GoogleSignin.signOut();
         navigation.navigate('SignIn');
     }
 

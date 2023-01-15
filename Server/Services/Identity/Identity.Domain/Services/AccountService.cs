@@ -4,6 +4,7 @@ using Identity.Domain.Interfaces;
 using Identity.Domain.Model;
 using Identity.Domain.ViewModel.Account;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace Identity.Domain.Services
 {
@@ -12,13 +13,22 @@ namespace Identity.Domain.Services
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<ApplicationRole> roleManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ILogger<AccountService> logger;
 
         public AccountService(
-            UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, SignInManager<ApplicationUser> signInManager)
+            UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager,
+            SignInManager<ApplicationUser> signInManager, ILogger<AccountService> logger)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.signInManager = signInManager;
+            this.logger = logger;
+        }
+        private static object TokenResponse(ApplicationUser user)
+        {
+            List<Claim> claims = new() { new Claim("Id", user.Id.ToString()) };
+            var token = JwtHelper.GetToken(claims);
+            return new { token, user.Id, user.UserName };
         }
 
         public async Task<object> LoginAsync(LoginViewModel loginViewModel)
@@ -55,7 +65,46 @@ namespace Identity.Domain.Services
             var token = JwtHelper.GetToken(claims);
             return new { token, appUser.Id, appUser.UserName };
         }
+        public async Task<ResponseClient> ExternalLoginService(ExternalLoginViewModel model)
+        {
+            // Tìm kiếm user Theo dịch vụ ngoài đăng nhập
+            var appUser = await userManager.FindByLoginAsync(model.Provider, model.ProviderKey);
+            // Đã tồn tại tài khoản đăng nhập với dịch vụ ngoài trên
+            if (appUser != null) {
+                logger.LogInformation("{Name} đã đăng nhập bằng dịch vụ {Provider}", appUser.UserName, model.Provider);
+                return new(TokenResponse(appUser), 200, true);
+            }
+            return new("Tạo tài khoản mới!", 302);
+        }
+        public async Task<ResponseClient> ExternalLoginConfirmationService(ExternalLoginConfirmationViewModel model)
+        {
+            UserLoginInfo info = new(model.Provider, model.ProviderKey, model.Provider);
+            var userExisted = await userManager.FindByLoginAsync(model.Provider, model.ProviderKey);
+            // Đã có tài khoản sử dụng dịch vụ ngoài trên
+            if (userExisted != null) { return new(TokenResponse(userExisted), 200, true); }
+            // Tìm Kiếm tài khoản theo Email người dùng nhập
+            var userFindByEmail = await userManager.FindByEmailAsync(model.Email);
+            if (userFindByEmail != null) {
+                // Xem tài khoản này đã liên kết với dịch vụ ngoài này chưa
+                var infoUser = await userManager.GetLoginsAsync(userFindByEmail);
+                bool checkLoginsUser = false;
+                infoUser.ToList().ForEach(i => {
+                    if (i.LoginProvider.Equals(model.Provider)) { checkLoginsUser = true; }
+                });
+                if (checkLoginsUser) { return new($"Tài khoản {userFindByEmail.UserName} Đã liên kết với dịch vụ ngoài {model.Provider}", 400, false);}
 
+                // Tài khoản đã tồn tại -- Liên kết dịch vụ ngoài với Tài khoản đã dùng
+                var resultAdd = await userManager.AddLoginAsync(userFindByEmail, info);
+                if (resultAdd.Succeeded) { return new(TokenResponse(userFindByEmail), 200, true); }
+                return new("Liết kết thất bại với tài khoản", 400, false);
+            }
+            ApplicationUser appUser = new() { UserName = model.UserName, Email = model.Email };
+            var result = await userManager.CreateAsync(appUser);
+            if (!result.Succeeded) { return new("Không tạo được tài khoản", 400, false); }
+            await userManager.AddLoginAsync(appUser, info);
+            logger.LogInformation("{Name} đã đăng nhập bằng dịch vụ {Provider}", appUser.UserName, model.Provider);
+            return new(TokenResponse(appUser), 200, true);
+        }
         public async Task<object> ChangePasswordAsync(ResetPasswordViewModel resetPasswordView)
         {
             var user = await userManager.FindByIdAsync(resetPasswordView.UserId.ToString());

@@ -10,6 +10,8 @@ import CustomSwitch from '../../components/CustomSwitch'
 import TextButton from '../../components/TextButton'
 import TextIconButton from '../../components/TextIconButton'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { ExternalLogin } from '../../services'
 
 
 
@@ -31,7 +33,6 @@ const SignIn = ({ navigation }) => {
     const isEnableSignIn = () => {
         return email != '' && password != '' && emailError == '' && passWordError == ''
     }
-
     const LoginAsync = async () => {
         try {
             const response = await RequestAxios.post('/IdentityService/Account/Login',
@@ -39,7 +40,7 @@ const SignIn = ({ navigation }) => {
                     email: email,
                     password: password
                 })
-            
+
             if (response.status == 200) {
                 await AsyncStorage.setItem('Token', response.data.token);
                 await AsyncStorage.setItem('userId', response.data.id);
@@ -240,7 +241,7 @@ const SignIn = ({ navigation }) => {
                             ...FONTS.h3,
                             marginLeft: SIZES.base
                         }}
-                        onPress={() => { console.log('Đăng nhập với facebook') }}
+                        onPress={() => { ExternalLogin.LoginFaceBook(navigation) }}
                     />
 
                     {/* Google */}
@@ -264,7 +265,7 @@ const SignIn = ({ navigation }) => {
                             ...FONTS.h3,
                             marginLeft: SIZES.base
                         }}
-                        onPress={() => { console.log('Đăng nhập với Google') }}
+                        onPress={() => { ExternalLogin.LoginGoogle(navigation) }}
                     />
                 </View>
             </View>

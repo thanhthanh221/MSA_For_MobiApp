@@ -13,6 +13,7 @@ import CartQuatityButton from "./CartQuatityButton";
 import RadioButton from "./RadioButton";
 import TextIconButton from "./TextIconButton";
 import MyAccountInfomation from "./MyAccountInfomation";
+import VerticalTextIconButton from "./VerticalTextIconButton";
 
 export {
     Header,
@@ -29,5 +30,6 @@ export {
     CartQuatityButton,
     RadioButton,
     TextIconButton,
-    MyAccountInfomation
+    MyAccountInfomation,
+    VerticalTextIconButton
 }

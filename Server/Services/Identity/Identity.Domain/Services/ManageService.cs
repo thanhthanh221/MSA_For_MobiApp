@@ -3,6 +3,7 @@ using Identity.Domain.IdentityConfig;
 using Identity.Domain.Interfaces;
 using Identity.Domain.Model;
 using Identity.Domain.ViewModel.Manage;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 
 namespace Identity.Domain.Services
@@ -11,15 +12,17 @@ namespace Identity.Domain.Services
     {
         private const string messageApi = "https://localhost:7050/MessageService/Message/SmsPhoneOtp";
         private readonly UserManager userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IOtpManager otpManager;
         private readonly HttpClient httpClient;
 
         public ManageService(
-            UserManager userManager, IOtpManager otpManager, HttpClient httpClient)
+            UserManager userManager, IOtpManager otpManager, HttpClient httpClient, SignInManager<ApplicationUser> signInManager)
         {
             this.userManager = userManager;
             this.otpManager = otpManager;
             this.httpClient = httpClient;
+            this.signInManager = signInManager;
         }
 
         public async Task<ResponseClient> AddPhoneNumberService(AddPhoneNumberViewModel phoneNumberViewModel)
@@ -42,7 +45,6 @@ namespace Identity.Domain.Services
             await userManager.UpdateAsync(appUser);
             return new("Gửi Otp tới số điện thoại của bạn", 200);
         }
-
         public async Task<ResponseClient> ChangeEmailAsync(ChangeEmailViewModel changeEmail)
         {
             var appUser = await userManager.FindByIdAsync(changeEmail.UserId.ToString());

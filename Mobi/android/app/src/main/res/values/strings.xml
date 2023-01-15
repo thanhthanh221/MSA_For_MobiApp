@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Mobi</string>
+    <string name="facebook_app_id">2318155231696338</string>
+    <string name="fb_login_protocol_scheme">fb2318155231696338</string>
+    <string name="facebook_client_token">9b4f9c0e62596da95e2849be10daa72d</string>
+    <string name="server_client_id">513932922057-i3d1bh6ml773esd8nveibv5imcvccp28.apps.googleusercontent.com</string>
 </resources>

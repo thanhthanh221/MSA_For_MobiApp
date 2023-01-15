@@ -21,6 +21,7 @@ import ChangeName from './Account/ChangeName';
 import ChangeSex from './Account/ChangeSex';
 import AccountLayout from './Account/AccountLayout';
 import ChangePhone from './Account/ChangePhone';
+import ViewAccount from './Account/ViewAccount';
 
 export {
   Home, 
@@ -45,5 +46,6 @@ export {
   ChangeJob,
   ChangeSex,
   AccountLayout,
-  ChangePhone
+  ChangePhone,
+  ViewAccount
 }
