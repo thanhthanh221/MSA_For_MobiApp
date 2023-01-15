@@ -1,6 +1,8 @@
 ﻿using Identity.Domain.Interfaces;
+using Identity.Domain.Model;
 using Identity.Domain.ViewModel.Account;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.Api.Controllers
@@ -11,7 +13,8 @@ namespace Identity.Api.Controllers
     {
         private readonly IAccountService accountService;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(
+            IAccountService accountService)
         {
             this.accountService = accountService;
         }
@@ -44,6 +47,36 @@ namespace Identity.Api.Controllers
             catch (System.Exception) {
                 return this.Unauthorized();
                 throw;
+            }
+        }
+        [Route("ExternalLogin")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> ExternalLoginAsync(ExternalLoginViewModel model)
+        {
+            try {
+                if (!ModelState.IsValid) { return this.BadRequest(); }
+                var response = await accountService.ExternalLoginService(model);
+                if (response.Status == 302) { return this.Ok(new { response.Response, response.Verify }); }
+                return this.Ok(new { response.Response, response.Verify });
+            }
+            catch (System.Exception) {
+                return this.StatusCode(500);
+            }
+        }
+        [Route("ExternalLoginConfirmation")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> ExternalLoginConfirmationAsync(ExternalLoginConfirmationViewModel model)
+        {
+            try {
+                if (!ModelState.IsValid) { return this.BadRequest(); }
+                var response = await accountService.ExternalLoginConfirmationService(model);
+                if (response.Status == 400) { return this.Ok(new { response.Response, response.Verify }); }
+                return this.Ok(new { response.Response, response.Verify });
+            }
+            catch (System.Exception) {
+                return this.StatusCode(500);
             }
         }
 

@@ -6,18 +6,18 @@
         {
         }
 
-        public ResponseClient(string message, int status)
+        public ResponseClient(object response, int status)
         {
-            Message = message;
+            Response = response;
             Status = status;
         }
 
-        public ResponseClient(string message, int status, bool verify) : this(message, status)
+        public ResponseClient(object response, int status, bool verify) : this(response, status)
         {
             Verify = verify;
         }
 
-        public string Message { get; set; }
+        public object Response { get; set; }
         public int Status { get; set; }
         public bool Verify {get; set;} 
     }

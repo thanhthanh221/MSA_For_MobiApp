@@ -140,6 +140,7 @@ namespace Identity.Infra.Migrations
                         .HasColumnType("Money");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 

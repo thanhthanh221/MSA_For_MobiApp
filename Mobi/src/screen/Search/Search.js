@@ -87,6 +87,7 @@ const Search = ({ navigation }) => {
                 height: 23,
                 marginRight: 5,
               }}
+              onPress={() => navigation.navigate("ViewAccount")}
             />
           </View>
         </View>

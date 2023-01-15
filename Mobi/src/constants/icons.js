@@ -80,10 +80,8 @@ const housewife = require("../assets/icons/housewife.png");
 const student = require("../assets/icons/student.png");
 const other = require("../assets/icons/other.png");
 const vietnam = require("../assets/icons/vietnam.png");
-
-
-
-
+const evaluateProject = require("../assets/icons/evaluateProject.png");
+const policyAndTerms = require("../assets/icons/policyAndTerms.png");
 export default {
     coupon,
     cross,
@@ -166,5 +164,7 @@ export default {
     housewife,
     student,
     other,
-    vietnam
+    vietnam,
+    evaluateProject,
+    policyAndTerms
 }

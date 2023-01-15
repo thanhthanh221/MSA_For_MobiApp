@@ -8,6 +8,18 @@ const SignIn = async () => {
 
     }
 }
+const ExternalLogin = async (Provider, ProviderKey) => {
+    try {
+        var response = await RequestAxios.post("/IdentityService/Account/ExternalLogin",
+            {
+                Provider: Provider,
+                ProviderKey: ProviderKey
+            });
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+}
 const ChangeEmailUser = async (newEmail) => {
     try {
         const token = await AsyncStorage.getItem('Token');
@@ -92,6 +104,7 @@ const VerifyPhoneNumber = async (code, phoneNumber) => {
     }
 
 }
+
 const EditExtraProfileUser = async ({ sex = null, DateOfBirth = null, Job = null, UserName = null }) => {
     try {
         const token = await AsyncStorage.getItem('Token');
@@ -119,6 +132,7 @@ const EditExtraProfileUser = async ({ sex = null, DateOfBirth = null, Job = null
 }
 const IdentityApi = {
     SignIn,
+    ExternalLogin,
     ChangeEmailUser,
     UserInfomation,
     EditExtraProfileUser,

@@ -17,6 +17,46 @@ const screens = {
     logout: 'Đăng xuât'
 }
 
+const labelViewAccount01 = [
+    {
+        id: 0,
+        icon: icons.coupon,
+        label: "Ví giảm giá"
+    },
+    {
+        id: 1,
+        icon: icons.wallet,
+        label: "Quản lý thanh toán"
+    },
+    {
+        id: 2,
+        icon: icons.userSecurity,
+        label: "Thông tin cá nhân"
+    }
+]
+
+const labelViewAccount02 = [
+    {
+        id: 0,
+        icon: icons.evaluateProject,
+        label: "Đánh giá"
+    },
+    {
+        id: 1,
+        icon: icons.notification,
+        label: "Thông báo"
+    },
+    {
+        id: 2,
+        icon: icons.help,
+        label: "Hỗ trợ"
+    },
+    {
+        id: 3,
+        icon: icons.policyAndTerms,
+        label: "Điều khoản và Chính sách"
+    }
+]
 const bottom_tabs = [
     {
         id: 0,
@@ -258,5 +298,7 @@ export default {
     onboarding_screens,
     track_order_status,
     Settings,
-    GOOGLE_MAP_API_KEY
+    GOOGLE_MAP_API_KEY,
+    labelViewAccount01,
+    labelViewAccount02
 }
