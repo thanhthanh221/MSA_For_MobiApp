@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { SIZES } from '../constants'
+import { FONTS, SIZES } from '../constants'
 
 const VerticalTextIconButton = (
     { containerStyle, label, lableStyle, icon, iconStyle, onPress, disabled = false }) => {
@@ -22,6 +22,7 @@ const VerticalTextIconButton = (
             <Text
                 style={{
                     marginTop: SIZES.base,
+                    ...FONTS.body3,
                     ...lableStyle
                 }}
             >

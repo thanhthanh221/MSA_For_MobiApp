@@ -30,7 +30,7 @@ const App = () => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName='MyAccount'
+          initialRouteName='Home'
           screenOptions={{ headerShown: false }}
         >
           <Stack.Screen

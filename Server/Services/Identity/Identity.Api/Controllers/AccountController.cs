@@ -31,7 +31,6 @@ namespace Identity.Api.Controllers
             }
             catch (System.Exception) {
                 return this.Unauthorized();
-                throw;
             }
         }
         [Route("Register")]
@@ -45,8 +44,7 @@ namespace Identity.Api.Controllers
                 return response != null ? this.Ok(response) : this.Unauthorized();
             }
             catch (System.Exception) {
-                return this.Unauthorized();
-                throw;
+                return this.StatusCode(500);
             }
         }
         [Route("ExternalLogin")]
@@ -60,7 +58,7 @@ namespace Identity.Api.Controllers
                 if (response.Status == 302) { return this.Ok(new { response.Response, response.Verify }); }
                 return this.Ok(new { response.Response, response.Verify });
             }
-            catch (System.Exception) {
+            catch (Exception) {
                 return this.StatusCode(500);
             }
         }
@@ -90,9 +88,8 @@ namespace Identity.Api.Controllers
                 var check = await accountService.ChangePasswordAsync(resetPasswordViewModel);
                 return check != null ? this.Ok(check) : this.BadRequest(check);
             }
-            catch (System.Exception) {
-                return this.Unauthorized();
-                throw;
+            catch (Exception) {
+                return this.StatusCode(500);
             }
         }
     }

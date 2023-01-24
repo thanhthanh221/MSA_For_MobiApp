@@ -5,23 +5,15 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  TextInput,
-  FlatList
+  TextInput
 } from 'react-native';
-import axios from 'axios';
 import React from 'react';
 
 import { FONTS, COLORS, SIZES, icons, images, theme } from '../../constants'
-import CartQuatityButton from '../../components/CartQuatityButton'
 import dummyData from '../../constants/dummyData';
 import {
   Header,
   IconButton,
-  IconLable,
-  LineDivider,
-  Ratting,
-  StepperInput,
-  TextButton,
   TextIconButton
 } from '../../components'
 import FilterModal from '../Home/FilterModal';
@@ -117,14 +109,17 @@ const Search = ({ navigation }) => {
           />
 
           {/* Text button */}
-
           <TextInput
             style={{
               marginLeft: SIZES.radius,
               flex: 1,
+              height: 60,
+              justifyContent:'center',
+              alignContent:'center',
               ...FONTS.h3
             }}
-            placeholder='Search food' />
+            placeholder='Tìm kiếm sản phẩm'
+          />
 
           {/* Filter Button */}
 
@@ -283,7 +278,7 @@ const Search = ({ navigation }) => {
           iconStyle={{
             width: 40,
             height: 40,
-            marginHorizontal: 15
+            marginRight: 15
           }}
           containerStyle={{
             height: 45,
@@ -297,7 +292,8 @@ const Search = ({ navigation }) => {
             marginLeft: 3,
             fontWeight: '400',
             color: COLORS.primary,
-            marginVertical: 10
+            marginVertical: 10,
+            ...FONTS.h3
 
           }}
           iconPosition="LEFT"
@@ -309,7 +305,7 @@ const Search = ({ navigation }) => {
             width: 30,
             height: 30,
             tintColor: COLORS.primary,
-            marginRight: 30
+            marginRight: 15
           }}
         />
       </View>
@@ -360,8 +356,4 @@ const Search = ({ navigation }) => {
 
 export default Search
 
-const styles = StyleSheet.create({
-  x: {
-
-  }
-})
+const styles = StyleSheet.create({})

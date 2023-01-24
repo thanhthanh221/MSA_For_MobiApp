@@ -1,3 +1,4 @@
+using Message.Interfaces;
 using Message.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Twilio.Rest.Api.V2010.Account;
@@ -9,6 +10,12 @@ namespace Message.Controllers;
 [Route("MessageService/[controller]")]
 public class MessageController : ControllerBase
 {
+    private readonly ISendMailService sendMailService;
+
+    public MessageController(ISendMailService sendMailService)
+    {
+        this.sendMailService = sendMailService;
+    }
 
     [HttpPost]
     [Route("SmsPhoneOtp")]
@@ -21,5 +28,14 @@ public class MessageController : ControllerBase
         );
         Console.WriteLine(message.Uri);
         return this.Ok($"Gửi tin nhắn tới số {viewModel.ToPhone}");
+    }
+
+    [HttpPost]
+    [Route("SendMail")]
+    public async Task<ActionResult> SendMailAsync()
+    {
+        await sendMailService.SendEmailAsync("quang.bv205401@sis.hust.edu.vn", "Bùi Việt Quang", "Yêu Tạ Phương Yến");
+
+        return this.Ok($"Đã gửi email tới zzzquangzzzthuzzz@gmail.com");
     }
 }

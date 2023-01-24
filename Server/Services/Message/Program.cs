@@ -13,8 +13,7 @@ if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseCors(buider => {
-        buider
-            .AllowAnyOrigin()
+        buider.AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader();
     });

@@ -8,6 +8,7 @@ namespace Identity.Infra.ServiceContext
     {
         public DbSet<Address> Addresses { get; set; }
         public DbSet<OtpUser> OtpUsers { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         public IdentityServiceContext(DbContextOptions options) : base(options)
         {
         }
@@ -26,10 +27,18 @@ namespace Identity.Infra.ServiceContext
                     .OnDelete(DeleteBehavior.Cascade);
             });
             builder.Entity<ApplicationUser>(entity => {
+                // Otp 1 - 1
                 entity.HasOne(u => u.Otp)
                     .WithOne(o => o.User)
                     .HasForeignKey<OtpUser>("UserId")
                     .OnDelete(DeleteBehavior.Cascade);
+
+                // Refresh Token 1 - 1
+                entity.HasOne(u => u.RefreshToken)
+                    .WithOne(r => r.User)
+                    .HasForeignKey<RefreshToken>("UserId")
+                    .OnDelete(DeleteBehavior.Cascade);
+
             });
             foreach (var entityType in builder.Model.GetEntityTypes()) {
                 var tableName = entityType.GetTableName();
