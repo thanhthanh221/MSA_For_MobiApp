@@ -43,7 +43,7 @@ namespace Identity.Api.Controllers
                 else if (checkResponse.Status == 400) { return this.BadRequest(checkResponse.Response); }
                 return this.Ok(checkResponse.Response);
             }
-            catch (System.Exception) {
+            catch (Exception) {
                 return this.Unauthorized();
                 throw;
             }
@@ -57,7 +57,7 @@ namespace Identity.Api.Controllers
                 var checkResponse = await manageService.AddPhoneNumberService(addPhoneNumber);
                 return this.Ok(checkResponse.Response);
             }
-            catch (System.Exception) {
+            catch (Exception) {
                 return this.Unauthorized();
                 throw;
             }
@@ -75,7 +75,6 @@ namespace Identity.Api.Controllers
             }
             catch (System.Exception) {
                 return this.StatusCode(500);
-                throw;
             }
         }
         [HttpPut]
@@ -90,7 +89,7 @@ namespace Identity.Api.Controllers
                 return this.Ok(checkResponse.Response);
             }
             catch (System.Exception) {
-                return this.Unauthorized();
+                return this.StatusCode(500);
                 throw;
             }
         }

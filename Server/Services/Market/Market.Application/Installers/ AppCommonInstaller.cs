@@ -8,7 +8,6 @@ namespace Market.Application.Installers
     {
         public void InstallService(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddJwtAuth();
             services.AddSystemBase();
             // Redis Cache
             services.AddRedisCache(configuration);  

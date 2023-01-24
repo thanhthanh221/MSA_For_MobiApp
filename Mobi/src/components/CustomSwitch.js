@@ -10,7 +10,6 @@ import {
 import React from 'react'
 
 import { COLORS, FONTS, SIZES, icons } from '../constants'
-import TextButton from './TextButton'
 
 const CustomSwitch = ({ value, onChange }) => {
     return (

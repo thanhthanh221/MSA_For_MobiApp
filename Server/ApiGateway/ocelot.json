@@ -11,7 +11,7 @@
       ],
 
       "UpstreamPathTemplate": "/MarketService/{controller}/{action}",
-      "UptreamHttpMethod": ["Get","Post", "Update"],
+      "UptreamHttpMethod": [ "Get", "Post", "Update" ],
 
       "Key": "Market"
     },
@@ -43,6 +43,10 @@
       "UpstreamPathTemplate": "/MessageService/{controller}/{action}",
       "UptreamHttpMethod": ["Get","Post", "Update"],
 
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
       "Key": "Message"
     }
   ],

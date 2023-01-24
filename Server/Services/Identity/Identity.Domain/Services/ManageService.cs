@@ -12,17 +12,13 @@ namespace Identity.Domain.Services
     {
         private const string messageApi = "https://localhost:7050/MessageService/Message/SmsPhoneOtp";
         private readonly UserManager userManager;
-        private readonly SignInManager<ApplicationUser> signInManager;
-        private readonly IOtpManager otpManager;
         private readonly HttpClient httpClient;
 
         public ManageService(
-            UserManager userManager, IOtpManager otpManager, HttpClient httpClient, SignInManager<ApplicationUser> signInManager)
+            UserManager userManager,HttpClient httpClient)
         {
             this.userManager = userManager;
-            this.otpManager = otpManager;
             this.httpClient = httpClient;
-            this.signInManager = signInManager;
         }
 
         public async Task<ResponseClient> AddPhoneNumberService(AddPhoneNumberViewModel phoneNumberViewModel)
@@ -31,7 +27,7 @@ namespace Identity.Domain.Services
             var appUser = await userManager.FindByIdAsync(phoneNumberViewModel.UserId.ToString());
             if (appUser == null) { return new("Không tìm thấy người dùng!", 400); }
             if (userByPhone != null && !userByPhone.Equals(appUser)) { return new("Số điện thoại đã được đăng ký", 400); }
-            var otp = await otpManager.GenerateTotpUserAsync(appUser);
+            var otp = await userManager.GenerateTotpUserAsync(appUser);
             // Gửi code đi tới điện thoại
             try {
                 var dataCallApi = new { toPhone = "+" + phoneNumberViewModel.PhoneNumber, otp };
@@ -39,7 +35,7 @@ namespace Identity.Domain.Services
                 HttpContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
                 await httpClient.PostAsync(messageApi, content);
             }
-            catch (System.Exception) {
+            catch (Exception) {
                 Console.WriteLine("Không Gửi được tin nhắn");
             }
             await userManager.UpdateAsync(appUser);
@@ -75,7 +71,7 @@ namespace Identity.Domain.Services
         {
             var appUser = await userManager.FindByIdAsync(verifyPhoneNumber.UserId.ToString());
             if (appUser is null) { return new("Không tìm thấy người dùng", 404); }
-            var result = await otpManager.CheckOtpAsync(appUser, verifyPhoneNumber.Code.ToString());
+            var result = await userManager.CheckOtpAsync(appUser, verifyPhoneNumber.Code.ToString());
             if (!result.Succeeded) { return new(result.Errors.SingleOrDefault()?.Description, 200, false); }
             //Set cho Số điện thoại xác thực
             await userManager.SetPhoneNumberAsync(appUser, verifyPhoneNumber.PhoneNumber);

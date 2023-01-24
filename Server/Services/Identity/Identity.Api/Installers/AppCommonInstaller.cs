@@ -7,8 +7,9 @@ namespace Identity.Api.Installers
     {
         public void InstallService(IServiceCollection services, IConfiguration configuration)
         {
-           services.AddSystemBase();
-           services.AddClientApi();
+            services.AddAuthenticationInCommon();
+            services.AddSystemBase();
+            services.AddClientApi();
         }
     }
 }

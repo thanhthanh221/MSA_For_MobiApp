@@ -1,5 +1,8 @@
 ﻿using System.Security.Claims;
 using Application.Common.Helper;
+using Application.Common.Utils;
+using Identity.Domain.Helpers;
+using Identity.Domain.IdentityConfig;
 using Identity.Domain.Interfaces;
 using Identity.Domain.Model;
 using Identity.Domain.ViewModel.Account;
@@ -10,13 +13,13 @@ namespace Identity.Domain.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly UserManager userManager;
         private readonly RoleManager<ApplicationRole> roleManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ILogger<AccountService> logger;
 
         public AccountService(
-            UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager,
+            UserManager userManager, RoleManager<ApplicationRole> roleManager,
             SignInManager<ApplicationUser> signInManager, ILogger<AccountService> logger)
         {
             this.userManager = userManager;
@@ -35,18 +38,21 @@ namespace Identity.Domain.Services
         {
             var user = await userManager.FindByEmailAsync(loginViewModel.Email);
             // Trường hợp Email không tồn tại
-            if (user is null) { return null; }
+            if (user is null) { return new ApiResponseUtils(200, false, "Không tồn tại tài khoản"); }
             var checkedPassWordUser = await userManager.CheckPasswordAsync(user, loginViewModel.Password);
             // Trường hợp Mật khẩu không chính xác
-            if (!checkedPassWordUser) { return null; }
-            List<Claim> claims = new();
-            // Add Claim 
-            var userRoles = await userManager.GetRolesAsync(user);
-            userRoles.ToList().ForEach(c => {
-                claims.Add(new Claim(ClaimTypes.Role, c));
-            });
-            claims.Add(new Claim("Id", user.Id.ToString()));
-            var token = JwtHelper.GetToken(claims);
+            if (!checkedPassWordUser) {
+                // Tăng số lần người dùng đăng nhập không chính xác !!
+                await userManager.AccessFailedAsync(user);
+                return new ResponseClient("Tên tài khoản hoặc mật khẩu không chính xác", 200, false);
+            }
+            // Xem tài khoản có bị khóa hay không
+            var checkLockedOut = await userManager.IsLockedOutAsync(user);
+            if (checkLockedOut) { return new ResponseClient("Tài khoản bị khóa", 200, false); }
+            // Tạo Token cho User
+            var token = JsonWebTokenHelper.GenerateJsonWebToken(user, userManager);
+            // Reset số lần người dùng đăng nhập sai !!
+            await userManager.ResetAccessFailedCountAsync(user);
             return new { token, user.Id, user.UserName };
         }
         public async Task<object> RegisterAsync(RegisterViewModel registerViewModel)
@@ -91,7 +97,7 @@ namespace Identity.Domain.Services
                 infoUser.ToList().ForEach(i => {
                     if (i.LoginProvider.Equals(model.Provider)) { checkLoginsUser = true; }
                 });
-                if (checkLoginsUser) { return new($"Tài khoản {userFindByEmail.UserName} Đã liên kết với dịch vụ ngoài {model.Provider}", 400, false);}
+                if (checkLoginsUser) { return new($"Tài khoản {userFindByEmail.UserName} Đã liên kết với dịch vụ ngoài {model.Provider}", 400, false); }
 
                 // Tài khoản đã tồn tại -- Liên kết dịch vụ ngoài với Tài khoản đã dùng
                 var resultAdd = await userManager.AddLoginAsync(userFindByEmail, info);

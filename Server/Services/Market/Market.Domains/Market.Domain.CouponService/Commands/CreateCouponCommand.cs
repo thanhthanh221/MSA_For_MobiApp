@@ -34,7 +34,5 @@ namespace Market.Domain.CouponService.Commands
         [Required]
         [Range(2022, int.MaxValue)]
         public int Year { get; private set; }
-
-
     }
 }

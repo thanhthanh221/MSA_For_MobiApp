@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+using Identity.Domain.Helpers;
 using Microsoft.AspNetCore.Identity;
-using OtpNet;
 
 namespace Identity.Domain.Model
 {
@@ -19,6 +18,7 @@ namespace Identity.Domain.Model
         public string Job { get; private set; }
         public virtual OtpUser Otp { get; set; }
         public virtual List<Address> Address { get; private set; }
+        public virtual RefreshToken RefreshToken { get; private set; }
 
         public void AddAddress(string city, string district, string commune, string street, string detail)
         {

@@ -2,12 +2,13 @@ import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react
 import React from 'react'
 import { useFocusEffect } from '@react-navigation/native';
 
-import { COLORS, SIZES, constants, icons, images } from '../../constants'
+import { COLORS, FONTS, SIZES, constants, icons, images } from '../../constants'
 import { Header, IconButton, LineDivider, TextIconButton, VerticalTextIconButton } from '../../components'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ViewAccount = ({ navigation }) => {
     const [userName, setUserName] = React.useState('');
+
     useFocusEffect(
         React.useCallback(() => {
             async function GetUserName() {
@@ -167,7 +168,8 @@ const ViewAccount = ({ navigation }) => {
                                     label={item.label}
                                     lableStyle={{
                                         fontWeight: '300',
-                                        fontSize: 18
+                                        fontSize: 18,
+                                        ...FONTS.h3
                                     }}
                                     iconPosition='LEFT'
                                     containerStyle={{
@@ -212,7 +214,8 @@ const ViewAccount = ({ navigation }) => {
                                     label={item.label}
                                     lableStyle={{
                                         fontWeight: '300',
-                                        fontSize: 18
+                                        fontSize: 18,
+                                        ...FONTS.h3
                                     }}
                                     iconPosition='LEFT'
                                     containerStyle={{
