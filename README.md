@@ -8,12 +8,12 @@
 
 ## Project Pictures
 - Identiy Api
-> ![Identiy Api](https://github.com/thanhthanh221/MSA_For_MobiApp/Images/IdentityApi.png)
+> ![Identiy Api](https://github.com/thanhthanh221/MSA_For_MobiApp/blob/Production/Images/IdentityApi.png)
 
 - Screen Application (Android)
-> ![Screen 1](https://github.com/thanhthanh221/MSA_For_MobiApp/Images/mb1.png)
-> ![Screen 2](https://github.com/thanhthanh221/MSA_For_MobiApp/Images/mb2.png)
-> ![Screen 3](https://github.com/thanhthanh221/MSA_For_MobiApp/Images/mb3.png)
+> ![Screen 1](https://github.com/thanhthanh221/MSA_For_MobiApp/blob/Production/Images/mb1.png)
+> ![Screen 2](https://github.com/thanhthanh221/MSA_For_MobiApp/blob/Production/Images/mb2.png)
+> ![Screen 3](https://github.com/thanhthanh221/MSA_For_MobiApp/blob/Production/Images/mb3.png)
 
 
 ## Settings
