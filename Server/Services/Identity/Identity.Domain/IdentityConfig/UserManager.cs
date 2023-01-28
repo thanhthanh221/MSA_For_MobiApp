@@ -2,7 +2,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Application.Common.Utils;
+using Identity.Domain.Helpers;
+using Identity.Domain.Interfaces;
 using Identity.Domain.Model;
+using Identity.Domain.ViewModel.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -11,7 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Identity.Domain.IdentityConfig
 {
-    public class UserManager : UserManager<ApplicationUser>
+    public class UserManager : UserManager<ApplicationUser>, IUserManager
     {
         public UserManager(IUserStore<ApplicationUser> store,
                            IOptions<IdentityOptions> optionsAccessor,
@@ -53,7 +56,7 @@ namespace Identity.Domain.IdentityConfig
             user.VerifyOtpTrue();
             return IdentityResult.Success;
         }
-        public async Task<string> RenderNewTokenAsync(ApplicationUser user)
+        public async Task<SecurityToken> RenderJsonWebToken(ApplicationUser user)
         {
             // Json Web Token
             SymmetricSecurityKey authSigningKey = new(Encoding.ASCII.GetBytes(ApplicationKeyUtils.Key));
@@ -79,7 +82,20 @@ namespace Identity.Domain.IdentityConfig
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
             var accessToken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
 
-            return null;
+            return accessToken;
+        }
+
+        public async Task<TokenViewModel> GenerateTokenAsync(ApplicationUser user)
+        {
+            var token = await this.RenderJsonWebToken(user);
+            JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
+            var accessToken = jwtSecurityTokenHandler.WriteToken(token);
+
+            var newRefreshToken = TokenHelper.GenerateRefreshToken();
+            user.UpdateToken(newRefreshToken, token.Id);
+            await this.UpdateAsync(user);
+
+            return new TokenViewModel(accessToken, newRefreshToken);
         }
     }
 }

@@ -11,5 +11,6 @@ namespace Identity.Domain.Interfaces
         Task<object> ChangePasswordAsync(ResetPasswordViewModel resetPasswordView);
         Task<ResponseClient> ExternalLoginService(ExternalLoginViewModel model);
         Task<ResponseClient> ExternalLoginConfirmationService(ExternalLoginConfirmationViewModel model);
+        Task<ResponseClient> RefreshNewToken(TokenViewModel token);
     }
 }
