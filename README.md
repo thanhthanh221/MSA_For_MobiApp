@@ -6,6 +6,16 @@
 > ![Aspnet Api](https://www.pragimtech.com/wp-content/uploads/2019/03/ASP.NET-Web-api.jpg)
 > ![React Native](https://i1.wp.com/blog.alexdevero.com/wp-content/uploads/2018/12/react-native-expo-how-to-build-your-first-mobile-app.jpg?fit=1024%2C635&ssl=1)
 
+## Project Pictures
+- Identiy Api
+> ![Identiy Api](https://github.com/thanhthanh221/MSA_For_MobiApp/Images/IdentityApi.png)
+
+- Screen Application (Android)
+> ![Screen 1](https://github.com/thanhthanh221/MSA_For_MobiApp/Images/mb1.png)
+> ![Screen 2](https://github.com/thanhthanh221/MSA_For_MobiApp/Images/mb2.png)
+> ![Screen 3](https://github.com/thanhthanh221/MSA_For_MobiApp/Images/mb3.png)
+
+
 ## Settings
 - Clone Project 
 ```
