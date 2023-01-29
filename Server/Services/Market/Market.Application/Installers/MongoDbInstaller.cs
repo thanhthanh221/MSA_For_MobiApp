@@ -10,7 +10,7 @@ namespace Market.Application.Installers
         public void InstallService(IServiceCollection services, IConfiguration configuration)
         {
             services.AddMongoDb();
-
+            
             services.AddMongoRepostory<ProductAggregate>("Product");
 
         }

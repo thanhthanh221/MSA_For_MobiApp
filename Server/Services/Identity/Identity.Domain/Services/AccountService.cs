@@ -1,13 +1,13 @@
-﻿using System.Security.Claims;
-using Application.Common.Helper;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using Application.Common.Utils;
-using Identity.Domain.Helpers;
 using Identity.Domain.IdentityConfig;
 using Identity.Domain.Interfaces;
 using Identity.Domain.Model;
 using Identity.Domain.ViewModel.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Identity.Domain.Services
 {
@@ -27,12 +27,6 @@ namespace Identity.Domain.Services
             this.signInManager = signInManager;
             this.logger = logger;
         }
-        private static object TokenResponse(ApplicationUser user)
-        {
-            List<Claim> claims = new() { new Claim("Id", user.Id.ToString()) };
-            var token = JwtHelper.GetToken(claims);
-            return new { token, user.Id, user.UserName };
-        }
 
         public async Task<object> LoginAsync(LoginViewModel loginViewModel)
         {
@@ -50,7 +44,7 @@ namespace Identity.Domain.Services
             var checkLockedOut = await userManager.IsLockedOutAsync(user);
             if (checkLockedOut) { return new ResponseClient("Tài khoản bị khóa", 200, false); }
             // Tạo Token cho User
-            var token = JsonWebTokenHelper.GenerateJsonWebToken(user, userManager);
+            var token = await userManager.GenerateTokenAsync(user);
             // Reset số lần người dùng đăng nhập sai !!
             await userManager.ResetAccessFailedCountAsync(user);
             return new { token, user.Id, user.UserName };
@@ -67,8 +61,7 @@ namespace Identity.Domain.Services
             // Xem có tạo tài khoản thành công hay không
             if (!result.Succeeded) { return null; }
 
-            List<Claim> claims = new() { new Claim("Id", appUser.Id.ToString()) };
-            var token = JwtHelper.GetToken(claims);
+            var token = await userManager.GenerateTokenAsync(appUser);
             return new { token, appUser.Id, appUser.UserName };
         }
         public async Task<ResponseClient> ExternalLoginService(ExternalLoginViewModel model)
@@ -78,7 +71,8 @@ namespace Identity.Domain.Services
             // Đã tồn tại tài khoản đăng nhập với dịch vụ ngoài trên
             if (appUser != null) {
                 logger.LogInformation("{Name} đã đăng nhập bằng dịch vụ {Provider}", appUser.UserName, model.Provider);
-                return new(TokenResponse(appUser), 200, true);
+                var token = await userManager.GenerateTokenAsync(appUser);
+                return new(token, 200, true);
             }
             return new("Tạo tài khoản mới!", 302);
         }
@@ -87,7 +81,10 @@ namespace Identity.Domain.Services
             UserLoginInfo info = new(model.Provider, model.ProviderKey, model.Provider);
             var userExisted = await userManager.FindByLoginAsync(model.Provider, model.ProviderKey);
             // Đã có tài khoản sử dụng dịch vụ ngoài trên
-            if (userExisted != null) { return new(TokenResponse(userExisted), 200, true); }
+            if (userExisted != null) {
+                var token = await userManager.GenerateTokenAsync(userExisted);
+                return new(token, 200, true);
+            }
             // Tìm Kiếm tài khoản theo Email người dùng nhập
             var userFindByEmail = await userManager.FindByEmailAsync(model.Email);
             if (userFindByEmail != null) {
@@ -101,7 +98,10 @@ namespace Identity.Domain.Services
 
                 // Tài khoản đã tồn tại -- Liên kết dịch vụ ngoài với Tài khoản đã dùng
                 var resultAdd = await userManager.AddLoginAsync(userFindByEmail, info);
-                if (resultAdd.Succeeded) { return new(TokenResponse(userFindByEmail), 200, true); }
+                if (resultAdd.Succeeded) {
+                    var token = await userManager.GenerateTokenAsync(userFindByEmail);
+                    return new(token, 200, true);
+                }
                 return new("Liết kết thất bại với tài khoản", 400, false);
             }
             ApplicationUser appUser = new() { UserName = model.UserName, Email = model.Email };
@@ -109,7 +109,8 @@ namespace Identity.Domain.Services
             if (!result.Succeeded) { return new("Không tạo được tài khoản", 400, false); }
             await userManager.AddLoginAsync(appUser, info);
             logger.LogInformation("{Name} đã đăng nhập bằng dịch vụ {Provider}", appUser.UserName, model.Provider);
-            return new(TokenResponse(appUser), 200, true);
+            var tokenCheckTrue = await userManager.GenerateTokenAsync(userFindByEmail);
+            return new(tokenCheckTrue, 200, true);
         }
         public async Task<object> ChangePasswordAsync(ResetPasswordViewModel resetPasswordView)
         {
@@ -123,6 +124,42 @@ namespace Identity.Domain.Services
             // Khiểm tra xem đổi mật khẩu thành công không
             if (!result.Succeeded) { return new { message = "Mật khẩu cũ không chính xác!" }; }
             return new { message = "Đổi mật khẩu thành công!" };
+        }
+        public async Task<ResponseClient> RefreshNewToken(TokenViewModel token)
+        {
+            JwtSecurityTokenHandler jwtTokenHandler = new();
+            var secretKeyBytes = Encoding.UTF8.GetBytes(ApplicationKeyUtils.Key);
+
+            TokenValidationParameters tokenValidateParam = new() {
+                //tự cấp token
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                //ký vào token
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
+                ClockSkew = TimeSpan.Zero,
+                ValidateLifetime = false //ko kiểm tra token hết hạn
+            };
+
+            try {
+                //check 1: AccessToken có đúng định dạng không
+                var tokenInVerification = jwtTokenHandler.ValidateToken(token.AccessToken, tokenValidateParam, out var validatedToken);
+
+                //check 2: Check alg
+                if (validatedToken is JwtSecurityToken jwtSecurityToken) {
+                    var result = jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha512, StringComparison.InvariantCultureIgnoreCase);
+                    if (!result) { return new ResponseClient("Token Không hợp lệ", 200, false); }
+                }
+
+                //check 3: Check accessToken expire?
+                var utcExpireDate = long.Parse(tokenInVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+            }
+            catch (Exception) {
+
+                throw;
+            }
+
+            return null;
         }
     }
 }

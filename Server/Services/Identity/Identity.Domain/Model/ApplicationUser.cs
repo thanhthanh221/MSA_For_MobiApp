@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Identity.Domain.Helpers;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Domain.Model
@@ -40,6 +39,18 @@ namespace Identity.Domain.Model
         {
             Otp.OtpHash = "";
             Otp.CountSubmit = 0;
+        }
+        public void UpdateToken(string token, string jwtId)
+        {
+            if (RefreshToken is null) {
+                RefreshToken = new(token, jwtId, false, false, this);
+            }
+            else {
+                RefreshToken.Token = token;
+                RefreshToken.JwtId = jwtId;
+                RefreshToken.IssuedAt = DateTime.UtcNow;
+                RefreshToken.ExpiredAt = DateTime.UtcNow.AddHours(1);
+            }
         }
     }
 }

@@ -2,7 +2,7 @@ using System.Security.Cryptography;
 
 namespace Identity.Domain.Helpers
 {
-    public static class RefreshTokenHelper
+    public static class TokenHelper
     {
         public static string GenerateRefreshToken()
         {
