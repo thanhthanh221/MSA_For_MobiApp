@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\Application.Common\Application.Common.csproj" />
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\CatchingRedis\CatchingRedis.csproj" />
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\EventBus.Messages\EventBus.Messages.csproj" />
+    <ProjectReference Include="..\..\Market.Infra\Market.Infra.csproj" />
+    <ProjectReference Include="..\Market.Product.Domain\Market.Product.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

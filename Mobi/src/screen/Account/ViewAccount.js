@@ -5,6 +5,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { COLORS, FONTS, SIZES, constants, icons, images } from '../../constants'
 import { Header, IconButton, LineDivider, TextIconButton, VerticalTextIconButton } from '../../components'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PushNotification from 'react-native-push-notification';
 
 const ViewAccount = ({ navigation }) => {
     const [userName, setUserName] = React.useState('');
@@ -14,6 +15,19 @@ const ViewAccount = ({ navigation }) => {
             async function GetUserName() {
                 const nameUserInStorage = await AsyncStorage.getItem('userName');
                 setUserName(nameUserInStorage);
+
+                PushNotification.createChannel(
+                    {
+                        channelId: "Test",
+                        channelName: "Chúc bạn dùng vui vẻ",
+                    }
+                )
+
+                PushNotification.localNotification({
+                    channelId: "Test",
+                    title: "Vui vẻ nhé",
+                    message: "Chào mừng bạn dến với hệ thống"
+                })
             }
             GetUserName();
         }, [])

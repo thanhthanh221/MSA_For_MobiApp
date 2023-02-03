@@ -3,11 +3,8 @@ import React from 'react';
 import SplashScreen from 'react-native-splash-screen'
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { applyMiddleware, createStore } from 'redux'
 import { Provider } from 'react-redux'
-import thunk from 'redux-thunk';
 
-import RootReducer from './src/stores/RootReducer';
 import OnBoarding from './src/screen/OnBoarding/OnBoarding';
 import SignIn from './src/screen/Authentication/SignIn';
 import SignUp from './src/screen/Authentication/SignUp';
@@ -16,8 +13,7 @@ import ForgotPassword from './src/screen/Authentication/ForgotPassword';
 import FoodDetail from './src/screen/Food/FoodDetail';
 import { AddCard, ChangeDateOfBirth, ChangeEmail, ChangeJob, ChangeName, ChangePassword, ChangePhone, ChangeSex, Checkout, Coupon, DeliveryStatus, Home, Map, MyAccount, MyCard, MyCart, Settings, Success, ViewAccount, ViewCoupon } from './src/screen';
 import CustomTabBottom from './src/navigation/CustomTabBottom';
-
-const store = createStore(RootReducer, applyMiddleware(thunk));
+import store from './src/stores/store';
 
 const Stack = createStackNavigator();
 

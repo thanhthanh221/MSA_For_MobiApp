@@ -12,6 +12,12 @@
             Success = success;
             Message = message;
         }
+        public ApiResponseUtils(bool success, string message, object data)
+        {
+            Data = data;
+            Success = success;
+            Message = message;
+        }
 
         public ApiResponseUtils(int? status, bool success, string message, object data) : this(status, success, message)
         {

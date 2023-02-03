@@ -31,8 +31,6 @@ namespace Market.Domain.ProductService.Commands.CreateProduct
         {
             var product = await productService.AddProduct(command);
             await productRepository.CreateAsync(product);
-            CreateProductEvent createProductEvent = new(command.UserId, command.CategoriesId);
-            await publishEndpoint.Publish(createProductEvent, cancellationToken);
             return product;
         }
     }
