@@ -1,4 +1,6 @@
 using Application.Common.Model;
+using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 
 namespace Market.Product.Domain.Model
 {
@@ -10,11 +12,10 @@ namespace Market.Product.Domain.Model
             Name = name;
         }
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         // Product Status
-        public static ProductStatus Submitted { get; private set; } = new ProductStatus(1, "Đang xác thực");
-        public static ProductStatus Success { get; private set; } = new ProductStatus(2, "Đã xác thực");
-
+        public static ProductStatus Submitted { get; set; } = new ProductStatus(1, "Đang xác thực");
+        public static ProductStatus Success { get; set; } = new ProductStatus(2, "Thành công");
     }
 }

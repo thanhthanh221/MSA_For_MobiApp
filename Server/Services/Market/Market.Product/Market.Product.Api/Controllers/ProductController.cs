@@ -1,6 +1,13 @@
-﻿using Application.Common.Helper;
+﻿using System.ComponentModel.DataAnnotations;
+using Application.Common.Helper;
+using Application.Common.Repository;
 using Application.Common.Utils;
+using Market.Product.Api.Dtos;
 using Market.Product.Domain.Commands.CreateProduct;
+using Market.Product.Domain.Commands.RemoveProduct;
+using Market.Product.Domain.Queries.FindProductByCategory;
+using Market.Product.Domain.Queries.FindProductById;
+using Market.Product.Domain.Queries.SearchProduct;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 namespace Market.Product.Api.Controllers
@@ -15,7 +22,6 @@ namespace Market.Product.Api.Controllers
         {
             this.mediator = mediator;
         }
-
         [HttpGet]
         [Route("ProductFile/{productImageName}")]
         public async Task<ActionResult> ProductImageAsync(string productImageName)
@@ -27,11 +33,57 @@ namespace Market.Product.Api.Controllers
                 string mimetype = UploadFileHelper.GetImageMimeTypeFromImageFileExtension(fileExtension);
                 return this.File(bytesImage, mimetype);
             }
-            catch (Exception) {
-                return this.StatusCode(500, new ApiResponseUtils(500, false, "Không tìm thấy hình ảnh"));
+            catch (Exception ex) {
+                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
             }
         }
+        [HttpGet]
+        [Route("GetById/{ProductId}")]
+        public async Task<ActionResult> GetProductByIdAsync([Required] Guid ProductId)
+        {
 
+            if (!ModelState.IsValid) { return this.BadRequest(); }
+            ProductByIdQuery query = new() { ProductId = ProductId };
+            var product = await mediator.Send(query);
+            if (product is null) {
+                return this.Ok(new ApiResponseUtils(200, false, "Không tìm thấy sản phẩm"));
+            }
+            return this.Ok(new ApiResponseUtils(200, true, "Tìm thấy sản phẩm", product));
+
+        }
+        [HttpGet]
+        [Route("GetByCategoryId")]
+        public async Task<ActionResult> GetProductByCategoryAsync([FromQuery] ProductByCategoryQuery query, Guid? userId)
+        {
+            try {
+                var products = await mediator.Send(query);
+                if (products is null) { return this.Ok(new ApiResponseUtils(200, false, "Không tìm thấy sản phẩm")); }
+                // Conver To Dto
+                List<ProductsDto> productsDto = products.Select(p => ProductsDto.ConverProductToDto(p, userId)).ToList();
+                var PagingProduct = PagingHelper.PagingEntity(productsDto.ToList(), query.Page, query.PageSize);
+                return this.Ok(new ApiResponseUtils(200, true, "Tìm thấy sản phẩm", PagingProduct));
+            }
+            catch (Exception ex) {
+                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
+            }
+        }
+        [HttpGet]
+        [Route("SearchProduct")]
+        public async Task<ActionResult> SearchProductAsync([FromQuery] SearchProductQuery query, Guid? userId)
+        {
+            try {
+                if (!ModelState.IsValid) { return this.BadRequest(); }
+                var products = await mediator.Send(query);
+                if (products is null) {
+                    return this.Ok(new ApiResponseUtils(200, false, "Không tìm thấy sản phẩm"));
+                }
+                var productsDto = products.Select(p => ProductsDto.ConverProductToDto(p, userId));
+                return this.Ok(new ApiResponseUtils(200, true, "Tìm thấy sản phẩm", productsDto));
+            }
+            catch (Exception ex) {
+                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
+            }
+        }
         [HttpPost("CreateProduct")]
         public async Task<ActionResult> CreateProductAsync([FromForm] CreateProductCommand createProductCommansd)
         {
@@ -43,6 +95,22 @@ namespace Market.Product.Api.Controllers
             );
             }
             return this.CreatedAtAction(nameof(CreateProductAsync), product);
+        }
+        [HttpDelete("DeleteProduct")]
+        public async Task<ActionResult> DeleteProductAsync(RemoveProductCommand command)
+        {
+            try {
+                if (!ModelState.IsValid) { return this.BadRequest(); }
+                var check = await mediator.Send(command);
+                if (check) {
+                    return this.Ok(new ApiResponseUtils(200, true, "Xóa thành công sản phẩm"));
+                }
+                return this.Ok(new ApiResponseUtils(200, false, "Không Tồn tại sản phẩm"));
+
+            }
+            catch (Exception ex) {
+                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
+            }
         }
     }
 }

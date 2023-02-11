@@ -2,7 +2,7 @@ namespace Application.Common.Model
 {
     public abstract class Enumeration : IComparable
     {
-        public int Id {get; protected set;}
+        public int Id { get; set; }
         public int CompareTo(object obj)
         {
             return Id.GetHashCode();

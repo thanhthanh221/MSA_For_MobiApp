@@ -16,6 +16,11 @@ namespace Market.Product.Domain.Services
             this.productRepository = productRepository;
         }
 
+        public Task<bool> CheckFavouriteProductAsync(ProductAggregate product, Guid userId)
+        {
+            return Task.FromResult(product.UserLikeProduct.Any(uId => uId.Equals(userId)));
+        }
+
         public async Task<ProductAggregate> CreateAsync(CreateProductCommand createProduct)
         {
             var allProduct = await productRepository.GetAllAsync();

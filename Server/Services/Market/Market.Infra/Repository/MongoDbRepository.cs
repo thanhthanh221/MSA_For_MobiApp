@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Application.Common.Model;
 using Application.Common.Repository;
 using MongoDB.Bson;
@@ -19,7 +20,6 @@ namespace Market.Infra.Repository
             var filter = filterBuilder.Eq(p => p.Id, id);
 
             return await DbCollection.Find(filter).FirstOrDefaultAsync();
-
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
@@ -49,6 +49,10 @@ namespace Market.Infra.Repository
                 return ;
             }
             await DbCollection.InsertOneAsync(obj);
+        }
+        public async Task<List<TEntity>> GetsAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            return await DbCollection.Find(filter).ToListAsync();
         }
     }
 }

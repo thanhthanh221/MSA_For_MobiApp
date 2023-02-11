@@ -1,7 +1,4 @@
-﻿using Market.Domain.ProductService.Commands.CreateProduct;
-using Market.Domain.ProductService.Extensions;
-using Market.Domain.ProductService.Queries;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

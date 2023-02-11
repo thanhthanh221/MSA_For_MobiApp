@@ -13,6 +13,7 @@ namespace Application.Common.Installer
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.AddCors();
+            services.AddHttpClient();
             return services;
         }
 

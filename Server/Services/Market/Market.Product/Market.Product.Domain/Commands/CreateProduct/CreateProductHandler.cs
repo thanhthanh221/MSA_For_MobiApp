@@ -1,5 +1,3 @@
-
-using Application.Common.Repository;
 using Market.Product.Domain.Interfaces;
 using Market.Product.Domain.Model;
 using MediatR;
@@ -35,6 +33,7 @@ namespace Market.Product.Domain.Commands.CreateProduct
             catch (Exception) {
                 logger.LogWarning("Không call Api được tới Service Nofitication");
             }
+            logger.LogInformation("Tạo 1 sản phẩm {ProductId} - {ProductName}",product.Id, product.Name);
             return product;
         }
     }

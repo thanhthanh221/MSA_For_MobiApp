@@ -10,10 +10,10 @@ namespace Market.Product.Api.Installers
     {
         public void InstallService(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMediatR(typeof(Program).GetTypeInfo().Assembly);
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddOptions();
             services.AddAuthenticationInCommon();
-            services.AddSystemBase();
-            services.AddRedisCache(configuration); 
+            services.AddSystemBase();  
         }
     }
 }
