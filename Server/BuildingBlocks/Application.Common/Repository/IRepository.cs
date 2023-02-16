@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Application.Common.Model;
 
 namespace Application.Common.Repository
@@ -6,6 +7,7 @@ namespace Application.Common.Repository
     {
         Task<TEntity> GetByIdAsync(Guid id);
         Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<List<TEntity>> GetsAsync(Expression<Func<TEntity, bool>> filter);
         Task UpdateAsync(TEntity obj);
         Task RemoveAsync(Guid id);
         Task CreateAsync(TEntity obj);

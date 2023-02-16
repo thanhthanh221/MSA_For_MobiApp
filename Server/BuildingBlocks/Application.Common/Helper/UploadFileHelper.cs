@@ -41,13 +41,35 @@ namespace Application.Common.Helper
                 return "Không Up được file";
             }
         }
+        public static string GetFileExtension(string fileName)
+        {
+            var findDotLast = fileName.LastIndexOf('.');
+            if (findDotLast <= fileName.Length - 5) {
+                return null;
+            }
+            return fileName[findDotLast..];
+        }
         public static void DeleteImage(string imageName, string locationStorage)
         {
             var imagePath = Path.Combine(Dir + "\\Images\\" + $"\\{locationStorage}\\" + imageName);
             if (File.Exists(imagePath)) {
                 File.Delete(imagePath);
             }
-
+        }
+        public static string GetImageMimeTypeFromImageFileExtension(string extension)
+        {
+            string mimetype = extension switch {
+                ".png" => "image/png",
+                ".gif" => "image/gif",
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".bmp" => "image/bmp",
+                ".tiff" => "image/tiff",
+                ".wmf" => "image/wmf",
+                ".jp2" => "image/jp2",
+                ".svg" => "image/svg+xml",
+                _ => "application/octet-stream",
+            };
+            return mimetype;
         }
     }
 }

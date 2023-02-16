@@ -151,15 +151,13 @@ namespace Identity.Domain.Services
                     if (!result) { return new ResponseClient("Token Không hợp lệ", 200, false); }
                 }
 
-                //check 3: Check accessToken expire?
-                var utcExpireDate = long.Parse(tokenInVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
-            }
-            catch (Exception) {
+                var userToken = await userManager.FindByRefreshTokenAsync(token.RefreshToken);
 
-                throw;
+                return null;
             }
-
-            return null;
+            catch (Exception ex) {
+                return new ResponseClient(ex.Message, 500, false);
+            }
         }
     }
 }

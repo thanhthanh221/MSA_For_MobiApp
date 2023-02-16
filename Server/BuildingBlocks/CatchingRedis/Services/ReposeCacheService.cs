@@ -28,15 +28,15 @@ namespace CatchingRedis.Services
             string cacheRespone = await distributedCache.GetStringAsync(cacheKey);
             return string.IsNullOrEmpty(cacheRespone) ? null : cacheRespone;
         }
-        public async Task<List<string>> GetAllCacheReponseAsync(string partern)
+        public async Task<List<string>> GetAllCacheReponseAsync(string pattern)
         {
             List<string> readByCatcheRedis = new();
-            if (string.IsNullOrWhiteSpace(partern) || partern.Equals("_")) {
+            if (string.IsNullOrWhiteSpace(pattern) || pattern.Equals("_")) {
                 throw new AggregateException("Dữ liệu không thể null hoặc khoảng trắng");
             }
             // Lấy ra cái Catche có Key = cacheKey
 
-            foreach (var key in this.GetKeyAsync(partern + "*")) {
+            foreach (var key in this.GetKeyAsync(pattern + "*")) {
                 var cacheResponeByte = await distributedCache.GetAsync(key);
 
                 string cacheRespone = Encoding.UTF8.GetString(cacheResponeByte);
@@ -47,17 +47,23 @@ namespace CatchingRedis.Services
             return readByCatcheRedis;
         }
 
-        // Remove
-        public async Task RemoveCacheResponseAsync(string partern)
+        // Remove by Pattern
+        public async Task RemoveCacheResponseAsync(string pattern)
         {
-            if (string.IsNullOrWhiteSpace(partern)) {
+            if (string.IsNullOrWhiteSpace(pattern)) {
                 throw new AggregateException("Dữ liệu không thể null hoặc khoảng trắng");
             }
-            foreach (var key in this.GetKeyAsync(partern + "*")) {
+            foreach (var key in this.GetKeyAsync(pattern + "*")) {
                 await distributedCache.RemoveAsync(key); // Xóa key bắt đầu bằng pattern    
             }
         }
-
+        public async Task RemoveCacheAsync(string pattern, Guid Id)
+        {
+            if (string.IsNullOrWhiteSpace(pattern)) {
+                throw new AggregateException("Dữ liệu không thể null hoặc khoảng trắng");
+            }
+            await distributedCache.RemoveAsync(pattern + Id);
+        }
         private IEnumerable<string> GetKeyAsync(string pattern)
         {
             if (string.IsNullOrWhiteSpace(pattern)) {

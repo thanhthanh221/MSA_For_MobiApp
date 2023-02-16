@@ -1,7 +1,7 @@
 ﻿using Application.Common.Model;
 using Application.Common.Repository;
+using Application.Common.Settings;
 using Market.Infra.Repository;
-using Market.Infra.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;

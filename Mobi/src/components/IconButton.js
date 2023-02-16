@@ -7,9 +7,7 @@ import {
 } from 'react-native'
 import React from 'react'
 
-import { COLORS } from '../constants'
-
-const IconButton = ({ containerStyle, icon, iconStyle, onPress, disabled }) => {
+const IconButton = ({ containerStyle, icon, iconStyle, onPress, disabled, network }) => {
     return (
         <TouchableOpacity
             style={containerStyle}
@@ -22,9 +20,8 @@ const IconButton = ({ containerStyle, icon, iconStyle, onPress, disabled }) => {
                     width: 30,
                     ...iconStyle
                 }}
-                source={icon}
+                source={!network ? icon : { uri: icon }}
             />
-
         </TouchableOpacity>
     )
 }

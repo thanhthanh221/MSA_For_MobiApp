@@ -1,8 +1,7 @@
-﻿using Identity.Domain.Interfaces;
-using Identity.Domain.Model;
+﻿using Application.Common.Utils;
+using Identity.Domain.Interfaces;
 using Identity.Domain.ViewModel.Account;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.Api.Controllers
@@ -29,8 +28,8 @@ namespace Identity.Api.Controllers
                 var token = await accountService.LoginAsync(loginViewModel);
                 return token != null ? this.Ok(token) : this.BadRequest();
             }
-            catch (System.Exception) {
-                return this.Unauthorized();
+            catch (Exception ex) {
+                return this.StatusCode(500, ex.Message);
             }
         }
         [Route("Register")]
@@ -43,8 +42,8 @@ namespace Identity.Api.Controllers
                 var response = await accountService.RegisterAsync(registerViewModel);
                 return response != null ? this.Ok(response) : this.Unauthorized();
             }
-            catch (System.Exception) {
-                return this.StatusCode(500);
+            catch (Exception ex) {
+                return this.StatusCode(500, ex.Message);
             }
         }
         [Route("ExternalLogin")]
@@ -77,6 +76,21 @@ namespace Identity.Api.Controllers
                 return this.StatusCode(500);
             }
         }
+        [Route("RefreshNewToken")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> RefreshNewTokenAsync(TokenViewModel tokenViewModel)
+        {
+            try {
+                if (!ModelState.IsValid) { return this.StatusCode(400); }
+                var newToken = await accountService.RefreshNewToken(tokenViewModel);
+                return this.Ok(newToken);
+            }
+            catch (Exception ex) {
+                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
+            }
+        }
+
 
         [Route("ChangePassword")]
         [HttpPut]
