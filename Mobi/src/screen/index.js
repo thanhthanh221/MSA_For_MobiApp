@@ -22,6 +22,7 @@ import ChangeSex from './Account/ChangeSex';
 import AccountLayout from './Account/AccountLayout';
 import ChangePhone from './Account/ChangePhone';
 import ViewAccount from './Account/ViewAccount';
+import SearchProduct from './Search/SearchProduct';
 
 export {
   Home, 
@@ -47,5 +48,6 @@ export {
   ChangeSex,
   AccountLayout,
   ChangePhone,
-  ViewAccount
+  ViewAccount,
+  SearchProduct
 }

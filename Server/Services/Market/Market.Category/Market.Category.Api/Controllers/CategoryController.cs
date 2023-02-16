@@ -1,41 +1,134 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Common.Helper;
+using Application.Common.Repository;
+using Application.Common.Utils;
+using Market.Category.Api.Dtos;
+using Market.Category.Api.Model;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Market.Category.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("CategoryService/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        // GET: api/<CategoryController>
+        private readonly IRepository<CategoryAggregate> categoryRepository;
+        private readonly ILogger<CategoryController> logger;
+
+        public CategoryController(
+            IRepository<CategoryAggregate> categoryRepository, ILogger<CategoryController> logger)
+        {
+            this.categoryRepository = categoryRepository;
+            this.logger = logger;
+        }
         [HttpGet]
-        public IEnumerable<string> Get()
+        [Route("CategoryIcon/{CategoryId}")]
+        public async Task<ActionResult> GetImageCategory(Guid CategoryId)
         {
-            return new string[] { "value1", "value2" };
+            try {
+                if (!ModelState.IsValid) {
+                    return this.StatusCode(400, new ApiResponseUtils(400, false, "Lỗi dữ liệu đầu vào"));
+                }
+                var category = await categoryRepository.GetByIdAsync(CategoryId);
+                if (category is null) {
+                    return this.Ok(new ApiResponseUtils(200, false, "Không tìm thấy sản phẩm có {Id}", CategoryId));
+                }
+                string imageProductPath = $"Images/{category.Icon}";
+                var bytesImage = await System.IO.File.ReadAllBytesAsync(imageProductPath);
+                var fileExtension = UploadFileHelper.GetFileExtension(category.Icon);
+                string mimetype = UploadFileHelper.GetImageMimeTypeFromImageFileExtension(fileExtension);
+                return this.File(bytesImage, mimetype);
+
+            }
+            catch (Exception ex) {
+                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
+            }
         }
 
-        // GET api/<CategoryController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet]
+        [Route("GetCategoryById/{CategoryId}")]
+        public async Task<ActionResult> GetCategoryByIdAsync(Guid CategoryId)
         {
-            return "value";
+            try {
+                if (!ModelState.IsValid) {
+                    return this.StatusCode(400, new ApiResponseUtils(400, false, "Lỗi dữ liệu đầu vào"));
+                }
+                var category = await categoryRepository.GetByIdAsync(CategoryId);
+                if (category is null) {
+                    return this.Ok(new ApiResponseUtils(200, false, "Không tìm thấy sản phẩm có {Id}", CategoryId));
+                }
+                CategoryDto categoryDto = CategoryDto.ConverCategoryToDto(category);
+                return this.Ok(new ApiResponseUtils(200, true, "Tìm thấy sản phẩm", categoryDto));
+            }
+            catch (Exception ex) {
+                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
+            }
         }
 
-        // POST api/<CategoryController>
+        [HttpGet]
+        [Route("GetAllCategory")]
+        public async Task<ActionResult> GetAllCategoryAsync()
+        {
+            try {
+                if (!ModelState.IsValid) {
+                    return this.StatusCode(400, new ApiResponseUtils(400, false, "Lỗi dữ liệu đầu vào"));
+                }
+                var categorys = await categoryRepository.GetAllAsync();
+                if (categorys is null) {
+                    return this.Ok(new ApiResponseUtils(200, false, "Không tìm thấy danh mục"));
+                }
+                var categoryDtos = categorys.Select(c => CategoryDto.ConverCategoryToDto(c)).OrderBy(c => c.Name);
+                return this.Ok(new ApiResponseUtils(200, true, "Tìm thấy danh mục", categoryDtos));
+            }
+            catch (Exception ex) {
+                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
+            }
+        }
+
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Route("CreateCategory")]
+        public async Task<ActionResult> CreateCategoryAsync([FromForm] CreateCategory createCategory)
         {
+            try {
+                if (!ModelState.IsValid) {
+                    return this.StatusCode(400, new ApiResponseUtils(400, false, "Lỗi dữ liệu đầu vào"));
+                }
+                var categorys = await categoryRepository.GetAllAsync();
+                var checkCategoryName = categorys.Any(c =>
+                                        c.Name.ToLower().Equals(createCategory.Name.ToLower().Trim()));
+                if (checkCategoryName) {
+                    return this.StatusCode(201, new ApiResponseUtils(false, "Đã tồn tại danh mục", null));
+                }
+                var category = await CategoryAggregate.CreateNewCategory(createCategory);
+                await categoryRepository.CreateAsync(category);
+                logger.LogInformation("Tạo một danh mục {Id} - {Name}", category.Id, category.Name);
+                return this.StatusCode(201, category);
+            }
+            catch (Exception ex) {
+                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
+            }
         }
 
-        // PUT api/<CategoryController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpDelete]
+        [Route("DeleteCategory/{CategoryId}")]
+        public async Task<ActionResult> DeleteCategoryAsync(Guid CategoryId)
         {
-        }
+            try {
+                if (!ModelState.IsValid) {
+                    return this.StatusCode(400, new ApiResponseUtils(400, false, "Lỗi dữ liệu đầu vào"));
+                }
+                var category = await categoryRepository.GetByIdAsync(CategoryId);
+                if (category is null) {
+                    return this.StatusCode(400, new ApiResponseUtils(400, false, "Không tồn tại danh mục !"));
+                }
+                await categoryRepository.RemoveAsync(CategoryId);
+                UploadFileHelper.DeleteImage(category.Icon, null);
 
-        // DELETE api/<CategoryController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+                logger.LogInformation("Xóa danh mục {Id} - {Name}", category.Id, category.Name);
+                return this.StatusCode(203, category);
+            }
+            catch (Exception ex) {
+                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
+            }
         }
     }
 }

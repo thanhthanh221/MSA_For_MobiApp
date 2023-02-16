@@ -1,19 +1,34 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/MarketService/{controller}/{action}",
+      "DownstreamPathTemplate": "/CategoryService/{controller}/{action}",
       "DownstreamScheme": "https",
       "DownstreamHostAndports": [
         {
           "Host": "localhost",
-          "Port": 7165
+          "Port": 7242
         }
       ],
 
-      "UpstreamPathTemplate": "/MarketService/{controller}/{action}",
-      "UptreamHttpMethod": [ "Get", "Post", "Update" ],
+      "UpstreamPathTemplate": "/CategoryService/{controller}/{action}",
+      "UptreamHttpMethod": ["Get", "Post", "Update"],
 
-      "Key": "Market"
+      "Key": "Category"
+    },
+    {
+      "DownstreamPathTemplate": "/ProductService/{controller}/{action}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndports": [
+        {
+          "Host": "localhost",
+          "Port": 7048
+        }
+      ],
+
+      "UpstreamPathTemplate": "/ProductService/{controller}/{action}",
+      "UptreamHttpMethod": ["Get", "Post", "Update"],
+
+      "Key": "Product"
     },
     {
       "DownstreamPathTemplate": "/IdentityService/{controller}/{action}",
@@ -26,10 +41,10 @@
       ],
 
       "UpstreamPathTemplate": "/IdentityService/{controller}/{action}",
-      "UptreamHttpMethod": ["Get","Post", "Update"],
+      "UptreamHttpMethod": ["Get", "Post", "Update"],
 
       "Key": "Identity"
-    },
+    }, 
     {
       "DownstreamPathTemplate": "/MessageService/{controller}/{action}",
       "DownstreamScheme": "https",
@@ -41,7 +56,7 @@
       ],
 
       "UpstreamPathTemplate": "/MessageService/{controller}/{action}",
-      "UptreamHttpMethod": ["Get","Post", "Update"],
+      "UptreamHttpMethod": ["Get", "Post", "Update"],
 
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",

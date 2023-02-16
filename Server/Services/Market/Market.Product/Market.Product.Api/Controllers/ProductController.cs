@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Application.Common.Helper;
-using Application.Common.Repository;
 using Application.Common.Utils;
 using Market.Product.Api.Dtos;
 using Market.Product.Domain.Commands.CreateProduct;
@@ -9,6 +8,7 @@ using Market.Product.Domain.Queries.FindProductByCategory;
 using Market.Product.Domain.Queries.FindProductById;
 using Market.Product.Domain.Queries.SearchProduct;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace Market.Product.Api.Controllers
 {
@@ -85,6 +85,7 @@ namespace Market.Product.Api.Controllers
             }
         }
         [HttpPost("CreateProduct")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult> CreateProductAsync([FromForm] CreateProductCommand createProductCommansd)
         {
             if (!ModelState.IsValid) { return this.BadRequest(); }

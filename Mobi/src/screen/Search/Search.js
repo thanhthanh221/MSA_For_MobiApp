@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React from 'react';
 
-import { FONTS, COLORS, SIZES, icons, images, theme } from '../../constants'
+import { FONTS, COLORS, SIZES, icons, images, theme, constants } from '../../constants'
 import dummyData from '../../constants/dummyData';
 import {
   Header,
@@ -17,10 +17,24 @@ import {
   TextIconButton
 } from '../../components'
 import FilterModal from '../Home/FilterModal';
+import CategoryApi from '../../services/CategoryApi';
+import { RequestLocationPermission } from '../../services';
 
-const Search = ({ navigation }) => {
+const Search = ({ navigation, setSelectedTab }) => {
 
   const [showFilterModal, setShowFilterModal] = React.useState(false);
+  const [Category, SetCategory] = React.useState([]);
+  const [Location, setLocation] = React.useState('');
+
+  React.useEffect(() => {
+    RequestLocationPermission();
+    const GetAllCategory = async () => {
+      const response = await CategoryApi.GetAllCategory();
+      SetCategory(response.data.data);
+    }
+    setLocation("Vĩnh Bảo - Hải Phòng")
+    GetAllCategory();
+  }, []);
 
 
   const renderSearch = () => {
@@ -40,13 +54,14 @@ const Search = ({ navigation }) => {
               height: 30
             }}
             iconPosition='LEFT'
-            label={dummyData?.myProfile?.address}
+            label={Location}
             lableStyle={{
               fontSize: 18,
               fontWeight: '700',
-              color: COLORS.black,
+              color: COLORS.primary,
               marginLeft: 5,
-              width: SIZES.width * 0.7
+              width: SIZES.width * 0.7,
+              ...SIZES.h3
             }}
           />
           <View
@@ -114,8 +129,8 @@ const Search = ({ navigation }) => {
               marginLeft: SIZES.radius,
               flex: 1,
               height: 60,
-              justifyContent:'center',
-              alignContent:'center',
+              justifyContent: 'center',
+              alignContent: 'center',
               ...FONTS.h3
             }}
             placeholder='Tìm kiếm sản phẩm'
@@ -186,20 +201,20 @@ const Search = ({ navigation }) => {
           }}
         >
           {
-            dummyData.categories.map((item, index) => {
+            Category.map((item, index) => {
               return (
                 <View
-                  key={"SX" + index}
+                  key={"SX" + item.id}
                   style={{
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginBottom: 20,
-
                   }}
                 >
                   <IconButton
-                    icon={item.icon}
+                    network={true}
+                    icon={`http://10.0.2.2:5027/CategoryService/Category/CategoryIcon/${item.id}`}
                     containerStyle={{
                       width: SIZES.width * 0.23,
                       height: 60,
@@ -297,7 +312,7 @@ const Search = ({ navigation }) => {
 
           }}
           iconPosition="LEFT"
-          onPress={() => navigation.navigate('CouponLayout')}
+          onPress={() => setSelectedTab(constants.screens.coupons)}
         />
         <Image
           source={icons.backRight}

@@ -16,6 +16,7 @@ namespace Identity.Domain.IdentityConfig
 {
     public class UserManager : UserManager<ApplicationUser>, IUserManager
     {
+        private readonly IUnitOfWork unitOfWork;
         public UserManager(IUserStore<ApplicationUser> store,
                            IOptions<IdentityOptions> optionsAccessor,
                            IPasswordHasher<ApplicationUser> passwordHasher,
@@ -24,12 +25,19 @@ namespace Identity.Domain.IdentityConfig
                            ILookupNormalizer keyNormalizer,
                            IdentityErrorDescriber errors,
                            IServiceProvider services,
-                           ILogger<UserManager<ApplicationUser>> logger) : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
+                           ILogger<UserManager<ApplicationUser>> logger,
+                           IUnitOfWork unitOfWork) : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
+            this.unitOfWork = unitOfWork;
         }
         public async Task<ApplicationUser> FindByPhoneAsync(string Phone)
         {
             var appUser = await Users.FirstOrDefaultAsync(u => u.PhoneNumber.Equals(Phone));
+            return appUser;
+        }
+        public async Task<ApplicationUser> FindByRefreshTokenAsync(string RefreshToken)
+        {
+            var appUser = await Users.FirstOrDefaultAsync(u => u.RefreshToken.Token.Equals(RefreshToken));
             return appUser;
         }
         public Task<string> GenerateTotpUserAsync(ApplicationUser user)
@@ -84,7 +92,6 @@ namespace Identity.Domain.IdentityConfig
 
             return accessToken;
         }
-
         public async Task<TokenViewModel> GenerateTokenAsync(ApplicationUser user)
         {
             var token = await this.RenderJsonWebToken(user);
@@ -93,7 +100,7 @@ namespace Identity.Domain.IdentityConfig
 
             var newRefreshToken = TokenHelper.GenerateRefreshToken();
             user.UpdateToken(newRefreshToken, token.Id);
-            await this.UpdateAsync(user);
+            await unitOfWork.SaveDbAsync();
 
             return new TokenViewModel(accessToken, newRefreshToken);
         }

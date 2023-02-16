@@ -1,4 +1,4 @@
-import { icons, images } from "./";
+import { icons} from "./";
 
 
 const categories = [

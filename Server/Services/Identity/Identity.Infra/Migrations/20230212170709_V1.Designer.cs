@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Identity.Infra.Migrations
 {
     [DbContext(typeof(IdentityServiceContext))]
-    [Migration("20230106045751_V1")]
+    [Migration("20230212170709_V1")]
     partial class V1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -180,6 +180,41 @@ namespace Identity.Infra.Migrations
                     b.ToTable("OtpUsers");
                 });
 
+            modelBuilder.Entity("Identity.Domain.Model.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExpiredAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("IssuedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("JwtId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
@@ -305,6 +340,17 @@ namespace Identity.Infra.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Identity.Domain.Model.RefreshToken", b =>
+                {
+                    b.HasOne("Identity.Domain.Model.ApplicationUser", "User")
+                        .WithOne("RefreshToken")
+                        .HasForeignKey("Identity.Domain.Model.RefreshToken", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Identity.Domain.Model.ApplicationRole", null)
@@ -361,6 +407,8 @@ namespace Identity.Infra.Migrations
                     b.Navigation("Address");
 
                     b.Navigation("Otp");
+
+                    b.Navigation("RefreshToken");
                 });
 #pragma warning restore 612, 618
         }
