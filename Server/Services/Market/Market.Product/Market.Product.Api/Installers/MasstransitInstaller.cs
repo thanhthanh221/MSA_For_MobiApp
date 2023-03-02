@@ -25,7 +25,7 @@ namespace Market.Product.Api.Installers
                     configuration.Host(rabbitMQSettings.Host, "/", h => {
                         h.Username(rabbitMQSettings.Username);
                         h.Password(rabbitMQSettings.Password);
-                    });                     
+                    });
                 });
             });
         }

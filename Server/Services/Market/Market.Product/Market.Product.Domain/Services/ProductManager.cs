@@ -1,5 +1,7 @@
 using Application.Common.Helper;
 using Application.Common.Repository;
+using Application.Common.Utils;
+using CategoryApi.Models;
 using Market.Product.Domain.Commands.CreateProduct;
 using Market.Product.Domain.Interfaces;
 using Market.Product.Domain.Model;
@@ -11,7 +13,8 @@ namespace Market.Product.Domain.Services
     {
         private readonly IRepository<ProductAggregate> productRepository;
 
-        public ProductManager(IRepository<ProductAggregate> productRepository)
+        public ProductManager(
+            IRepository<ProductAggregate> productRepository)
         {
             this.productRepository = productRepository;
         }
@@ -21,7 +24,7 @@ namespace Market.Product.Domain.Services
             return Task.FromResult(product.UserLikeProduct.Any(uId => uId.Equals(userId)));
         }
 
-        public async Task<ProductAggregate> CreateAsync(CreateProductCommand createProduct)
+        public async Task<ProductAggregate> CreateAsync(CreateProductCommand createProduct, List<CategoryClientRes> categories)
         {
             var allProduct = await productRepository.GetAllAsync();
             var checkProduct = allProduct
@@ -32,7 +35,7 @@ namespace Market.Product.Domain.Services
             string imageToString = await UploadFileHelper.SaveImage(createProduct.Image, null);
             var productTypes = JsonConvert.DeserializeObject<List<ProductType>>(createProduct.ProductTypes);
             TimeSpan timeOrder = new(createProduct.TimeOrder.Day, createProduct.TimeOrder.Hours, createProduct.TimeOrder.Minute, 0);
-            var categories = JsonConvert.DeserializeObject<List<ProductCategory>>(createProduct.Categories);
+            List<ProductCategory> productCategories = categories.Select(c => new ProductCategory(c.Id, c.Name)).ToList();
 
             ProductAggregate product = new(
                 createProduct.Name,
@@ -40,12 +43,13 @@ namespace Market.Product.Domain.Services
                 createProduct.Descretion,
                 createProduct.TypeNameProduct,
                 productTypes,
-                categories,
+                productCategories,
                 imageToString,
                 timeOrder
             );
             await productRepository.CreateAsync(product);
             return product;
         }
+
     }
 }

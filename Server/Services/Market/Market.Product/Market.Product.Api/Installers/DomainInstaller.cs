@@ -1,6 +1,7 @@
 using Application.Common.Extensions;
 using Market.Product.Domain.Commands.CreateProduct;
 using Market.Product.Domain.Commands.RemoveProduct;
+using Market.Product.Domain.Commands.UserFavouriteProduct;
 using Market.Product.Domain.Interfaces;
 using Market.Product.Domain.Model;
 using Market.Product.Domain.Queries.FindProductByCategory;
@@ -18,6 +19,8 @@ public class DomainInstaller : IInstaller
         // Command
         services.AddScoped<IRequestHandler<CreateProductCommand, ProductAggregate>, CreateProductHandler>();
         services.AddScoped<IRequestHandler<RemoveProductCommand, bool>, RemoveProductHandler>();
+        services.AddScoped<IRequestHandler<UserFavouriteProductCommand, Unit>, UserFavouriteProductHandler>();
+
 
         //Query
         services.AddScoped<IRequestHandler<ProductByIdQuery, ProductAggregate>, ProductByIdHandler>();

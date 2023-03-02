@@ -1,6 +1,6 @@
 using Application.Common.Extensions;
-using Market.Infra.MongoDb;
 using Market.Product.Domain.Model;
+using Mongodb.Extensions;
 
 namespace Market.Product.Api.Installers
 {

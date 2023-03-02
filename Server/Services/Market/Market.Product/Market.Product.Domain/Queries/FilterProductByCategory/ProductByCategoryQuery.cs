@@ -12,4 +12,6 @@ public class ProductByCategoryQuery : IRequest<List<ProductAggregate>>
     public int Page { get; set; }
     [Required]
     public int PageSize { get; set; }
+    [Required]
+    public int UserId {get; set;}
 }

@@ -14,6 +14,7 @@ import IconButton from '../../components/IconButton';
 import TwoPointSlider from '../../components/TwoPointSlider';
 import TextButton from '../../components/TextButton'
 import TextIconButton from '../../components/TextIconButton';
+import { CategoryApi } from '../../services';
 
 
 const Section = ({ containerStyle, title, children }) => {
@@ -40,35 +41,28 @@ const Section = ({ containerStyle, title, children }) => {
     )
 }
 
-// Khoảng cách
-const renderDistance = () => {
-    return (
-        <Section
-            title="Khoảng cách đặt hàng"
-        >
-            <View
-                style={{ alignItems: 'center' }}
-            >
-                <TwoPointSlider
-                    values={[3, 10]}
-                    min={1}
-                    max={20}
-                    postfix=' km'
-                    onValuesChange={(value) => console.log(value)}
-                />
-            </View>
-        </Section>
-    )
-}
-
-const FilterModal = ({ isVisible, onClose }) => {
+const FilterModal = ({ navigation, isVisible, onClose }) => {
     const [showFilterModal, setShowFilterModal] = React.useState(isVisible);
     const modalAnimatedValue = React.useRef(new Animated.Value(0)).current;
 
     const [deliveryTime, setDeliveryTime] = React.useState("");
     const [rattings, setRattings] = React.useState("");
+
+    const [listCategory, setListCategory] = React.useState([]);
     const [tags, setTags] = React.useState("");
 
+    const [minPrice, setMinPrice] = React.useState(1);
+    const [maxPrice, setMaxPrice] = React.useState(40);
+
+    React.useState(() => {
+        const CallApi = async () => {
+            var res = await CategoryApi.GetAllCategory();
+            if (res.status == 200 && res.data.success) {
+                setListCategory(res.data.data);
+            }
+        }
+        CallApi();
+    }, [])
 
     React.useEffect(() => {
         if (showFilterModal) {
@@ -94,6 +88,12 @@ const FilterModal = ({ isVisible, onClose }) => {
         outputRange: [SIZES.height * 0.15, 0]
     })
 
+    // Update Price
+    const updatePrice = (minPriceUpdate, maxPriceUpdate) => {
+        setMinPrice(minPriceUpdate);
+        setMaxPrice(maxPriceUpdate);
+    }
+
     // Thời gian đặt hàng 
 
     const renderDeliveryTime = () => {
@@ -116,16 +116,16 @@ const FilterModal = ({ isVisible, onClose }) => {
                                     key={`'time-${index}`}
                                     buttonContainerStyle={{
                                         ...styles.buttonContainerStyle,
-                                        backgroundColor: item.id == deliveryTime
+                                        backgroundColor: item.value == deliveryTime
                                             ? COLORS.primary : COLORS.lightGray2
                                     }}
                                     lableStyle={{
                                         ...FONTS.h3,
-                                        color: item.id === deliveryTime
+                                        color: item.value === deliveryTime
                                             ? COLORS.white : COLORS.black
                                     }}
                                     lable={item.label}
-                                    onPress={() => { setDeliveryTime(item.id) }}
+                                    onPress={() => { setDeliveryTime(item.value) }}
                                 />
                             )
                         })
@@ -145,11 +145,11 @@ const FilterModal = ({ isVisible, onClose }) => {
             >
                 <View style={{ alignItems: 'center' }}>
                     <TwoPointSlider
-                        values={[1, 40]}
+                        values={[minPrice, maxPrice]}
                         min={1}
                         max={200}
                         postfix={' k'}
-                        onValuesChange={(value) => console.log(value)}
+                        onValuesChange={(value) => updatePrice(value[0], value[1])}
                     />
 
                 </View>
@@ -194,8 +194,8 @@ const FilterModal = ({ isVisible, onClose }) => {
                                         tintColor: item.id == rattings ?
                                             COLORS.white : COLORS.gray,
                                         width: 20,
-                                        height: 20
-
+                                        height: 20,
+                                        marginLeft: SIZES.base
                                     }}
                                     onPress={() => setRattings(item.id)}
                                 />
@@ -223,22 +223,22 @@ const FilterModal = ({ isVisible, onClose }) => {
                     }}
                 >
                     {
-                        constants.tags.map((item, index) => {
+                        listCategory?.map((item, index) => {
                             return (
                                 <TextButton
                                     key={`T-${index}`}
-                                    lable={item.label}
+                                    lable={item.name}
                                     lableStyle={{
-                                        color: item.id == tags ?
+                                        color: item === tags ?
                                             COLORS.white : COLORS.gray,
                                         ...FONTS.body3
                                     }}
                                     buttonContainerStyle={{
                                         ...styles.tagContainerStyle,
-                                        backgroundColor: item.id == tags ?
+                                        backgroundColor: item === tags ?
                                             COLORS.primary : COLORS.lightGray2
                                     }}
-                                    onPress={() => setTags(item.id)}
+                                    onPress={() => setTags(item)}
                                 />
                             )
                         })
@@ -331,8 +331,6 @@ const FilterModal = ({ isVisible, onClose }) => {
                             paddingBottom: 250
                         }}
                     >
-                        {/*  khoảng cách */}
-                        {renderDistance()}
 
                         {/* thời gian đặt hàng */}
                         {renderDeliveryTime()}
@@ -363,17 +361,25 @@ const FilterModal = ({ isVisible, onClose }) => {
                         }}
                     >
                         <TextButton
-                            lable={"Nhập yêu cầu tìm kiếm"}
-                            buttonContainerStyle={{ ...styles.appLyButton }}
-                            onPress={() => console.log("Nhập ứng dụng")}
+                            lable={"Tìm kiếm sản phẩm ..."}
+                            buttonContainerStyle={{
+                                ...styles.appLyButton,
+                                backgroundColor: tags ? COLORS.primary : COLORS.transparentPrimray
+                            }}
+                            disabled={tags ? false : true}
+                            onPress={() => navigation.navigate("SearchProduct", {
+                                "CategoryId": tags.id,
+                                "CategoryName": tags.name,
+                                "Star": rattings,
+                                "TimeOrder": deliveryTime,
+                                "minPrice": minPrice,
+                                "maxPrice": maxPrice
+                            })}
                             lableStyle={styles.baseApply}
                         />
                     </View>
-
                 </Animated.View>
-
             </View>
-
         </Modal>
     )
 }
@@ -405,13 +411,12 @@ const styles = StyleSheet.create({
     tagContainerStyle: {
         height: 50,
         margin: 5,
-        paddingHorizontal: 5,
+        paddingHorizontal: 8,
         alignItems: 'center',
         borderRadius: SIZES.base
     },
     appLyButton: {
         height: 50,
-        backgroundColor: COLORS.primary,
         borderRadius: SIZES.base
     },
     baseApply: {

@@ -32,7 +32,7 @@ namespace Identity.Domain.Services
         {
             var user = await userManager.FindByEmailAsync(loginViewModel.Email);
             // Trường hợp Email không tồn tại
-            if (user is null) { return new ApiResponseUtils(200, false, "Không tồn tại tài khoản"); }
+            if (user is null) { return new ApiResponseUtils(false, "Không tồn tại tài khoản"); }
             var checkedPassWordUser = await userManager.CheckPasswordAsync(user, loginViewModel.Password);
             // Trường hợp Mật khẩu không chính xác
             if (!checkedPassWordUser) {

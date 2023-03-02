@@ -1,4 +1,4 @@
-import { icons} from "./";
+import { icons } from "./";
 
 
 const categories = [
@@ -107,7 +107,7 @@ const wrapSandwich = {
     isFavourite: true,
     image: require("../assets/dummyData/wrap_sandwich.png")
 }
-
+const listProduct = [hamburger, hotTacos, vegBiryani, wrapSandwich]
 const menu = [
     {
         id: 1,
@@ -268,5 +268,6 @@ export default {
     allCards,
     myCards,
     myCart,
-    sizes
+    sizes,
+    listProduct
 }

@@ -267,8 +267,8 @@ const CustomTabBottom = ({ navigation }) => {
                         onPress={() => setSelectedTab(constants.screens.coupons)}
                     />
                     <TabButton
-                        lable={constants.screens.evaluate}
-                        icon={icons.evaluate}
+                        lable={constants.screens.order}
+                        icon={icons.orderNavigation}
                         outerContainerStyle={evaluateFlexStyle}
                         innerContainerStyle={evaluateColorStyle}
                         isFocused={selectedTab === constants.screens.evaluate}

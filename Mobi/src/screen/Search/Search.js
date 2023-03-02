@@ -204,7 +204,7 @@ const Search = ({ navigation, setSelectedTab }) => {
             Category.map((item, index) => {
               return (
                 <View
-                  key={"SX" + item.id}
+                  key={"SX" + item.id + index}
                   style={{
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -224,6 +224,12 @@ const Search = ({ navigation, setSelectedTab }) => {
                       height: 45,
                       width: 45
                     }}
+                    onPress={() => navigation.navigate("SearchProduct",
+                      {
+                        "CategoryId": item.id,
+                        "CategoryName": item.name
+                      }
+                    )}
                   />
 
                   <Text
@@ -347,6 +353,7 @@ const Search = ({ navigation, setSelectedTab }) => {
       {
         showFilterModal &&
         <FilterModal
+          navigation={navigation}
           isVisible={showFilterModal}
           onClose={() => setShowFilterModal(false)}
         />
@@ -361,8 +368,6 @@ const Search = ({ navigation, setSelectedTab }) => {
         {SearchCategory()}
 
         {CouponsSearch()}
-
-
       </ScrollView>
 
     </View>

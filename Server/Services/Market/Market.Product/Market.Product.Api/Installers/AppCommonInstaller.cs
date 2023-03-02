@@ -13,7 +13,8 @@ namespace Market.Product.Api.Installers
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddOptions();
             services.AddAuthenticationInCommon();
-            services.AddSystemBase();  
+            services.AddSystemBase();
+            services.AddRedisCache(configuration);
         }
     }
 }

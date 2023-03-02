@@ -1,6 +1,6 @@
 using Application.Common.Extensions;
 using Market.Category.Api.Model;
-using Market.Infra.MongoDb;
+using Mongodb.Extensions;
 
 namespace Market.Category.Api.Installers
 {
