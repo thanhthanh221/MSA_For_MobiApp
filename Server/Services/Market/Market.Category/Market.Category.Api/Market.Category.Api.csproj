@@ -10,10 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\BuildingBlocks\Application.Common\Application.Common.csproj" />
-    <ProjectReference Include="..\..\..\..\BuildingBlocks\CatchingRedis\CatchingRedis.csproj" />
-    <ProjectReference Include="..\..\..\..\BuildingBlocks\EventBus.Messages\EventBus.Messages.csproj" />
-    <ProjectReference Include="..\..\Market.Infra\Market.Infra.csproj" />
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\Common\Common.csproj" />
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\Mongodb\Mongodb.csproj" />
   </ItemGroup>
 
 </Project>

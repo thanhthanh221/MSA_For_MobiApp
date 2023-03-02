@@ -67,30 +67,27 @@ namespace Identity.Domain.IdentityConfig
         public async Task<SecurityToken> RenderJsonWebToken(ApplicationUser user)
         {
             // Json Web Token
-            SymmetricSecurityKey authSigningKey = new(Encoding.ASCII.GetBytes(ApplicationKeyUtils.Key));
-            SigningCredentials signingCredentials = new(authSigningKey, SecurityAlgorithms.HmacSha256);
+            SymmetricSecurityKey authSigningKey = new(Encoding.UTF8.GetBytes(ApplicationKeyUtils.Key));
             // Role
             var userRoles = await this.GetRolesAsync(user);
             List<Claim> claims = new() {
+                new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("UserName", user.UserName),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("Id", user.Id.ToString()),
             };
             userRoles.ToList().ForEach(c => {
                 claims.Add(new Claim(ClaimTypes.Role, c));
             });
-            ClaimsIdentity claimIdentity = new(claims);
-
-            SecurityTokenDescriptor securityTokenDescriptor = new() {
-                Subject = claimIdentity,
-                Expires = DateTime.UtcNow.AddSeconds(20),
-                SigningCredentials = signingCredentials
-            };
-
-            JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
-            var accessToken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
-
-            return accessToken;
+            JwtSecurityToken token = new(
+                issuer: ApplicationKeyUtils.ValidIssuer, // Nơi được xác thực bằng JWT
+                audience: ApplicationKeyUtils.ValidAudience,
+                expires: DateTime.Now.AddHours(3),
+                claims: claims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
+            return token;
         }
         public async Task<TokenViewModel> GenerateTokenAsync(ApplicationUser user)
         {

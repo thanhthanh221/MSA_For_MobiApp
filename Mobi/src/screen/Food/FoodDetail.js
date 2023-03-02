@@ -63,7 +63,7 @@ const FoodDetail = ({ navigation }) => {
                         iconStyle={{
                             tintColor: COLORS.darkGray2,
                         }}
-                        onPress={() => console.log("Back")}
+                        onPress={() => navigation.goBack()}
                     />
                 }
                 RightComponent={

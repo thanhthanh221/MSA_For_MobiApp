@@ -72,8 +72,8 @@ namespace Identity.Api.Controllers
                 if (response.Status == 400) { return this.Ok(new { response.Response, response.Verify }); }
                 return this.Ok(new { response.Response, response.Verify });
             }
-            catch (System.Exception) {
-                return this.StatusCode(500);
+            catch (Exception ex) {
+                return this.StatusCode(500, ex.Message);
             }
         }
         [Route("RefreshNewToken")]
@@ -87,7 +87,7 @@ namespace Identity.Api.Controllers
                 return this.Ok(newToken);
             }
             catch (Exception ex) {
-                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
+                return this.StatusCode(500, new ApiResponseUtils(false, ex.Message));
             }
         }
 

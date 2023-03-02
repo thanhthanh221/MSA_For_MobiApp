@@ -45,7 +45,7 @@ const UserInfomation = async () => {
     try {
         const token = await AsyncStorage.getItem('Token');
         const userId = await AsyncStorage.getItem('userId');
-        var response = await RequestAxios.get("/IdentityService/Manage/GetInfomation",
+        var response = await RequestAxios.get(`/IdentityService/Manage/GetInfomation/${userId}`,
             {
                 params: {
                     userId: userId

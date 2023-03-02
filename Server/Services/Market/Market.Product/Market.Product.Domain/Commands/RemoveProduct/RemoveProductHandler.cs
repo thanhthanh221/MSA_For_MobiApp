@@ -1,5 +1,5 @@
-using Application.Common.Data;
 using Application.Common.Repository;
+using CatchingRedis.Data;
 using CatchingRedis.Services;
 using Market.Product.Domain.Model;
 using MediatR;

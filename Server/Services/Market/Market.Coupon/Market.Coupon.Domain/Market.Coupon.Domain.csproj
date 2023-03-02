@@ -5,4 +5,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\Api\UserApi\UserApi.csproj" />
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\Common\Common.csproj" />
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\Mongodb\Mongodb.csproj" />
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\Redis\Redis.csproj" />
+  </ItemGroup>
+
 </Project>

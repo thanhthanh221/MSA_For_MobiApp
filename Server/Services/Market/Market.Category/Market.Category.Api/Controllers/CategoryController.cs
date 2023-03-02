@@ -26,11 +26,11 @@ namespace Market.Category.Api.Controllers
         {
             try {
                 if (!ModelState.IsValid) {
-                    return this.StatusCode(400, new ApiResponseUtils(400, false, "Lỗi dữ liệu đầu vào"));
+                    return this.StatusCode(400, new ApiResponseUtils(false, "Lỗi dữ liệu đầu vào"));
                 }
                 var category = await categoryRepository.GetByIdAsync(CategoryId);
                 if (category is null) {
-                    return this.Ok(new ApiResponseUtils(200, false, "Không tìm thấy sản phẩm có {Id}", CategoryId));
+                    return this.Ok(new ApiResponseUtils(false, "Không tìm thấy sản phẩm có {Id}", CategoryId));
                 }
                 string imageProductPath = $"Images/{category.Icon}";
                 var bytesImage = await System.IO.File.ReadAllBytesAsync(imageProductPath);
@@ -40,7 +40,7 @@ namespace Market.Category.Api.Controllers
 
             }
             catch (Exception ex) {
-                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
+                return this.StatusCode(500, new ApiResponseUtils(false, ex.Message,null));
             }
         }
 
@@ -50,17 +50,17 @@ namespace Market.Category.Api.Controllers
         {
             try {
                 if (!ModelState.IsValid) {
-                    return this.StatusCode(400, new ApiResponseUtils(400, false, "Lỗi dữ liệu đầu vào"));
+                    return this.StatusCode(400, new ApiResponseUtils(false, "Lỗi dữ liệu đầu vào",null));
                 }
                 var category = await categoryRepository.GetByIdAsync(CategoryId);
                 if (category is null) {
-                    return this.Ok(new ApiResponseUtils(200, false, "Không tìm thấy sản phẩm có {Id}", CategoryId));
+                    return this.Ok(new ApiResponseUtils(false, "Không tìm thấy sản phẩm có {Id}", CategoryId));
                 }
                 CategoryDto categoryDto = CategoryDto.ConverCategoryToDto(category);
-                return this.Ok(new ApiResponseUtils(200, true, "Tìm thấy sản phẩm", categoryDto));
+                return this.Ok(new ApiResponseUtils(true, "Tìm thấy sản phẩm", categoryDto));
             }
             catch (Exception ex) {
-                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
+                return this.StatusCode(500, new ApiResponseUtils(false, ex.Message));
             }
         }
 
@@ -70,17 +70,17 @@ namespace Market.Category.Api.Controllers
         {
             try {
                 if (!ModelState.IsValid) {
-                    return this.StatusCode(400, new ApiResponseUtils(400, false, "Lỗi dữ liệu đầu vào"));
+                    return this.StatusCode(400, new ApiResponseUtils(false, "Lỗi dữ liệu đầu vào"));
                 }
                 var categorys = await categoryRepository.GetAllAsync();
                 if (categorys is null) {
-                    return this.Ok(new ApiResponseUtils(200, false, "Không tìm thấy danh mục"));
+                    return this.Ok(new ApiResponseUtils(false, "Không tìm thấy danh mục"));
                 }
                 var categoryDtos = categorys.Select(c => CategoryDto.ConverCategoryToDto(c)).OrderBy(c => c.Name);
-                return this.Ok(new ApiResponseUtils(200, true, "Tìm thấy danh mục", categoryDtos));
+                return this.Ok(new ApiResponseUtils(true, "Tìm thấy danh mục", categoryDtos));
             }
             catch (Exception ex) {
-                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
+                return this.StatusCode(500, new ApiResponseUtils(false, ex.Message));
             }
         }
 
@@ -90,7 +90,7 @@ namespace Market.Category.Api.Controllers
         {
             try {
                 if (!ModelState.IsValid) {
-                    return this.StatusCode(400, new ApiResponseUtils(400, false, "Lỗi dữ liệu đầu vào"));
+                    return this.StatusCode(400, new ApiResponseUtils(false, "Lỗi dữ liệu đầu vào"));
                 }
                 var categorys = await categoryRepository.GetAllAsync();
                 var checkCategoryName = categorys.Any(c =>
@@ -104,7 +104,7 @@ namespace Market.Category.Api.Controllers
                 return this.StatusCode(201, category);
             }
             catch (Exception ex) {
-                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
+                return this.StatusCode(500, new ApiResponseUtils(false, ex.Message));
             }
         }
 
@@ -114,11 +114,11 @@ namespace Market.Category.Api.Controllers
         {
             try {
                 if (!ModelState.IsValid) {
-                    return this.StatusCode(400, new ApiResponseUtils(400, false, "Lỗi dữ liệu đầu vào"));
+                    return this.StatusCode(400, new ApiResponseUtils(false, "Lỗi dữ liệu đầu vào"));
                 }
                 var category = await categoryRepository.GetByIdAsync(CategoryId);
                 if (category is null) {
-                    return this.StatusCode(400, new ApiResponseUtils(400, false, "Không tồn tại danh mục !"));
+                    return this.StatusCode(400, new ApiResponseUtils(false, "Không tồn tại danh mục !"));
                 }
                 await categoryRepository.RemoveAsync(CategoryId);
                 UploadFileHelper.DeleteImage(category.Icon, null);
@@ -127,7 +127,7 @@ namespace Market.Category.Api.Controllers
                 return this.StatusCode(203, category);
             }
             catch (Exception ex) {
-                return this.StatusCode(500, new ApiResponseUtils(500, false, ex.Message));
+                return this.StatusCode(500, new ApiResponseUtils(false, ex.Message));
             }
         }
     }

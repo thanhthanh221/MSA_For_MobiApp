@@ -16,7 +16,7 @@ namespace Identity.Api.Controllers
             this.manageService = manageService;
         }
         [HttpGet]
-        [Route("GetInfomation")]
+        [Route("GetInfomation/{userId}")]
         public async Task<IActionResult> GetUserInfomation(Guid userId)
         {
             try {
@@ -26,9 +26,8 @@ namespace Identity.Api.Controllers
                 ManageInfomationDto userInfomation = ManageInfomationDto.ConvertAppUserToDto(appUser);
                 return this.Ok(userInfomation);
             }
-            catch (System.Exception) {
-                return this.Unauthorized();
-                throw;
+            catch (Exception ex) {
+                return this.StatusCode(500, ex.Message);
             }
         }
         [HttpPatch]

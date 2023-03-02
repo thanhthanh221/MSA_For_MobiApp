@@ -12,7 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BuildingBlocks\Application.Common\Application.Common.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\Common\Common.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\Events\Events.csproj" />
   </ItemGroup>
+
 
 </Project>

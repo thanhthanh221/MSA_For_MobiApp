@@ -15,7 +15,7 @@ namespace Market.Product.Domain.Commands.CreateProduct
         [Required]
         public TimeSpanOrderProduct TimeOrder { get; set; }
         [Required]
-        public string Categories { get; set; }
+        public List<Guid> ListCateId { get; set; }
         [Required]
         public string TypeNameProduct {get; set;}
         [Required]

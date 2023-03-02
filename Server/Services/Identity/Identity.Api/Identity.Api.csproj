@@ -18,9 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\Application.Common\Application.Common.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\CatchingRedis\CatchingRedis.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus.Messages\EventBus.Messages.csproj" />
     <ProjectReference Include="..\Identity.Infra\Identity.Infra.csproj" />
   </ItemGroup>
 
