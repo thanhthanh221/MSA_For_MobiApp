@@ -32,7 +32,7 @@ namespace Identity.Domain.Services
         {
             var user = await userManager.FindByEmailAsync(loginViewModel.Email);
             // Trường hợp Email không tồn tại
-            if (user is null) { return new ApiResponseUtils(200, false, "Không tồn tại tài khoản"); }
+            if (user is null) { return new ApiResponseUtils(false, "Không tồn tại tài khoản"); }
             var checkedPassWordUser = await userManager.CheckPasswordAsync(user, loginViewModel.Password);
             // Trường hợp Mật khẩu không chính xác
             if (!checkedPassWordUser) {
@@ -151,15 +151,13 @@ namespace Identity.Domain.Services
                     if (!result) { return new ResponseClient("Token Không hợp lệ", 200, false); }
                 }
 
-                //check 3: Check accessToken expire?
-                var utcExpireDate = long.Parse(tokenInVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
-            }
-            catch (Exception) {
+                var userToken = await userManager.FindByRefreshTokenAsync(token.RefreshToken);
 
-                throw;
+                return null;
             }
-
-            return null;
+            catch (Exception ex) {
+                return new ResponseClient(ex.Message, 500, false);
+            }
         }
     }
 }

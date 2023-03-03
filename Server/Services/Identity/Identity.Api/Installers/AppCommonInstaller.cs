@@ -9,7 +9,6 @@ namespace Identity.Api.Installers
         {
             services.AddAuthenticationInCommon();
             services.AddSystemBase();
-            services.AddClientApi();
         }
     }
 }

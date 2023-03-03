@@ -8,7 +8,7 @@ namespace Identity.Infra.ServiceContext
     {
         public DbSet<Address> Addresses { get; set; }
         public DbSet<OtpUser> OtpUsers { get; set; }
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<RefreshToken> RefreshTokens{get; set;}
         public IdentityServiceContext(DbContextOptions options) : base(options)
         {
         }
