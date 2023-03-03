@@ -23,6 +23,7 @@ import AccountLayout from './Account/AccountLayout';
 import ChangePhone from './Account/ChangePhone';
 import ViewAccount from './Account/ViewAccount';
 import SearchProduct from './Search/SearchProduct';
+import AdminScreen from './Admin/AdminScreen';
 
 export {
   Home, 
@@ -49,5 +50,6 @@ export {
   AccountLayout,
   ChangePhone,
   ViewAccount,
-  SearchProduct
+  SearchProduct,
+  AdminScreen
 }

@@ -11,7 +11,7 @@ import SignUp from './src/screen/Authentication/SignUp';
 import Otp from './src/screen/Authentication/Otp';
 import ForgotPassword from './src/screen/Authentication/ForgotPassword';
 import FoodDetail from './src/screen/Food/FoodDetail';
-import { AddCard, ChangeDateOfBirth, ChangeEmail, ChangeJob, ChangeName, ChangePassword, ChangePhone, ChangeSex, Checkout, Coupon, DeliveryStatus, Home, Map, MyAccount, MyCard, MyCart, SearchProduct, Settings, Success, ViewAccount, ViewCoupon } from './src/screen';
+import { AddCard, AdminScreen, ChangeDateOfBirth, ChangeEmail, ChangeJob, ChangeName, ChangePassword, ChangePhone, ChangeSex, Checkout, Coupon, DeliveryStatus, Home, Map, MyAccount, MyCard, MyCart, SearchProduct, Settings, Success, ViewAccount, ViewCoupon } from './src/screen';
 import CustomTabBottom from './src/navigation/CustomTabBottom';
 import store from './src/stores/store';
 
@@ -32,6 +32,10 @@ const App = () => {
           <Stack.Screen
             name='Settings'
             component={Settings}
+          />
+          <Stack.Screen
+            name='AdminScreen'
+            component={AdminScreen}
           />
           <Stack.Screen
             name='SearchProduct'

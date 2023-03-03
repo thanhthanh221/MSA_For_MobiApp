@@ -84,6 +84,8 @@ const evaluateProject = require("../assets/icons/evaluateProject.png");
 const policyAndTerms = require("../assets/icons/policyAndTerms.png");
 const arrowDown = require("../assets/icons/arrowDown.png");
 const orderNavigation = require("../assets/icons/orderNavigation.png");
+const admin = require("../assets/icons/admin.png");
+
 export default {
     coupon,
     cross,
@@ -170,5 +172,6 @@ export default {
     evaluateProject,
     policyAndTerms,
     arrowDown,
-    orderNavigation
+    orderNavigation,
+    admin
 }

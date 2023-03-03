@@ -204,7 +204,7 @@ const Coupon = ({ navigation }) => {
                             style={{
                                 marginTop: 20,
                                 flexDirection: 'row',
-                                alignItems: 'center'
+                                alignItems: 'center',
                             }}
                         >
                             <View
