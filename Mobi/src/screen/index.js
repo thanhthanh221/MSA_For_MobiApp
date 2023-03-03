@@ -22,8 +22,6 @@ import ChangeSex from './Account/ChangeSex';
 import AccountLayout from './Account/AccountLayout';
 import ChangePhone from './Account/ChangePhone';
 import ViewAccount from './Account/ViewAccount';
-import SearchProduct from './Search/SearchProduct';
-import AdminScreen from './Admin/AdminScreen';
 
 export {
   Home, 
@@ -49,7 +47,5 @@ export {
   ChangeSex,
   AccountLayout,
   ChangePhone,
-  ViewAccount,
-  SearchProduct,
-  AdminScreen
+  ViewAccount
 }

@@ -21,7 +21,6 @@ const Header = (
                 }}>
                 <Text
                     style={{
-                        color: COLORS.darkBlue,
                         ...FONTS.h3
                     }}
                 >{title}</Text>

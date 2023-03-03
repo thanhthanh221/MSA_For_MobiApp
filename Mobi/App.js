@@ -3,17 +3,21 @@ import React from 'react';
 import SplashScreen from 'react-native-splash-screen'
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import { applyMiddleware, createStore } from 'redux'
 import { Provider } from 'react-redux'
+import thunk from 'redux-thunk';
 
+import RootReducer from './src/stores/RootReducer';
 import OnBoarding from './src/screen/OnBoarding/OnBoarding';
 import SignIn from './src/screen/Authentication/SignIn';
 import SignUp from './src/screen/Authentication/SignUp';
 import Otp from './src/screen/Authentication/Otp';
 import ForgotPassword from './src/screen/Authentication/ForgotPassword';
 import FoodDetail from './src/screen/Food/FoodDetail';
-import { AddCard, AdminScreen, ChangeDateOfBirth, ChangeEmail, ChangeJob, ChangeName, ChangePassword, ChangePhone, ChangeSex, Checkout, Coupon, DeliveryStatus, Home, Map, MyAccount, MyCard, MyCart, SearchProduct, Settings, Success, ViewAccount, ViewCoupon } from './src/screen';
+import { AddCard, ChangeDateOfBirth, ChangeEmail, ChangeJob, ChangeName, ChangePassword, ChangePhone, ChangeSex, Checkout, Coupon, DeliveryStatus, Home, Map, MyAccount, MyCard, MyCart, Settings, Success, ViewAccount, ViewCoupon } from './src/screen';
 import CustomTabBottom from './src/navigation/CustomTabBottom';
-import store from './src/stores/store';
+
+const store = createStore(RootReducer, applyMiddleware(thunk));
 
 const Stack = createStackNavigator();
 
@@ -32,14 +36,6 @@ const App = () => {
           <Stack.Screen
             name='Settings'
             component={Settings}
-          />
-          <Stack.Screen
-            name='AdminScreen'
-            component={AdminScreen}
-          />
-          <Stack.Screen
-            name='SearchProduct'
-            component={SearchProduct}
           />
           <Stack.Screen
             name='ViewAccount'
@@ -108,6 +104,10 @@ const App = () => {
           <Stack.Screen
             name='SignUp'
             component={SignUp}
+          />
+          <Stack.Screen
+            name='CouponLayout'
+            component={Coupon}
           />
           <Stack.Screen
             name='DetailCoupon'

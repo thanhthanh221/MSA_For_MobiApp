@@ -11,7 +11,7 @@ const AccountLayout = (
                 flex: 1,
                 paddingVertical: SIZES.radius,
                 backgroundColor: COLORS.white,
-                paddingHorizontal: SIZES.radius,
+                paddingHorizontal: SIZES.radius
             }}
         >
             <Header

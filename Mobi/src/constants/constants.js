@@ -14,8 +14,7 @@ const screens = {
     settings: 'Cài đặt',
     invite_a_friend: 'Kết bạn',
     help_center: 'Hỗ trợ',
-    logout: 'Đăng xuât',
-    order: 'Đơn hàng'
+    logout: 'Đăng xuât'
 }
 
 const labelViewAccount01 = [
@@ -85,17 +84,14 @@ const delivery_time = [
     {
         id: 1,
         label: "10 Phút",
-        value: 10
     },
     {
         id: 2,
-        label: "20 Phút",
-        value:20
+        label: "20 Phút"
     },
     {
         id: 3,
-        label: "30 Phút",
-        value:30
+        label: "30 Phút"
     }
 ]
 

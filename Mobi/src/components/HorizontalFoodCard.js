@@ -15,7 +15,6 @@ const HorizontalFoodCard = (
     { containerStyle, imageStyle, item, onPress }) => {
     return (
         <TouchableOpacity
-            onPress={onPress}
             style={{
                 flexDirection: 'row',
                 borderRadius: SIZES.radius,
@@ -48,6 +47,10 @@ const HorizontalFoodCard = (
                     {item.name}
                 </Text>
 
+                {/* Star */}
+                <Star score={1} style={styles.starStyle} />
+
+
                 {/* price */}
                 <Text
                     style={{
@@ -59,68 +62,7 @@ const HorizontalFoodCard = (
                 >
                     {item.price.toFixed(3)} VNĐ
                 </Text>
-                {/* Star */}
-                <View
-                    style={{
-                        marginTop: SIZES.radius,
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start'
-                    }}
-                >
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Image
-                            source={icons.star}
-                            style={{
-                                tintColor: COLORS.orange,
-                                width: 17,
-                                height: 17,
-                                marginRight: 4
-                            }}
-                        />
-                        <Text
-                            style={{
-                                fontSize: 16,
-                                textAlignVertical: 'center'
-                            }}>
-                            4.3(659)
-                        </Text>
-                    </View>
 
-                    {/* Favourite */}
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginLeft: SIZES.padding
-
-                        }}
-                    >
-                        <Image
-                            source={icons.favourite}
-                            style={{
-                                tintColor: COLORS.red,
-                                width: 17,
-                                height: 17,
-                                marginRight: 4
-                            }}
-                        />
-                        <Text
-                            style={{
-                                fontSize: 16,
-                                textAlignVertical: 'center'
-                            }}
-                        >
-                            54
-                        </Text>
-                    </View>
-                </View>
             </View>
 
             {/* Calories */}
@@ -149,6 +91,8 @@ const HorizontalFoodCard = (
                     {item.calories} Calo
                 </Text>
             </View>
+
+
         </TouchableOpacity>
     )
 }
@@ -157,8 +101,6 @@ export default HorizontalFoodCard
 
 const styles = StyleSheet.create({
     starStyle: {
-        marginTop: SIZES.base,
-        height: 30,
-        width: 130
+        marginTop: SIZES.base
     }
 })

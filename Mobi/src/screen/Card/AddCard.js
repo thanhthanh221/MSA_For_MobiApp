@@ -273,7 +273,7 @@ const AddCard = ({ navigation, route }) => {
         style={{
           paddingTop: SIZES.radius,
           paddingBottom: SIZES.padding,
-          paddingHorizontal: SIZES.padding,
+          paddingHorizontal: SIZES.padding
         }}
       >
         <TextButton

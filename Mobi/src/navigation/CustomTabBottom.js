@@ -1,10 +1,12 @@
 import { Image, StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
 import React from 'react'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { Coupon, Home, Search } from '../screen';
 import { COLORS, SIZES, constants, icons, FONTS } from '../constants';
 
+const Tab = createBottomTabNavigator();
 
 const TabButton = ({ lable, icon, isFocused,
     onPress, innerContainerStyle, outerContainerStyle }) => {
@@ -27,7 +29,7 @@ const TabButton = ({ lable, icon, isFocused,
                     style={[
                         {
                             flexDirection: 'row',
-                            width: '90%',
+                            width: '80%',
                             height: 40,
                             borderRadius: 25,
                             alignItems: 'center',
@@ -50,7 +52,7 @@ const TabButton = ({ lable, icon, isFocused,
                             style={{
                                 marginLeft: SIZES.base,
                                 color: COLORS.white,
-                                width: 85,
+                                width: 76,
                                 ...FONTS.h3
                             }}>
                             {lable}
@@ -63,7 +65,7 @@ const TabButton = ({ lable, icon, isFocused,
 }
 
 const CustomTabBottom = ({ navigation }) => {
-    const [selectedTab, setSelectedTab] = React.useState(constants.screens.home);
+    const [selectedTab, setSelectedTab] = React.useState('');
 
     const flatListRef = React.useRef(null);
 
@@ -216,12 +218,9 @@ const CustomTabBottom = ({ navigation }) => {
             }}
         >
             <View style={{ flex: 1 }}>
-                {selectedTab === constants.screens.home &&
-                    <Home navigation={navigation} setSelectedTab={setSelectedTab} />}
-                {selectedTab === constants.screens.search &&
-                    <Search navigation={navigation} setSelectedTab={setSelectedTab} />}
-                {selectedTab === constants.screens.coupons &&
-                    <Coupon navigation={navigation} setSelectedTab={setSelectedTab} />}
+                {selectedTab === constants.screens.home && <Home navigation={navigation} />}
+                {selectedTab === constants.screens.search && <Search navigation={navigation} />}
+                {selectedTab === constants.screens.coupons && <Coupon navigation={navigation} />}
 
             </View>
 
@@ -229,7 +228,7 @@ const CustomTabBottom = ({ navigation }) => {
                 style={{
                     justifyContent: 'flex-end',
                     height: 85,
-
+                    
                 }}>
 
                 <View
@@ -267,8 +266,8 @@ const CustomTabBottom = ({ navigation }) => {
                         onPress={() => setSelectedTab(constants.screens.coupons)}
                     />
                     <TabButton
-                        lable={constants.screens.order}
-                        icon={icons.orderNavigation}
+                        lable={constants.screens.evaluate}
+                        icon={icons.evaluate}
                         outerContainerStyle={evaluateFlexStyle}
                         innerContainerStyle={evaluateColorStyle}
                         isFocused={selectedTab === constants.screens.evaluate}

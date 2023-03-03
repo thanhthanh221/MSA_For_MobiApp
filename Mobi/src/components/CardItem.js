@@ -14,7 +14,7 @@ const CardItem = ({ item, isSelected, onPress }) => {
                 paddingHorizontal: SIZES.padding,
                 borderWidth: 2,
                 borderRadius: SIZES.radius,
-                borderColor: isSelected ? COLORS.primary : COLORS.lightGray2
+                borderColor: isSelected ? COLORS.primary : COLORS.lightGray2,
             }}
             onPress={onPress}
         >
@@ -34,7 +34,7 @@ const CardItem = ({ item, isSelected, onPress }) => {
                     source={item.icon}
                     style={{
                         width: 35,
-                        height: 35
+                        height: 35,
                     }}
                     resizeMode='center'
                 />

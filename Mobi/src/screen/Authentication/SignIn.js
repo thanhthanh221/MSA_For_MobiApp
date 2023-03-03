@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native'
 import React from 'react'
 
+
 import AuthLayout from './AuthLayout'
 import { COLORS, FONTS, icons, images, SIZES } from '../../constants'
 import FormInput from '../../components/FormInput'
@@ -35,13 +36,13 @@ const SignIn = ({ navigation }) => {
     const LoginAsync = async () => {
         try {
             const response = await RequestAxios.post('/IdentityService/Account/Login',
-            {
-                email: email,
-                password: password
-              })
+                {
+                    email: email,
+                    password: password
+                })
 
             if (response.status == 200) {
-                await AsyncStorage.setItem('Token', response.data.token.accessToken);
+                await AsyncStorage.setItem('Token', response.data.token);
                 await AsyncStorage.setItem('userId', response.data.id);
                 await AsyncStorage.setItem('userName', response.data.userName);
                 navigation.navigate('MyAccount')

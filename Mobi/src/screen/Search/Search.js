@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React from 'react';
 
-import { FONTS, COLORS, SIZES, icons, images, theme, constants } from '../../constants'
+import { FONTS, COLORS, SIZES, icons, images, theme } from '../../constants'
 import dummyData from '../../constants/dummyData';
 import {
   Header,
@@ -17,24 +17,10 @@ import {
   TextIconButton
 } from '../../components'
 import FilterModal from '../Home/FilterModal';
-import CategoryApi from '../../services/CategoryApi';
-import { RequestLocationPermission } from '../../services';
 
-const Search = ({ navigation, setSelectedTab }) => {
+const Search = ({ navigation }) => {
 
   const [showFilterModal, setShowFilterModal] = React.useState(false);
-  const [Category, SetCategory] = React.useState([]);
-  const [Location, setLocation] = React.useState('');
-
-  React.useEffect(() => {
-    RequestLocationPermission();
-    const GetAllCategory = async () => {
-      const response = await CategoryApi.GetAllCategory();
-      SetCategory(response.data.data);
-    }
-    setLocation("Vĩnh Bảo - Hải Phòng")
-    GetAllCategory();
-  }, []);
 
 
   const renderSearch = () => {
@@ -54,14 +40,13 @@ const Search = ({ navigation, setSelectedTab }) => {
               height: 30
             }}
             iconPosition='LEFT'
-            label={Location}
+            label={dummyData?.myProfile?.address}
             lableStyle={{
               fontSize: 18,
               fontWeight: '700',
-              color: COLORS.primary,
+              color: COLORS.black,
               marginLeft: 5,
-              width: SIZES.width * 0.7,
-              ...SIZES.h3
+              width: SIZES.width * 0.7
             }}
           />
           <View
@@ -129,8 +114,8 @@ const Search = ({ navigation, setSelectedTab }) => {
               marginLeft: SIZES.radius,
               flex: 1,
               height: 60,
-              justifyContent: 'center',
-              alignContent: 'center',
+              justifyContent:'center',
+              alignContent:'center',
               ...FONTS.h3
             }}
             placeholder='Tìm kiếm sản phẩm'
@@ -201,20 +186,20 @@ const Search = ({ navigation, setSelectedTab }) => {
           }}
         >
           {
-            Category.map((item, index) => {
+            dummyData.categories.map((item, index) => {
               return (
                 <View
-                  key={"SX" + item.id + index}
+                  key={"SX" + index}
                   style={{
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginBottom: 20,
+
                   }}
                 >
                   <IconButton
-                    network={true}
-                    icon={`http://10.0.2.2:5027/CategoryService/Category/CategoryIcon/${item.id}`}
+                    icon={item.icon}
                     containerStyle={{
                       width: SIZES.width * 0.23,
                       height: 60,
@@ -224,12 +209,6 @@ const Search = ({ navigation, setSelectedTab }) => {
                       height: 45,
                       width: 45
                     }}
-                    onPress={() => navigation.navigate("SearchProduct",
-                      {
-                        "CategoryId": item.id,
-                        "CategoryName": item.name
-                      }
-                    )}
                   />
 
                   <Text
@@ -318,7 +297,7 @@ const Search = ({ navigation, setSelectedTab }) => {
 
           }}
           iconPosition="LEFT"
-          onPress={() => setSelectedTab(constants.screens.coupons)}
+          onPress={() => navigation.navigate('CouponLayout')}
         />
         <Image
           source={icons.backRight}
@@ -353,7 +332,6 @@ const Search = ({ navigation, setSelectedTab }) => {
       {
         showFilterModal &&
         <FilterModal
-          navigation={navigation}
           isVisible={showFilterModal}
           onClose={() => setShowFilterModal(false)}
         />
@@ -368,6 +346,8 @@ const Search = ({ navigation, setSelectedTab }) => {
         {SearchCategory()}
 
         {CouponsSearch()}
+
+
       </ScrollView>
 
     </View>

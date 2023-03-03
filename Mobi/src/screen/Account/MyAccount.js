@@ -64,27 +64,6 @@ const MyAccount = ({ navigation }) => {
                         onPress={() => navigation.goBack()}
                     />
                 }
-                RightComponent={
-                    <IconButton
-                        icon={icons.admin}
-                        containerStyle={{
-                            width: 45,
-                            height: 45,
-                            color: COLORS.black,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: SIZES.radius,
-                            borderColor: COLORS.transparentPrimray,
-                            borderWidth:1
-
-                        }}
-                        iconStyle={{
-                            width: 35,
-                            height: 35
-                        }}
-                        onPress={() => navigation.navigate("AdminScreen")}
-                    />
-                }
             />
         )
     }
